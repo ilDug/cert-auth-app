@@ -1,0 +1,8 @@
+FROM python:3.11
+WORKDIR /app
+EXPOSE 8000
+COPY ./api/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY ./api ./
+CMD [ "python", "-u",  "./main.py" ]
+# la -u è per mostrare i print nel log (UNBUFFERED=1)
