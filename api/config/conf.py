@@ -36,5 +36,3 @@ CNF_BASE_OPENSSL = Path(__file__).parents[0] / "config/openssl.cnf"
 # JWT
 ###############################
 # USER_NAMESPACE = uuid.UUID("6aaaa2c0-6254-4840-ae71-a73575121820")
-
-

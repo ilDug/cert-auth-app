@@ -8,8 +8,11 @@ from core.middlewares import (
     req_validation_error_handler,
     dag_http_error_handler,
     mongo_error_handler,
+    pki_middleware,
 )
 
+
+from .routers import generate_router
 
 app = FastAPI(root_path="/api")
 # app = FastAPI(root_path="/")
@@ -46,6 +49,8 @@ app.add_exception_handler(RequestValidationError, req_validation_error_handler)
 app.add_exception_handler(HTTPException, dag_http_error_handler)
 # app.add_exception_handler(PyMongoError, mongo_error_handler)
 
+app.add_middleware(pki_middleware)
+app.include_router(generate_router)
 
 # app.mount("/assets", StaticFiles(directory=ASSETS_PATH), name="static_media")
 
