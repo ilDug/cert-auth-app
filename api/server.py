@@ -1,4 +1,3 @@
-# from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
@@ -49,6 +48,7 @@ app.add_exception_handler(HTTPException, dag_http_error_handler)
 
 
 # app.mount("/assets", StaticFiles(directory=ASSETS_PATH), name="static_media")
+
 
 @app.get("/", response_class=PlainTextResponse)
 async def root():
