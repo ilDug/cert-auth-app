@@ -4,12 +4,12 @@ networks:
   cert-auth-net:
 
 ##########################################
-secrets:
+secrets: {}
 
 
 ##########################################
 volumes:
-  # pki:
+  pki:
 
 ##########################################
 services:
@@ -28,6 +28,7 @@ services:
       - 8310:8000
     volumes:
       - ./api:/app # cartella dell'applicazione
+      - pki:/PKI
       # - /etc/timezone:/etc/timezone:ro
       # - /etc/localtime:/etc/localtime:ro
     networks:

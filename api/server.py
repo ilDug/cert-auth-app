@@ -1,18 +1,18 @@
 from datetime import datetime
 from starlette.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException, RequestValidationError
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from core.middlewares import (
     req_validation_error_handler,
     dag_http_error_handler,
-    mongo_error_handler,
     pki_middleware,
 )
+from core.install import install
+import logging
 
-
-from .routers import generate_router
+from routers import generate_router
 
 app = FastAPI(root_path="/api")
 # app = FastAPI(root_path="/")
@@ -45,11 +45,22 @@ app.add_middleware(
     # allow_headers=["*"],)
 )
 
+
+@app.middleware("http")
+async def check_pki(request: Request, call_next):
+    """controlla che sia istanziata una pki"""
+    if not pki_middleware():
+        # return JSONResponse("nessuna PKI instanziata", status_code=500)
+        print("PKI directory creation...")
+        install()
+    response = await call_next(request)
+    return response
+
+
 app.add_exception_handler(RequestValidationError, req_validation_error_handler)
 app.add_exception_handler(HTTPException, dag_http_error_handler)
 # app.add_exception_handler(PyMongoError, mongo_error_handler)
 
-app.add_middleware(pki_middleware)
 app.include_router(generate_router)
 
 # app.mount("/assets", StaticFiles(directory=ASSETS_PATH), name="static_media")

@@ -45,8 +45,9 @@ CA_KEY_GEN = Template(
 # CA_KEY_GEN.substitute(passphrasepath=None, cakeypath=None)
 
 CA_CRT_GEN = Template(
-    "openssl req -config $configpath -new -x509 -nodes -days $days -sha256 -extensions v3_ca -passin file:$passphrasepath -key $cakeypath -out $cacrtpath"
+    "openssl req -config $configpath -new -x509 -nodes -days $days -sha256 -batch -extensions v3_ca -passin file:$passphrasepath -key $cakeypath -out $cacrtpath"
 )
+# ATTEZIONE: l'opzione -batch non fa apparire il prompt
 # CA_CRT_GEN.substitute(configpath=None,days=365,passphrasepath=None,cakeypath=None, cacrtpath=None)
 
 CA_PUB_KEY_GEN = Template("openssl x509 -pubkey -noout -in $cacrtpath -out $pubkeypath")
