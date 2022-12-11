@@ -1,6 +1,7 @@
 from controllers import Installer
 from config import PKI_PATH
 
+
 def install():
     """genera tutta l'infrastruttira della PKI compreso il certificato root"""
     installer = Installer()
@@ -21,7 +22,6 @@ def install():
 
     print("ottinene e salva lachiave pubblica CA")
     installer.generate_public_key()
-
 
 
 def import_root():

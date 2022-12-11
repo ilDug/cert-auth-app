@@ -1,7 +1,6 @@
 import shutil
 import os
 from pathlib import Path
-import subprocess
 from core.openssl_commands import CA_CRT_GEN, CA_KEY_GEN, CA_PUB_KEY_GEN, PASSPHRASE_GEN
 from config import (
     CA_CRT_PATH,
