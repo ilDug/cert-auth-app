@@ -1,7 +1,15 @@
-from fastapi import Request
+from fastapi import HTTPException
+from config import PKI_PATH
 
 
-async def pki_middleware(request: Request, call_next):
-    """controlla che sia istanziata una pki"""
-    response = await call_next(request)
-    return response
+def pki_middleware():
+    cwd = PKI_PATH
+    try:
+        if not cwd.exists():
+            return False
+        is_empty = not any(cwd.iterdir())
+        if is_empty:
+            return False
+        return True
+    except Exception as e:
+        return False
