@@ -5,6 +5,10 @@
 
 
 @import "styles/scaffolding";
+@import "styles/nav";
+@import "styles/main";
+
+
 
 
 // $fa-font-path: "../lib/webfonts" !default;
@@ -17,16 +21,5 @@
 @import "../node_modules/@fortawesome/fontawesome-pro/scss/duotone.scss";
 @import "../node_modules/@fortawesome/fontawesome-pro/scss/_duotone-icons.scss";
 
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  background: $bg-color;
-  color: $gray-600;
-
-  ul > li {list-style: none;}
-}
 
 

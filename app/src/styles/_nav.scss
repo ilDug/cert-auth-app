@@ -1,0 +1,41 @@
+nav {
+  display: flex;
+  flex-direction: row;
+
+  @include media-breakpoint-up(sm) {
+    flex-direction: column;
+  }
+
+
+  #logo{
+    font-size: 3rem;
+    padding:2rem;
+  }
+
+  #nav-links {
+    ul {
+      font-size: 1.25rem;
+      display: flex;
+      flex-direction: row;
+      text-align: center;
+      height: 100%;
+
+      @include media-breakpoint-up(sm) {
+        flex-direction: column;
+        margin-top: 1rem;
+      }
+
+      li {
+        padding: 2rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          background: tint-color($bg-color, 3%);
+        }
+      }
+    }
+  }
+}
