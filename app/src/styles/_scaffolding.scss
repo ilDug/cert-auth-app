@@ -17,6 +17,7 @@ header {
   #application {
     background: tint-color($bg-color, 3%);
     padding: 2rem;
+    width: 100%;
 
     @include media-breakpoint-up(sm) {
       border-top-left-radius: 1rem;
