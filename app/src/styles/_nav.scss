@@ -6,10 +6,11 @@ nav {
     flex-direction: column;
   }
 
-
-  #logo{
+  #logo {
     font-size: 3rem;
-    padding:2rem;
+    padding: 2rem;
+    color: $logo-color;
+    text-align: center;
   }
 
   #nav-links {
@@ -31,9 +32,38 @@ nav {
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
+
+        border-left: 0 solid $bg-color;
+        border-top: 3px solid $bg-color;
+        border-color: $bg-color;
+
+        @include media-breakpoint-up(sm) {
+            border-left: 3px solid $bg-color;
+            border-top: 0 solid $bg-color;
+        }
+
+
+        &.active {
+          color: $gray-500;
+          border-color: $primary;
+          background: tint-color($bg-color, 3%);
+        }
+
+        .link-description {
+          margin-top: 0.5rem;
+          visibility: hidden;
+          font-size: 0.7rem;
+        }
+        &.active .link-description {
+          visibility: visible;
+        }
 
         &:hover {
           background: tint-color($bg-color, 3%);
+          .link-description {
+            visibility: visible;
+          }
         }
       }
     }
