@@ -7,6 +7,15 @@
 @import "styles/scaffolding";
 
 
+// $fa-font-path: "../lib/webfonts" !default;
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/fontawesome.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/regular.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/solid.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/light.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/thin.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/brands.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/duotone.scss";
+@import "../node_modules/@fortawesome/fontawesome-pro/scss/_duotone-icons.scss";
 
 html,
 body {
