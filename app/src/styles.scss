@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import "styles/variables";
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+
+@import "styles/scaffolding";
+
+
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: $bg-color;
+  color: $gray-600;
+
+  ul > li {list-style: none;}
+}
+
+
