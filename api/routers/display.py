@@ -8,6 +8,12 @@ import subprocess
 router = APIRouter(tags=["display"])
 
 
+@router.get("/certificates")
+async def certs_list():
+    c = Certificate()
+    return c.list_certificates()
+
+
 @router.get("/display/certificate/pem/{subject}")
 async def display_certificate_pem(subject: str = Path):
     c = Certificate()
