@@ -10,6 +10,8 @@ import { CertificatesComponent } from './certificates/certificates.component';
 import { SettingsComponent } from './settings/settings.component';
 import { KeysComponent } from './keys/keys.component';
 import { AddCertificateComponent } from './certificates/add-certificate/add-certificate.component';
+import { CertsListComponent } from './certificates/certs-list/certs-list.component';
+import { CertDisplayComponent } from './certificates/cert-display/cert-display.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { AddCertificateComponent } from './certificates/add-certificate/add-cert
     CertificatesComponent,
     SettingsComponent,
     KeysComponent,
-    AddCertificateComponent
+    AddCertificateComponent,
+    CertsListComponent,
+    CertDisplayComponent
   ],
   imports: [
     BrowserModule,

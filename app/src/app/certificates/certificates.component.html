@@ -1,20 +1,24 @@
 <section id="certificates">
     <div class="container">
+
         <div class="row">
             <div class="col-12">
-                <h1><i class="fa-light fa-certificate me-3"></i>Certificati</h1>
+                <h1 [routerLink]="['/certificates']"><i class="fa-light fa-certificate me-3"></i>Certificati</h1>
             </div>
         </div>
+
         <div class="row">
             <div class="col-12">
                 <div class="commands">
                     <ul>
-                        <li (click)="addCertificate()"><i class="fa-light fa-plus me-1" ></i>aggiungi certificato</li>
-                        <li><i class="fa-light fa-plus me-1"></i>boh</li>
+                        <li (click)="addCertificate()"><i class="fa-light fa-plus me-1"></i>aggiungi</li>
+                        <li [routerLink]="['/certificates']" ><i class="fa-light fa-list me-1"></i>lista </li>
                     </ul>
                 </div>
             </div>
         </div>
+
+        <router-outlet></router-outlet>
     </div>
 
 </section>
