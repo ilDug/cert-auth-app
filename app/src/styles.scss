@@ -2,10 +2,14 @@
 @import "styles/variables";
 
 @import "../node_modules/bootstrap/scss/bootstrap";
+// @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 
 @import "styles/scaffolding";
 @import "styles/nav";
+@import "styles/commands";
+@import "styles/dialogs";
+@import "styles/input";
 @import "styles/main";
 
 

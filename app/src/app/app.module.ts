@@ -9,13 +9,15 @@ import { RouterModule } from '@angular/router';
 import { CertificatesComponent } from './certificates/certificates.component';
 import { SettingsComponent } from './settings/settings.component';
 import { KeysComponent } from './keys/keys.component';
+import { AddCertificateComponent } from './certificates/add-certificate/add-certificate.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CertificatesComponent,
     SettingsComponent,
-    KeysComponent
+    KeysComponent,
+    AddCertificateComponent
   ],
   imports: [
     BrowserModule,
