@@ -11,6 +11,10 @@ nav {
     padding: 2rem;
     color: $logo-color;
     text-align: center;
+    p{
+        font-size: 0.7rem;
+        color: $gray-400;
+    }
   }
 
   #nav-links {
