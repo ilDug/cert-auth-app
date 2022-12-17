@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, finalize, lastValueFrom, map, Observable, of, tap } from 'rxjs';
-import { Certificate } from './core/classes/certificate.class';
+import { Certificate, CertificateSigningRequest } from './core/classes/certificate.class';
 import { ENPOINT } from './core/core.service';
 
 @Injectable({
@@ -77,11 +77,11 @@ export class CertificatesService extends BehaviorSubject<string[]>{
 
 
     /** method to INSERT object to server */
-    public add(object: string): Observable<string> {
+    public add(csr: CertificateSigningRequest): Observable<string> {
         this.next(null)
-        return this.http.post<string>(`${this.url}`, object)
+        return this.http.post(`${this.url}/generate/certificate`, csr, { responseType: 'text' as 'text' })
             .pipe(
-                map(this.itemParser),
+                tap(_ => console.log(_)),
                 finalize(() => this.load(this.query))
             )
     }

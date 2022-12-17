@@ -7,3 +7,11 @@ export class Certificate {
     subject: string
     alt_names: string[]
 }
+
+export class CertificateSigningRequest {
+    constructor(c: Partial<CertificateSigningRequest>) {
+        Object.assign(this, c)
+    }
+    subject: string
+    alt_names: string[] = []
+}
