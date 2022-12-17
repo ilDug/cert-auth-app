@@ -12,26 +12,36 @@ import { KeysComponent } from './keys/keys.component';
 import { AddCertificateComponent } from './certificates/add-certificate/add-certificate.component';
 import { CertsListComponent } from './certificates/certs-list/certs-list.component';
 import { CertDisplayComponent } from './certificates/cert-display/cert-display.component';
+import { ENPOINT } from './core/core.service';
+import { APIURL } from '../environments'
+import { NgxToastModule } from '@ildug/ngx-toast';
+import { httpInterceptorProviders } from './core/interceptors';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CertificatesComponent,
-    SettingsComponent,
-    KeysComponent,
-    AddCertificateComponent,
-    CertsListComponent,
-    CertDisplayComponent
-  ],
-  imports: [
-    BrowserModule,
-      AppRoutingModule,
-      BrowserAnimationsModule,
-      CoreModule,
-      RouterModule
+    declarations: [
+        AppComponent,
+        CertificatesComponent,
+        SettingsComponent,
+        KeysComponent,
+        AddCertificateComponent,
+        CertsListComponent,
+        CertDisplayComponent
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        CoreModule,
+        RouterModule,
+        NgxToastModule
 
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    ],
+    providers: [
+        { provide: ENPOINT, useValue: APIURL },
+        httpInterceptorProviders,
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
