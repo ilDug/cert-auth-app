@@ -39,12 +39,10 @@ export class CertificatesService extends BehaviorSubject<string[]>{
     }
 
 
-    /** restituisce un singolo oggetto della lista */
-    public item(_id: string): string {
-        if (this.value === null) return null;
-        return this.value.find(_ => _['_id'] === _id)
+    item(subject: string, type: "info" | "pem" | "file"): Observable<string> {
+        let url = `${this.url}/display/certificate/${type}/${subject}`
+        return this.http.get(url, { responseType: 'text' as 'text' })
     }
-
 
     /** esergue la richiesta al server per recuperare la lista di oggetti */
     public load(query?: any | any[]): Promise<string[]> {
@@ -82,18 +80,6 @@ export class CertificatesService extends BehaviorSubject<string[]>{
     public add(object: string): Observable<string> {
         this.next(null)
         return this.http.post<string>(`${this.url}`, object)
-            .pipe(
-                map(this.itemParser),
-                finalize(() => this.load(this.query))
-            )
-    }
-
-
-
-    /** method to UPDATE object to server */
-    public edit(object: string): Observable<string> {
-        this.next(null)
-        return this.http.put<string>(`${this.url}/${object['_id']}`, object)
             .pipe(
                 map(this.itemParser),
                 finalize(() => this.load(this.query))

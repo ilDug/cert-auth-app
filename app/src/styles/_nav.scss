@@ -43,14 +43,14 @@ nav {
         border-color: $bg-color;
 
         @include media-breakpoint-up(sm) {
-            border-left: 3px solid $bg-color;
+            border-left: 4px solid $bg-color;
             border-top: 0 solid $bg-color;
         }
 
 
         &.active {
           color: $gray-500;
-          border-color: $primary;
+          border-color: $color-primary;
           background: tint-color($bg-color, 3%);
         }
 
