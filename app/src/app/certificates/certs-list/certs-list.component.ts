@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CertificatesService } from 'src/app/certificates.service';
 
 @Component({
   selector: 'app-certs-list',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./certs-list.component.scss']
 })
 export class CertsListComponent {
+    constructor(
+        public certs$: CertificatesService
+    ) { }
+
 
 }
