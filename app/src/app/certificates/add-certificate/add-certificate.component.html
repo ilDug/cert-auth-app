@@ -1,15 +1,15 @@
 <div class="ca-dialog">
     <h1 mat-dialog-title>Add certificate</h1>
     <div mat-dialog-content>
-        <p>
-          <input type="text" placeholder="common name" name="subject">
-        </p>
-
-        <mat-checkbox color="accent" class="text-light" [checked]="true">Wildcard</mat-checkbox>
-
+        <form [formGroup]="form">
+            <p>
+                <input type="text" placeholder="common name" formControlName="subject">
+            </p>
+            <mat-checkbox color="accent" class="text-light" [checked]="true" formControlName="wildcard">Wildcard</mat-checkbox>
+        </form>
     </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-raised-button color="primary" cdkFocusInitial  (click)="null">Crea</button>
-        <button mat-button [mat-dialog-close] >Annulla</button>
+        <button mat-raised-button color="primary" cdkFocusInitial (click)="save()">Crea</button>
+        <button mat-button [mat-dialog-close]>Annulla</button>
     </div>
 </div>
