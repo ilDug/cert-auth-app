@@ -6,6 +6,7 @@ MODE = config("MODE")
 
 IMPORT_PATH = Path("/import")
 PKI_PATH = Path("/PKI")
+PKI_DB = PKI_PATH / "index.txt"
 KEYS_PATH = PKI_PATH / "private"
 REQS_PATH = PKI_PATH / "reqs"
 CONFIGS_PATH = PKI_PATH / "configs"

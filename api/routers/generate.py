@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body
 from fastapi.responses import PlainTextResponse
-from controllers import Generator, Certificate
+from controllers import Generator, CertificateController
 from core import CommonNameBodyRequest
 
 
@@ -14,6 +14,6 @@ async def generate_certificate(body: CommonNameBodyRequest = Body(...)):
     g.request(body.subject, body.alt_names)
     g.certificate(body.subject, body.alt_names)
 
-    c = Certificate()
+    c = CertificateController()
     info = c.cert(body.subject, pem=False)
     return PlainTextResponse(info)
