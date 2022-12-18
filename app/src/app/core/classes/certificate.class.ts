@@ -4,8 +4,12 @@ export class Certificate {
     constructor(c: Partial<Certificate>) {
         Object.assign(this, c)
     }
-    subject: string
-    alt_names: string[]
+    status: string
+    exp_date: Date
+    revoke_date: Date
+    serial: number
+    filename_unknown: string
+    common_name: string
 }
 
 export class CertificateSigningRequest {

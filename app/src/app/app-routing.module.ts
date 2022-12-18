@@ -19,7 +19,7 @@ const routes: Routes = [
     {
         path: "keys", component: KeysComponent, children: [
             { path: "", component: KeysListComponent },
-            { path: "/:key", component: KeysDisplayComponent }
+            { path: ":key", component: KeysDisplayComponent }
         ]
     },
     { path: "settings", component: SettingsComponent }
