@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CertDisplayComponent } from './certificates/cert-display/cert-display.component';
 import { CertificatesComponent } from './certificates/certificates.component';
 import { CertsListComponent } from './certificates/certs-list/certs-list.component';
+import { KeysDisplayComponent } from './keys/keys-display/keys-display.component';
+import { KeysListComponent } from './keys/keys-list/keys-list.component';
 import { KeysComponent } from './keys/keys.component';
 import { SettingsComponent } from './settings/settings.component';
 
@@ -14,7 +16,12 @@ const routes: Routes = [
             { path: ":cert", component: CertDisplayComponent },
         ]
     },
-    { path: "keys", component: KeysComponent },
+    {
+        path: "keys", component: KeysComponent, children: [
+            { path: "", component: KeysListComponent },
+            { path: "/:key", component: KeysDisplayComponent }
+        ]
+    },
     { path: "settings", component: SettingsComponent }
 ];
 
