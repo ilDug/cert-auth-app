@@ -7,7 +7,7 @@ import { ENPOINT } from './core/core.service';
 @Injectable({
     providedIn: 'root'
 })
-export class CertificatesService extends BehaviorSubject<string[]>{
+export class CertificatesService extends BehaviorSubject<Certificate[]>{
 
     constructor(
         /** Angular Client HTTP */
@@ -34,8 +34,8 @@ export class CertificatesService extends BehaviorSubject<string[]>{
 
 
     /** elabora ongi singolo oggetto della lista restituita dal server API */
-    protected itemParser(item: Partial<string>): string {
-        return item
+    protected itemParser(item: Partial<Certificate>): Certificate {
+        return new Certificate(item)
     }
 
 
@@ -45,13 +45,13 @@ export class CertificatesService extends BehaviorSubject<string[]>{
     }
 
     /** esergue la richiesta al server per recuperare la lista di oggetti */
-    public load(query?: any | any[]): Promise<string[]> {
+    public load(query?: any | any[]): Promise<Certificate[]> {
         this.next(null)
 
         this.query = query ?? null;
         const params: HttpParams = this.parseQuery(query);
 
-        const _ = this.http.get<string[]>(`${this.url}/certificates`, { params: params })
+        const _ = this.http.get<Certificate[]>(`${this.url}/certificates`, { params: params })
             .pipe(
                 catchError((err: HttpErrorResponse) => of([])),
                 map(list => list.map(this.itemParser)),

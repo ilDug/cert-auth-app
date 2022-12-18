@@ -6,15 +6,22 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">certificato</th>
+                    <th scope="col">Certificato</th>
+                    <th scope="col">Serial</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Scadenza</th>
+                    <th scope="col">Revocato</th>
                 </tr>
             </thead>
             <tbody>
                 <ng-container *ngFor="let c of certs$ | async; index as i">
-                    <tr [routerLink]="['/certificates', c]">
+                    <tr [routerLink]="['/certificates', c.common_name]">
                         <th scope="row">{{i+1}}</th>
-                        <td>{{c}}</td>
-
+                        <td>{{c.common_name}}</td>
+                        <td>{{c.serial}}</td>
+                        <td>{{c.status}}</td>
+                        <td>{{c.exp_date | date}}</td>
+                        <td>{{c.revoke_date | date }}</td>
                     </tr>
                 </ng-container>
 
