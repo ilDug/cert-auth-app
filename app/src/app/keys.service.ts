@@ -39,6 +39,17 @@ export class KeysService extends BehaviorSubject<string[]>{
 
 
 
+    privatekey(subject: string, type: "info" | "pem" | "file"): Observable<string> {
+        let url = `${this.url}/display/privatekey/${type}/${subject}`
+        return this.http.get(url, { responseType: 'text' as 'text' })
+    }
+
+    publickey(subject: string, type: "info" | "pem" | "file"): Observable<string> {
+        let url = `${this.url}/display/publickey/${type}/${subject}`
+        return this.http.get(url, { responseType: 'text' as 'text' })
+    }
+
+
     /** esergue la richiesta al server per recuperare la lista di oggetti */
     public load(query?: any | any[]): Promise<string[]> {
         this.next(null)
