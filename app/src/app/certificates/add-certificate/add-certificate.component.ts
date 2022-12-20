@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CertificateSigningRequest } from 'src/app/core/classes/certificate.class';
 
@@ -18,8 +18,9 @@ export class AddCertificateComponent implements OnInit {
 
     ngOnInit(): void {
         const controls = {
-            subject: new FormControl(null),
-            wildcard: new FormControl(true)
+            subject: new FormControl(null, [Validators.required]),
+            wildcard: new FormControl(true),
+            days: new FormControl(1825, [Validators.min(2)])
         }
 
         this.form = new FormGroup(controls)
@@ -29,8 +30,8 @@ export class AddCertificateComponent implements OnInit {
     save() {
         if (this.form.invalid) return;
 
-        let { subject, wildcard } = this.form.value
-        let csr = new CertificateSigningRequest({ subject: subject })
+        let { subject, wildcard, days } = this.form.value
+        let csr = new CertificateSigningRequest({ subject: subject, days: days })
         if (wildcard)
             csr.alt_names.push(`*.${subject}`)
 
