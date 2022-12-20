@@ -10,13 +10,12 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <ng-container *ngFor="let c of certs$ | async; index as i">
-                    <tr [routerLink]="['/certificates', c]">
+                <ng-container *ngFor="let k of keys$ | async; index as i">
+                    <tr [routerLink]="['/keys', k]">
                         <th scope="row">{{i+1}}</th>
-                        <td>{{c}}</td>
-
+                        <td>{{k}}</td>
                     </tr>
-                </ng-container> -->
+                </ng-container>
 
             </tbody>
         </table>
