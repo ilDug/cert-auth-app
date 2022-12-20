@@ -12,7 +12,7 @@ async def generate_certificate(body: CommonNameBodyRequest = Body(...)):
     g = Generator()
     g.priv_key(body.subject)
     g.request(body.subject, body.alt_names)
-    g.certificate(body.subject, body.alt_names)
+    g.certificate(body.subject, body.alt_names, body.days)
 
     c = CertificateController()
     info = c.cert(body.subject, pem=False)

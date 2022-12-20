@@ -18,4 +18,5 @@ export class CertificateSigningRequest {
     }
     subject: string
     alt_names: string[] = []
+    days: number = 1825
 }

@@ -3,7 +3,12 @@
     <div mat-dialog-content>
         <form [formGroup]="form">
             <p>
+                FQDN <br>
                 <input type="text" placeholder="common name" formControlName="subject">
+            </p>
+            <p>
+                validità [giorni] <br>
+                <input type="number" placeholder="scadenza [giorni, minimo 2]" formControlName="days">
             </p>
             <mat-checkbox color="accent" class="text-light" [checked]="true" formControlName="wildcard">Wildcard</mat-checkbox>
         </form>
