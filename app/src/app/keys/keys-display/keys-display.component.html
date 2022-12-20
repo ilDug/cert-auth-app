@@ -1,1 +1,45 @@
-<p>keys-display works!</p>
+<div class="row">
+    <div class="col-12 pt-3">
+        <h2>{{subject}}</h2>
+
+        <div>
+            <ul class="header-tabs">
+                <li [ngClass]="{'active':tab=='info'}" (click)="tab='info'"><i class="fa-solid fa-file-certificate me-2"></i> info</li>
+                <li [ngClass]="{'active':tab=='pem'}" (click)="tab='pem'"><i class="fa-solid fa-code me-2"></i> pem</li>
+            </ul>
+        </div>
+
+        <ng-container [ngTemplateOutlet]="tab=='info' ? info : pem ">
+        </ng-container>
+
+        <ng-template #info>
+            <div class="position-relative">
+                <button class="btn copy-btn" [cdkCopyToClipboard]="privInfo$ | async" matTooltip="copy">
+                    <i class="fa-light fa-copy fa-lg"></i>
+                </button>
+                <pre class="crt-pre">{{privInfo$ | async}}</pre>
+            </div>
+        </ng-template>
+
+        <ng-template #pem>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <button class="btn copy-btn" [cdkCopyToClipboard]="privPem$ | async" matTooltip="copy">
+                            <i class="fa-light fa-copy fa-lg"></i>
+                        </button>
+                        <pre class="crt-pre">{{privPem$ | async}}</pre>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <button class="btn copy-btn" [cdkCopyToClipboard]="pubPem$ | async" matTooltip="copy">
+                            <i class="fa-light fa-copy fa-lg"></i>
+                        </button>
+                        <pre class="crt-pre">{{pubPem$ | async}}</pre>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
