@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { KeysService } from 'src/app/keys.service';
 
 @Component({
   selector: 'app-keys-list',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./keys-list.component.scss']
 })
 export class KeysListComponent {
-
+    constructor(
+        public keys$: KeysService
+    ) { }
 }
