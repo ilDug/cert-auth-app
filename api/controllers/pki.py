@@ -1,7 +1,10 @@
 from datetime import datetime
+from pathlib import Path
 import shutil
 from config.conf import CERTS_PATH, PKI_DB, KEYS_PATH, PKI_PATH
 from core.models import Certificate
+import zipfile
+from datetime import datetime
 
 
 class PKIController:
@@ -24,7 +27,7 @@ class PKIController:
                     revoke_date=self.__convert_date(i[2]),
                     serial=i[3],
                     filename_unknown=i[4],
-                    common_name=i[5].replace("/CN=", "")
+                    common_name=i[5].replace("/CN=", ""),
                 )
                 for i in items
             ]
@@ -37,5 +40,17 @@ class PKIController:
             return None
 
     def export(self):
-        if pki := PKI_PATH.exists():
-            pass
+        zipname = f"pki-{datetime.now().strftime('%Y%d%m-%H%M%S')}.zip"
+        zippath = Path("/tmp") / zipname
+        pki = PKI_PATH
+
+        with zipfile.ZipFile(
+            zippath, mode="w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+        ) as archive:
+            for file_path in pki.rglob("*"):
+                archive.write(file_path, arcname=file_path.relative_to(pki))
+        return zippath
+
+    def remove_zip_after_download(self, filename: Path):
+        if filename.exists():
+            filename.unlink()
