@@ -12,7 +12,7 @@ from core.middlewares import (
 from core.install import install
 import logging
 
-from routers import generate_router, display_router
+from routers import generate_router, display_router, pki_utils_router
 
 app = FastAPI(root_path="/api")
 # app = FastAPI(root_path="/")
@@ -62,6 +62,7 @@ app.add_exception_handler(HTTPException, dag_http_error_handler)
 
 app.include_router(generate_router)
 app.include_router(display_router)
+app.include_router(pki_utils_router)
 
 # app.mount("/assets", StaticFiles(directory=ASSETS_PATH), name="static_media")
 

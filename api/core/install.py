@@ -22,8 +22,3 @@ def install():
 
     print("ottinene e salva lachiave pubblica CA")
     installer.generate_public_key()
-
-
-def import_root():
-    """genera tutta l'infrastruttira della PKI importando la chiave ed il certificato root. Eventuali strutture esistenti verranno cancellate"""
-    pass

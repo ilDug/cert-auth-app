@@ -1,5 +1,6 @@
 from datetime import datetime
-from config.conf import CERTS_PATH, PKI_DB, KEYS_PATH
+import shutil
+from config.conf import CERTS_PATH, PKI_DB, KEYS_PATH, PKI_PATH
 from core.models import Certificate
 
 
@@ -34,3 +35,7 @@ class PKIController:
             return datetime.strptime(raw, "%y%m%d%H%M%SZ")
         except (ValueError, TypeError):
             return None
+
+    def export(self):
+        if pki := PKI_PATH.exists():
+            pass
