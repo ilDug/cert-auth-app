@@ -12,7 +12,13 @@ from core.openssl_commands import (
 from config import CERTS_PATH, KEYS_PATH, PUBLIC_PATH, CA_CRT_PATH
 
 
-class Certificate:
+class CertificateController:
+    def list_certificates(self):
+        certs = [c.name for c in CERTS_PATH.iterdir() if c.is_file()]
+        certs = [c.split(".")[:-1] for c in certs]
+        certs = [".".join(c) for c in certs]
+        return certs
+
     def pub_key(self, subject: str):
         crt = CERTS_PATH / f"{subject}.crt"
         pub = PUBLIC_PATH / f"{subject}.pub.pem"

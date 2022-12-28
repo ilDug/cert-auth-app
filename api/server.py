@@ -23,7 +23,6 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:4200",
         "http://127.0.0.1:4200",
-        "https://app3.eurokemical.lan",
     ],
     allow_methods=["OPTIONS", "POST", "PUT", "GET", "DELETE"],
     expose_headers=[

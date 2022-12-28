@@ -32,6 +32,11 @@ CERT_PRINT = Template("openssl x509 -noout -text -in $crtpath")
 CERT_VERIFY = Template("openssl verify -CAfile $capath $crtpath")
 # CERT_VERIFY.substitute(capath=None, crtpath=None)
 
+CERT_REVOKE = Template(
+    "openssl ca -config $configpath -batch -passin file:'$passphrsepath' -revoke $crtpath "
+)
+# CERT_REVOKE.substitute(configpath=None, crtpath=None)
+
 
 PUB_KEY_GEN = Template("openssl x509 -pubkey -noout -in $crtpath -out $pubkeypath")
 # PUB_KEY_GEN.substitute(crtpath=None,pubkeypath=None)

@@ -80,7 +80,7 @@ class Generator:
                 if len(alt_names) > 0:
                     new.writelines(extensions)
 
-    def certificate(self, subject: str, alt_names: list[str]):
+    def certificate(self, subject: str, alt_names: list[str], days:int=1825):
         """crea il certificato, deve esistere la chiave privata el la richiesta CSR"""
         key = KEYS_PATH / f"{subject}.key"
         ext = CONFIGS_PATH / f"{subject}.cnf"
@@ -89,7 +89,7 @@ class Generator:
 
         cmd = CERT_GEN.substitute(
             confpath=CONFIG_FILE,
-            days=1825,
+            days=days,
             extpath=ext,
             passphrsepath=PASSPRHASE_PATH,
             csrpath=csr,
