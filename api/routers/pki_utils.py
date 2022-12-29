@@ -1,9 +1,10 @@
 from pathlib import Path
-from fastapi import APIRouter, Body, BackgroundTasks, UploadFile, HTTPException
+from fastapi import APIRouter, Body, BackgroundTasks, Form, UploadFile, HTTPException
 from fastapi.responses import PlainTextResponse, FileResponse
 from controllers import Installer, PKIController, Importer
 from core.install import install
 import aiofiles
+from core.utils.remove_tmp_file import remove_tmp_file
 
 router = APIRouter(tags=["import"])
 
@@ -22,10 +23,17 @@ async def export_pki(background_tasks: BackgroundTasks):
     pki = PKIController()
     pathfile = pki.export()
     filename = pathfile.name
-    background_tasks.add_task(pki.remove_zip_after_download, pathfile)
+    background_tasks.add_task(remove_tmp_file, pathfile)
     return FileResponse(pathfile, media_type="application/zip", filename=filename)
 
-    # """genera tutta l'infrastruttira della PKI importando la chiave ed il certificato root. Eventuali strutture esistenti verranno cancellate"""
+
+@router.get("/pki/download-root")
+async def download_root(background_tasks: BackgroundTasks):
+    pki = PKIController()
+    pathfile = pki.download_ca_root()
+    filename = pathfile.name
+    background_tasks.add_task(remove_tmp_file, pathfile)
+    return FileResponse(pathfile, media_type="application/zip", filename=filename)
 
 
 @router.post("/pki/import/archive")
@@ -35,12 +43,27 @@ async def import_pki_zip(archive: UploadFile):
 
     importer = Importer()
     importer.clean_structure()
+    return await importer.extract_pki(archive)
 
-    temp_path = Path("/tmp/imported_pki.zip")
-    async with aiofiles.open(temp_path, "wb") as out_file:
-        while content := await archive.read(1024):  # async read chunk
-            await out_file.write(content)  # async write chunk
 
-    return importer.extract_pki(temp_path)
+@router.post("/pki/import/root")
+async def import_root(
+    crt: UploadFile,
+    key: UploadFile,
+    passphrase: str = Form(..., media_type="multipart/form-data"),
+):
+    """genera tutta l'infrastruttira della PKI importando la chiave ed il certificato root. Eventuali strutture esistenti verranno cancellate"""
+    importer = Importer()
+    importer.clean_structure()
+    importer.scaffolding()
 
-    
+    print("importa i files")
+    await importer.import_root(crt, key, passphrase)
+
+    print("ottinene e salva la chiave pubblica CA")
+    importer.generate_public_key()
+
+    print("verifica il certificato")
+    importer.verify_ca_crt()
+
+    return True

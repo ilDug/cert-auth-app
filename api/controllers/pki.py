@@ -1,7 +1,15 @@
 from datetime import datetime
 from pathlib import Path
 import shutil
-from config.conf import CERTS_PATH, PKI_DB, KEYS_PATH, PKI_PATH
+from config.conf import (
+    CERTS_PATH,
+    PKI_DB,
+    KEYS_PATH,
+    PKI_PATH,
+    CA_CRT_PATH,
+    CA_KEY_PATH,
+    PASSPRHASE_PATH,
+)
 from core.models import Certificate
 import zipfile
 from datetime import datetime
@@ -51,6 +59,14 @@ class PKIController:
                 archive.write(file_path, arcname=file_path.relative_to(pki))
         return zippath
 
-    def remove_zip_after_download(self, filename: Path):
-        if filename.exists():
-            filename.unlink()
+    def download_ca_root(self):
+        zipname = f"ca-root.zip"
+        zippath = Path("/tmp") / zipname
+
+        with zipfile.ZipFile( zippath, mode="w" ) as archive:
+            for f in [CA_KEY_PATH, CA_CRT_PATH, PASSPRHASE_PATH]:
+                archive.write(f, arcname=f.name)
+
+        with zipfile.ZipFile(zippath, mode="r") as archive:
+            archive.printdir()
+        return zippath
