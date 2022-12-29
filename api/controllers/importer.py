@@ -1,44 +1,47 @@
 from pathlib import Path
+import aiofiles
 from .installer import Installer
 import zipfile
-from config.conf import PKI_PATH
-from fastapi import HTTPException
+from config.conf import PKI_PATH, CA_CRT_PATH, CA_KEY_PATH, PASSPRHASE_PATH
+from fastapi import HTTPException, UploadFile
+from core.utils.remove_tmp_file import remove_tmp_file
+
 
 class Importer(Installer):
     def __init__(self) -> None:
         super().__init__()
 
-    def extract_pki(self, archive: Path):
+    async def extract_pki(self, archive: UploadFile):
         try:
-            with zipfile.ZipFile(archive, mode="r") as zip_file:
+            temp_path = Path("/tmp/imported_pki.zip")
+            async with aiofiles.open(temp_path, "wb") as out_file:
+                while content := await archive.read(1024):  # async read chunk
+                    await out_file.write(content)  # async write chunk
+
+            with zipfile.ZipFile(temp_path, mode="r") as zip_file:
                 for file in zip_file.namelist():
                     zip_file.extract(file, PKI_PATH)
+
+            remove_tmp_file(temp_path)
+
             return True
         except Exception:
             raise HTTPException(500, "impossibile estrare archivio")
 
-    # def import_ca(self):
-    #     crt = self.import_crt()
-    #     key = self.import_key()
+    async def import_root(self, crt: UploadFile, key: UploadFile, passphrase: str):
+        try:
+            async with aiofiles.open(CA_CRT_PATH, "wb") as out_crt:
+                while content := await crt.read(1024):  # async read chunk
+                    await out_crt.write(content)  # async write chunk
 
-    #     if crt and key:
-    #         CA_KEY_PATH.write_text(key.read_text())
-    #         CA_CRT_PATH.write_text(crt.read_text())
-    #         self.register_passphrase()
-    #     else:
-    #         typer.Exit("non sono stati trovati i file necessari all'importazione")
+            async with aiofiles.open(CA_KEY_PATH, "wb") as out_key:
+                while content := await key.read(1024):  # async read chunk
+                    await out_key.write(content)  # async write chunk
 
-    # def import_crt(self) -> Path:
-    #     for file in IMPORT_PATH.iterdir():
-    #         if file.is_file() and file.suffix == ".crt":
-    #             return file
-
-    # def import_key(self) -> Path:
-    #     for file in IMPORT_PATH.iterdir():
-    #         if file.is_file() and file.suffix == ".key":
-    #             return file
-
-    # def register_passphrase(self):
-    #     passphrase = typer.prompt("inserire la passphrase")
-    #     PASSPRHASE_PATH.write_text(passphrase)
-    #     PASSPRHASE_PATH.chmod(400)
+            PASSPRHASE_PATH.write_text(passphrase)
+            PASSPRHASE_PATH.chmod(400)
+            CA_KEY_PATH.chmod(400)
+            CA_CRT_PATH.chmod(444)
+            return True
+        except Exception:
+            HTTPException(500, "Errori durante il salvataggio dei files")
