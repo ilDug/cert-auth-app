@@ -72,3 +72,8 @@ async def root():
     now = datetime.now()
     # now = datetime.isoformat(datetime.now())
     return f"API SERVER RUNNING... FAST. Server time: {now} (isoformat: {datetime.isoformat(now)})"
+
+
+@app.get("/health-check")
+async def health_check():
+    return True

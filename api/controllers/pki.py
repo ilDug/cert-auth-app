@@ -63,7 +63,7 @@ class PKIController:
         zipname = f"ca-root.zip"
         zippath = Path("/tmp") / zipname
 
-        with zipfile.ZipFile( zippath, mode="w" ) as archive:
+        with zipfile.ZipFile(zippath, mode="w") as archive:
             for f in [CA_KEY_PATH, CA_CRT_PATH, PASSPRHASE_PATH]:
                 archive.write(f, arcname=f.name)
 
