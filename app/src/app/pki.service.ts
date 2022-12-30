@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, finalize, lastValueFrom, map, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, lastValueFrom, map, Observable, of, pipe, tap } from 'rxjs';
 import { Certificate, CertificateSigningRequest } from './core/classes/certificate.class';
 import { ENPOINT } from './core/core.service';
 
@@ -34,24 +34,38 @@ export class PKIService {
         return params;
     }
 
+    private extractFilenameForBlob = pipe(
+        map((res: HttpResponse<Blob>) => {
+            const contentDisposition = res.headers.get('content-disposition')
+            let [match, filename] = contentDisposition.match(/filename="(.+)"/)
+            return { blob: res.body, filename: filename }
+        }))
+
+    private downloadBlob = pipe(
+        map(({ blob, filename }) => {
+            const a = document.createElement('a')
+            const objectUrl = URL.createObjectURL(blob)
+            a.href = objectUrl
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+            return filename as string
+        })
+    )
 
     public exportPki(): Observable<string> {
         return this.http.get(`${this.url}/pki/export`, { responseType: 'blob', observe: 'response' })
             .pipe(
-                map(res => {
-                    const contentDisposition = res.headers.get('content-disposition')
-                    let [match, filename] = contentDisposition.match(/filename="(.+)"/)
-                    return { blob: res.body, filename: filename }
-                }),
-                map(({ blob, filename }) => {
-                    const a = document.createElement('a')
-                    const objectUrl = URL.createObjectURL(blob)
-                    a.href = objectUrl
-                    a.download = filename;
-                    a.click();
-                    URL.revokeObjectURL(objectUrl);
-                    return filename
-                })
+                this.extractFilenameForBlob,
+                this.downloadBlob
+            )
+    }
+
+    public downloadRoot(): Observable<string> {
+        return this.http.get(`${this.url}/pki/download-root`, { responseType: 'blob', observe: 'response' })
+            .pipe(
+                this.extractFilenameForBlob,
+                this.downloadBlob
             )
     }
 
