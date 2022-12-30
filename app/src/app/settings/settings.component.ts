@@ -17,4 +17,8 @@ export class SettingsComponent {
     downloadPki() {
         this.pki$.exportPki().subscribe(filename => this.toast.info(`PKI con successo ${filename}`, 3000))
     }
+
+    downloadRoot() {
+        this.pki$.downloadRoot().subscribe(filename => this.toast.info(`ROOT CA scaricata con successo`, 3000))
+    }
 }
