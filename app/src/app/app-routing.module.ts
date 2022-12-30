@@ -22,7 +22,7 @@ const routes: Routes = [
             { path: ":key", component: KeysDisplayComponent }
         ]
     },
-    { path: "settings", component: SettingsComponent }
+  { path: "settings", component: SettingsComponent }
 ];
 
 @NgModule({
