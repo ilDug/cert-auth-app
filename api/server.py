@@ -32,6 +32,7 @@ app.add_middleware(
         "X-Error",
         "X-Auth-Token",
         "Authorization",
+        "Content-Disposition"
     ],
     allow_headers=[
         "Origin",
