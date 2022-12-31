@@ -9,7 +9,7 @@ from core.utils.remove_tmp_file import remove_tmp_file
 router = APIRouter(tags=["import"])
 
 
-@router.get("/pki/reset")
+@router.delete("/pki/reset")
 async def reset_pki():
     pki = Installer()
     pki.clean_structure()
