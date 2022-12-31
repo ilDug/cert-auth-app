@@ -25,8 +25,8 @@ class Importer(Installer):
             remove_tmp_file(temp_path)
 
             return True
-        except Exception:
-            raise HTTPException(500, "impossibile estrare archivio")
+        except Exception as e :
+            raise HTTPException(500, f"impossibile estrare archivio: {str(e)}")
 
     async def import_root(self, crt: UploadFile, key: UploadFile, passphrase: str):
         try:
