@@ -21,6 +21,7 @@ import { KeysListComponent } from './keys/keys-list/keys-list.component';
 import { KeysDisplayComponent } from './keys/keys-display/keys-display.component';
 import { NgxConfirmModule } from '@ildug/ngx-confirm';
 import { NgxUploadModule } from './core/modules/ngx-upload';
+import { ImportPkiComponent } from './settings/import-pki/import-pki.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { NgxUploadModule } from './core/modules/ngx-upload';
         CertsListComponent,
         CertDisplayComponent,
         KeysListComponent,
-        KeysDisplayComponent
+        KeysDisplayComponent,
+        ImportPkiComponent
     ],
     imports: [
         BrowserModule,

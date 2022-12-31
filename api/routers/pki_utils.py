@@ -37,13 +37,13 @@ async def download_root(background_tasks: BackgroundTasks):
 
 
 @router.post("/pki/import/archive")
-async def import_pki_zip(archive: UploadFile):
-    if archive.content_type != "application/zip":
+async def import_pki_zip(file: UploadFile):
+    if file.content_type != "application/zip":
         raise HTTPException(400, "il file deve essere un archivio zip")
 
     importer = Importer()
     importer.clean_structure()
-    return await importer.extract_pki(archive)
+    return await importer.extract_pki(file)
 
 
 @router.post("/pki/import/root")

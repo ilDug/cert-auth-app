@@ -3,7 +3,8 @@ import { NgxUploadListDirective } from './ngx-upload-list.directive';
 import { UploadSet } from './uploas-set';
 
 @Directive({
-    selector: '[NgxUploadItem]'
+    selector: '[ngxUploadItem]',
+    exportAs: 'ngxUploadItem'
 })
 export class NgxUploadItemDirective {
 

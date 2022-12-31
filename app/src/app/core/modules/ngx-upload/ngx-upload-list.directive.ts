@@ -4,7 +4,9 @@ import { NgxUploadService } from './ngx-upload.service';
 import { UploadSet } from './uploas-set';
 
 @Directive({
-    selector: '[NgxUploadList]'
+    selector: '[NgxUploadList]',
+    exportAs: 'NgxUploadList',
+
 })
 export class NgxUploadListDirective implements OnDestroy {
 
