@@ -21,4 +21,12 @@ export class SettingsComponent {
     downloadRoot() {
         this.pki$.downloadRoot().subscribe(filename => this.toast.info(`ROOT CA scaricata con successo`, 3000))
     }
+
+
+    resetPki() {
+        this.pki$.resetPki().subscribe({
+            next: success => this.toast.info("reset completato", 3000),
+            error: err => this.toast.error("Errore lato server", 3000)
+        })
+    }
 }

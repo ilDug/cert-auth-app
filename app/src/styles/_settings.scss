@@ -3,6 +3,10 @@
   padding: 1rem;
   border-radius: 1rem;
 
+  &.danger{
+    border-color: $red;
+  }
+
   .actions{
     text-align: end;
   }

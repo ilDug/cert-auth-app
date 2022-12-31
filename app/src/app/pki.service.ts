@@ -70,4 +70,9 @@ export class PKIService {
     }
 
 
+    public resetPki(): Observable<boolean> {
+        return this.http.delete<boolean>(`${this.url}/pki/reset`)
+    }
+
+
 }
