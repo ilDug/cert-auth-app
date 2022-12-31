@@ -19,6 +19,7 @@ import { httpInterceptorProviders } from './core/interceptors';
 import { HttpClientModule } from '@angular/common/http';
 import { KeysListComponent } from './keys/keys-list/keys-list.component';
 import { KeysDisplayComponent } from './keys/keys-display/keys-display.component';
+import { NgxUploadModule } from './core/modules/ngx-upload';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { KeysDisplayComponent } from './keys/keys-display/keys-display.component
         BrowserAnimationsModule,
         CoreModule,
         RouterModule,
-        NgxToastModule
+        NgxToastModule,
+        NgxUploadModule
 
     ],
     providers: [

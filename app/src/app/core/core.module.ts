@@ -27,6 +27,7 @@ import { NgxUploadModule } from './modules/ngx-upload/ngx-upload.module';
         MatTabsModule,
         ClipboardModule,
         MatTooltipModule,
+        NgxUploadModule,
         NgxUploadModule
     ]
 })

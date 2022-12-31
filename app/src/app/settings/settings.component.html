@@ -12,7 +12,7 @@
                 <div class="commands">
                     <ul>
                         <!-- <li (click)="null"><i class="fa-light fa-plus me-1"></i>aggiungi</li> -->
-                        <li [routerLink]="['/settings']" ><i class="fa-light fa-sync me-1"></i>reload </li>
+                        <li [routerLink]="['/settings']"><i class="fa-light fa-sync me-1"></i>reload </li>
                     </ul>
                 </div>
             </div>
@@ -23,13 +23,13 @@
                 <div class="setting-box">
                     <h4><i class="fa-thin fa-folder-tree me-2"></i> Export PKI</h4>
                     <p><small>
-                      Esporta l'intera struttura della PKI in file ZIP,  per poter creare un archivio della Public Key Insfrastructure.
-                      <br>
-                      <span class="text-warning">Attenzione:</span> il file contiene anche le chiavi private e la passphrase del certificato ROOT. Conservare il file con cura.
-                    </small></p>
+                            Esporta l'intera struttura della PKI in file ZIP, per poter creare un archivio della Public Key Insfrastructure.
+                            <br>
+                            <span class="text-warning">Attenzione:</span> il file contiene anche le chiavi private e la passphrase del certificato ROOT. Conservare il file con cura.
+                        </small></p>
 
                     <div class="actions">
-                      <button class="btn btn-primary" (click)="downloadPki()"><i class="fa-light fa-file-export me-2"></i>esporta</button>
+                        <button class="btn btn-primary" (click)="downloadPki()"><i class="fa-light fa-file-export me-2"></i>esporta</button>
                     </div>
                 </div>
             </div>
@@ -41,13 +41,13 @@
                 <div class="setting-box">
                     <h4><i class="fa-thin fa-shield me-2"></i> Download ROOT CA</h4>
                     <p><small>
-                      Scarica il certificato di ROOT della Certification Authority,  insieme alla chiave privata ed alla passphrase
-                      <br>
-                      <span class="text-warning">Attenzione:</span> il file contiene ainformazioni private che devono essere conservate con per non compromettere l'authorità della CA.
-                    </small></p>
+                            Scarica il certificato di ROOT della Certification Authority, insieme alla chiave privata ed alla passphrase
+                            <br>
+                            <span class="text-warning">Attenzione:</span> il file contiene ainformazioni private che devono essere conservate con per non compromettere l'authorità della CA.
+                        </small></p>
 
                     <div class="actions">
-                      <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-download me-2"></i>scarica</button>
+                        <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-download me-2"></i>scarica</button>
                     </div>
                 </div>
             </div>
@@ -59,13 +59,17 @@
                 <div class="setting-box">
                     <h4><i class="fa-thin fa-file-arrow-up me-2"></i> Import PKI</h4>
                     <p><small>
-                      Importa una PKI esistente.
-                      <br>
-                      Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
-                    </small></p>
+                            Importa una PKI esistente.
+                            <br>
+                            Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
+                        </small></p>
+
+                    <div class="drop-area" NgxUploadArea [uploadOptions]="{validExtensions:['zip']}" (add)="null" (error)="null">
+                        drop pki archive (or click to select)
+                    </div>
 
                     <div class="actions">
-                      <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-upload me-2"></i>carica</button>
+                        <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-upload me-2"></i>carica</button>
                     </div>
                 </div>
             </div>
