@@ -10,4 +10,25 @@
   .actions{
     text-align: end;
   }
+
+  .drop-area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+    max-width: 20rem;
+    min-height: 10rem;
+
+    border-radius: 0.5rem;
+
+    background:  $bg-color;
+    transition: all 0.5s;
+
+    &.drag-hover{
+        background:  shade-color($bg-color, 10%);
+
+    }
+  }
 }

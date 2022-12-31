@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from "@angular/material/tabs"
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip'
+import { NgxUploadModule } from './modules/ngx-upload/ngx-upload.module';
 
 @NgModule({
     declarations: [],
@@ -26,6 +27,8 @@ import { MatTooltipModule } from '@angular/material/tooltip'
         MatTabsModule,
         ClipboardModule,
         MatTooltipModule,
+        NgxUploadModule,
+        NgxUploadModule
     ]
 })
 export class CoreModule { }
