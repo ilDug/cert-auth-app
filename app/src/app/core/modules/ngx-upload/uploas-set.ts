@@ -1,23 +1,14 @@
 import { Subject } from 'rxjs';
 
 
+export class UploadOptions {
+    constructor(o: Partial<UploadOptions>) {
+        o.validExtensions = o.validExtensions ?? ["jpg", "jpeg", "png", "tiff", 'pdf'];
+        o.maxFileSize = 3000000
+        o.prefix = o.prefix ?? ""
+        Object.assign(this, o)
+    }
 
-export interface IUploadOptions {
-    /** estensioni suportate */
-    validExtensions?: string[];
-
-    /** dimensione massima del file in byte */
-    maxFileSize?: number;
-
-    /** prefisso da assegnare al nome del file */
-    prefix?: string;
-}
-
-
-
-
-
-export class UploadOptions implements IUploadOptions {
     /** estensioni suportate */
     validExtensions: string[];
 
@@ -27,10 +18,6 @@ export class UploadOptions implements IUploadOptions {
     /** prefisso del nomefile */
     prefix: string;
 
-    constructor() {
-        this.validExtensions = ["jpg", "jpeg", "png", "tiff", 'pdf'];
-        this.maxFileSize = 3000000
-    }
 
 }
 
@@ -50,18 +37,18 @@ export class UploadSet {
 
 
     /**
-     * 
+     *
      * @param filename nome del file
      * @param file il file in formato File
      * @param options opzioni di caricamento
      */
-    constructor(filename: string, file?: File, options?: IUploadOptions) {
+    constructor(filename: string, file?: File, options?: Partial<UploadOptions>) {
 
         /** inizializza il progress */
         this.progress = new Subject<number>();
 
         /** inizializza le opzioni */
-        this.defaultOptions(options);
+        this.options = new UploadOptions(options);
 
         this.file = file;
 
@@ -74,7 +61,7 @@ export class UploadSet {
 
         let reader: FileReader = new FileReader();
         reader.onload = (e: Event) => {
-            
+
             const base64: string | any = reader.result;
             this.src = base64;
 
@@ -85,25 +72,6 @@ export class UploadSet {
 
         if (file) reader.readAsDataURL(file);
     }
-
-
-
-
-    /** inizializza le opzioni dek Set */
-    private defaultOptions(opts: IUploadOptions) {
-        let options = new UploadOptions();
-
-        if (opts.hasOwnProperty('validExtensions')) options.validExtensions = opts['validExtensions'];
-        if (opts.hasOwnProperty('prefix')) options.prefix = opts['prefix'];
-        if (opts.hasOwnProperty('maxFileSize')) options.maxFileSize = opts['maxFileSize'];
-
-        this.options = options;
-        console.log(this.options);
-
-    }
-
-
-
 
 
     /**

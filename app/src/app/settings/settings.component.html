@@ -67,6 +67,9 @@
 
                     <div class="actions">
                         <button class="btn btn-danger" dagConfirm (confirm)="resetPki()"><i class="fa-light fa-trash-can-arrow-up me-2"></i>reset</button>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-download me-2"></i>scarica</button>
                     </div>
                 </div>
             </div>
@@ -78,13 +81,17 @@
                 <div class="setting-box">
                     <h4><i class="fa-thin fa-file-arrow-up me-2"></i> Import PKI</h4>
                     <p><small>
-                      Importa una PKI esistente.
-                      <br>
-                      Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
-                    </small></p>
+                            Importa una PKI esistente.
+                            <br>
+                            Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
+                        </small></p>
+
+                    <div class="drop-area" NgxUploadArea [uploadOptions]="{validExtensions:['zip']}" (add)="null" (error)="null">
+                        drop pki archive (or click to select)
+                    </div>
 
                     <div class="actions">
-                      <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-upload me-2"></i>carica</button>
+                        <button class="btn btn-primary" (click)="downloadRoot()"><i class="fa-light fa-file-upload me-2"></i>carica</button>
                     </div>
                 </div>
             </div>

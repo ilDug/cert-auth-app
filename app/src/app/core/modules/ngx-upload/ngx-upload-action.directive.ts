@@ -1,10 +1,20 @@
-import { Directive } from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject } from '@angular/core';
+import { NgxUploadListDirective } from './ngx-upload-list.directive';
 
 @Directive({
-  selector: '[appNgxUploadAction]'
+    selector: '[NgxUploadAction]'
 })
 export class NgxUploadActionDirective {
 
-  constructor() { }
+    constructor(
+        @Inject(forwardRef(() => NgxUploadListDirective)) private fileList: NgxUploadListDirective
+    ) { }
 
+
+    @HostListener('click', ['$event'])
+    upload(e: Event) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.fileList.uploadAll()
+    }
 }

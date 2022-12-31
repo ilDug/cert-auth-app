@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { KeysListComponent } from './keys/keys-list/keys-list.component';
 import { KeysDisplayComponent } from './keys/keys-display/keys-display.component';
 import { NgxConfirmModule } from '@ildug/ngx-confirm';
+import { NgxUploadModule } from './core/modules/ngx-upload';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,11 @@ import { NgxConfirmModule } from '@ildug/ngx-confirm';
         CoreModule,
         RouterModule,
         NgxToastModule,
+<<<<<<< HEAD
         NgxConfirmModule,
+=======
+        NgxUploadModule
+>>>>>>> 1a906b47 (ngcuploadFile)
 
     ],
     providers: [
