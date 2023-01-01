@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, finalize, lastValueFrom, map, Observable, of, pipe, tap } from 'rxjs';
 import { Certificate, CertificateSigningRequest } from './core/classes/certificate.class';
 import { ENPOINT } from './core/core.service';
+import { UploadSet } from './core/modules/ngx-upload';
 
 @Injectable({
     providedIn: 'root'
@@ -72,6 +73,16 @@ export class PKIService {
 
     public resetPki(): Observable<boolean> {
         return this.http.delete<boolean>(`${this.url}/pki/reset`)
+    }
+
+
+    public uploadRoot(crt: UploadSet, key: UploadSet, passphrase: string) {
+        const formdata = new FormData();
+        formdata.append('crt', crt.file)
+        formdata.append('key', key.file)
+        formdata.append('passphrase', passphrase)
+
+        return this.http.post(`${this.url}/pki/import/root`, formdata)
     }
 
 
