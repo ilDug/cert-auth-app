@@ -1,0 +1,35 @@
+<header dagToast></header>
+<div id="main-container">
+    <nav>
+        <div id="logo">
+            <i class="fa-duotone fa-landmark-dome"></i>
+            <p>CERT-AUTH</p>
+        </div>
+        <div id="nav-links">
+            <ul>
+                <li [routerLink]="['/certificates']" routerLinkActive="active">
+                    <i class="fa-solid fa-file-certificate"></i>
+                    <span class="link-description">certificati</span>
+                </li>
+                <li [routerLink]="['/keys']" routerLinkActive="active">
+                    <i class="fa-solid fa-key-skeleton-left-right"></i>
+                    <span class="link-description">chiavi</span>
+                </li>
+                <li [routerLink]="['/settings']" routerLinkActive="active">
+                    <i class="fa-solid fa-cog"></i>
+                    <span class="link-description">impostazioni</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="application">
+        <router-outlet></router-outlet>
+        <!-- <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ea dicta deleniti eos, error unde ipsam veritatis quam quia iste in. Nostrum id perferendis molestiae, sunt illum iusto eius laboriosam quo.
+            Dolores quasi corporis veritatis magni fuga tempore doloremque ipsum ad sunt rerum nobis pariatur, molestiae vitae est, doloribus veniazm voluptatum neque adipisci deleniti suscipit earum! Corporis iste quos ut in.
+            Exercitationem libero omnis sunt, esse magnam repellendus officia numquam doloribus voluptas ad odit et dolor nihil ducimus laboriosam dolore ipsam ipsa eaque alias aperiam a dolorem. Est molestias perferendis magnam.
+            Laudantium hic ullam maiores minus non iusto quisquam est vero delectus, quasi placeat modi tempora excepturi ipsa sint ipsum optio dolorum soluta neque dolorem. Sit neque eligendi eveniet porro veritatis.
+            Cum est numquam, sunt, eius sint facilis perspiciatis voluptas consequatur temporibus aut quo ea magnam rerum veritatis minus aliquid magni. Ipsum veniam fugit qui dolorem harum temporibus consequatur asperiores expedita!
+            <button class="btn btn-primary">Ciao</button>
+        </p> -->
+    </div>
+</div>

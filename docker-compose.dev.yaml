@@ -1,0 +1,35 @@
+version: "3.9"
+
+networks:
+  cert-auth-net:
+
+##########################################
+secrets: {}
+
+
+##########################################
+volumes:
+  pki:
+
+##########################################
+services:
+
+  api:
+    container_name: certauth-api
+    build:
+      context: ./
+      dockerfile: Dockerfile.api-dev
+    restart: unless-stopped
+    environment:
+      MODE: DEVELOPMENT
+      PYTHONUNBUFFERED: 1
+      TZ: Europe/Rome
+    ports:
+      - 8310:8000
+    volumes:
+      - ./api:/app # cartella dell'applicazione
+      - pki:/PKI
+      # - /etc/timezone:/etc/timezone:ro
+      # - /etc/localtime:/etc/localtime:ro
+    networks:
+      - cert-auth-net
