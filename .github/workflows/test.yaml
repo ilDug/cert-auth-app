@@ -38,7 +38,7 @@ jobs:
       run: |
         cd ./app
         pwd
-        ng build 
+        npm run build 
     
 
       
