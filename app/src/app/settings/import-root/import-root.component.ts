@@ -5,7 +5,7 @@ import { UploadSet, UPLOAD_ENDPOINT, UPLOAD_STRATEGY } from 'src/app/core/module
 import { NgxUploadListDirective } from 'src/app/core/modules/ngx-upload/ngx-upload-list.directive';
 import { NgxUploadService } from 'src/app/core/modules/ngx-upload/ngx-upload.service';
 import { PKIService } from 'src/app/pki.service';
-import { APIURL } from 'src/environments.prod.';
+import { APIURL } from 'src/environments';
 
 @Component({
     selector: 'app-import-root',

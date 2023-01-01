@@ -1,0 +1,69 @@
+version: "3.9"
+
+networks:
+  default:
+    name: traefik_net
+    external: true
+
+  # cert-auth-net:
+
+##########################################
+secrets: {}
+
+
+##########################################
+volumes:
+  pki:
+
+##########################################
+services:
+
+  api:
+    container_name: certauth-api
+    image: ghcr.io/ildug/cert-auth-app-api
+    restart: unless-stopped
+    environment:
+      MODE: PRODUCTION
+      PYTHONUNBUFFERED: 1
+      TZ: Europe/Rome
+    volumes:
+      # - ./api:/app # cartella dell'applicazione
+      - pki:/PKI
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.certauthapi.rule=Host(`ca.dag.lan`) && PathPrefix(`/api`) "
+      - "traefik.http.routers.certauthapi.entrypoints=websecure"
+      - "traefik.http.routers.certauthapi.tls=true"
+      # - "traefik.http.routers.certauthapi.tls.certresolver=le"
+      - "traefik.http.routers.certauthapi.middlewares=api_stripprefix@docker"
+      - "traefik.http.middlewares.api_stripprefix.stripprefix.prefixes=/api"
+
+
+  app:
+    container_name: certauth-app
+    image: ghcr.io/ildug/cert-auth-app-web
+    restart: unless-stopped
+    environment:
+      MODE: PRODUCTION
+      TZ: Europe/Rome
+    depends_on:
+      - api
+    volumes:
+      # - ./app/dist/cert-auth:/app # cartella del sito
+      # - ./assets:/app/assets # collegamento ai file statici
+      # - ./config/nginx:/etc/nginx/conf.d
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.certauthapp.rule=Host(`ca.dag.lan`)"
+      - "traefik.http.routers.certauthapp.entrypoints=websecure"
+      - "traefik.http.routers.certauthapp.tls=true"
+      # - "traefik.http.routers.certauthapp.tls.certresolver=le"
+

@@ -1,0 +1,12 @@
+FROM nginx
+WORKDIR /app
+
+# cartella delle configurazioni
+COPY ./config/nginx/ /etc/nginx/conf.d/
+
+# cartelle del sito
+COPY ./app/dist/cert-auth /app 
+
+EXPOSE 80
+
+# CMD ["nginx", "-g", "daemon off;"]
