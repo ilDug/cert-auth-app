@@ -1,0 +1,78 @@
+<div class="setting-box">
+    <h4><i class="fa-thin fa-file-arrow-up me-2"></i> Import ROOT</h4>
+    <p><small>
+            Importa il certificato Root della Certification Authority esistente, insieme alla chiave privata e alla passphrase.
+            Utile per quando si posiede già un certificato distribuito ai singoli client, e con il quale si ha la necessità di ricostruire una pki.
+            <br>
+            Caricare i file ed inserire la passphrase. <span class="text-warning">Attenzione</span> tutto il contenuto dell'attuale PKI verrà cancellato. Prevedere una copia di backup.
+        </small></p>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="drop-area" NgxUploadArea [uploadOptions]="{validExtensions:['crt']}" (add)="flcrt.add($event)" (error)="onError($event)">
+                <p class="text-primary text-center" *ngIf="flcrt.empty">drop CA certificate <br>(or click to select)</p>
+
+                <div class="file-upload-list" NgxUploadList #flcrt="NgxUploadList" (upload)="flcrt.markAsUploaded()">
+                    <ng-container *ngFor="let f of flcrt.files">
+                        <div class="pki-crt file-item" [ngxUploadItem]="f" #fitem="ngxUploadItem">
+                            <span class="file-icon">
+                                <i class="fa-duotone fa-file-certificate"></i>
+
+                                <span class="file-item-status completed" *ngIf="fitem.completed"><i class="fa-regular fa-check"></i></span>
+
+                                <span class="file-item-status pending" *ngIf="fitem.pending"><i class="fa-regular fa-sync"></i></span>
+
+                                <span class="file-item-status error" *ngIf="fitem.invalid"><i class="fa-regular fa-exclamation-triangle"></i></span>
+
+                                <span class="remove-file" NgxUploadRemove><i class="fa-light fa-times-circle text-danger"></i></span>
+                            </span>
+                            <span class="file-text">{{f.file.size/1000}} kB</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="drop-area" NgxUploadArea [uploadOptions]="{validExtensions:['key']}" (add)="flkey.add($event)" (error)="onError($event)">
+                <p class="text-primary text-center" *ngIf="flkey.empty">drop CA private key <br>(or click to select)</p>
+
+                <div class="file-upload-list" NgxUploadList #flkey="NgxUploadList" (upload)="flkey.markAsUploaded()">
+                    <ng-container *ngFor="let f of flkey.files">
+                        <div class="pki-key file-item" [ngxUploadItem]="f" #fitem="ngxUploadItem">
+                            <span class="file-icon">
+                                <i class="fa-duotone fa-file-powerpoint"></i>
+
+                                <span class="file-item-status completed" *ngIf="fitem.completed"><i class="fa-regular fa-check"></i></span>
+
+                                <span class="file-item-status pending" *ngIf="fitem.pending"><i class="fa-regular fa-sync"></i></span>
+
+                                <span class="file-item-status error" *ngIf="fitem.invalid"><i class="fa-regular fa-exclamation-triangle"></i></span>
+
+                                <span class="remove-file" NgxUploadRemove><i class="fa-light fa-times-circle text-danger"></i></span>
+                            </span>
+                            <span class="file-text">{{f.file.size/1000}} kB</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="passphrase" placeholder="passphrase" [(ngModel)]="passphrase">
+                    <label for="floatingPassword">passphrase</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <div class="actions">
+        <button class="btn btn-primary" (click)="submit()" [disabled]="flcrt.empty || flkey.empty || !passphrase"><i class="fa-light fa-file-upload me-2"></i>carica</button>
+    </div>
+</div>

@@ -19,6 +19,10 @@ import { httpInterceptorProviders } from './core/interceptors';
 import { HttpClientModule } from '@angular/common/http';
 import { KeysListComponent } from './keys/keys-list/keys-list.component';
 import { KeysDisplayComponent } from './keys/keys-display/keys-display.component';
+import { NgxConfirmModule } from '@ildug/ngx-confirm';
+import { NgxUploadModule } from './core/modules/ngx-upload';
+import { ImportPkiComponent } from './settings/import-pki/import-pki.component';
+import { ImportRootComponent } from './settings/import-root/import-root.component';
 
 @NgModule({
     declarations: [
@@ -30,7 +34,9 @@ import { KeysDisplayComponent } from './keys/keys-display/keys-display.component
         CertsListComponent,
         CertDisplayComponent,
         KeysListComponent,
-        KeysDisplayComponent
+        KeysDisplayComponent,
+        ImportPkiComponent,
+        ImportRootComponent
     ],
     imports: [
         BrowserModule,
@@ -39,7 +45,9 @@ import { KeysDisplayComponent } from './keys/keys-display/keys-display.component
         BrowserAnimationsModule,
         CoreModule,
         RouterModule,
-        NgxToastModule
+        NgxToastModule,
+        NgxConfirmModule,
+        NgxUploadModule
 
     ],
     providers: [
