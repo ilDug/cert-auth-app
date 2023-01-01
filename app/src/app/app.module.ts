@@ -46,12 +46,8 @@ import { ImportRootComponent } from './settings/import-root/import-root.componen
         CoreModule,
         RouterModule,
         NgxToastModule,
-<<<<<<< HEAD
         NgxConfirmModule,
-=======
         NgxUploadModule
->>>>>>> 1a906b47 (ngcuploadFile)
-
     ],
     providers: [
         { provide: ENPOINT, useValue: APIURL },
