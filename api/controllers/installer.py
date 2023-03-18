@@ -11,6 +11,7 @@ from config import (
     CONFIGS_PATH,
     PASSPRHASE_PATH,
     PKI_PATH,
+    CA_DURATION
 )
 
 
@@ -36,10 +37,11 @@ class Installer:
     ######################################################################################
 
     def scaffolding(self):
-        PKI_PATH.mkdir(770, exist_ok=True)
+        PKI_PATH.mkdir(0o777, exist_ok=True)
 
         for p in [PKI_PATH / d for d in self.dirs]:
-            p.mkdir(770, exist_ok=True)
+            p.mkdir(0o777, exist_ok=True)
+            p.chmod(0o777)
 
         Path(PKI_PATH / "index.txt").write_text("")
         Path(PKI_PATH / "serial").write_text("1000")
@@ -79,7 +81,7 @@ class Installer:
             passphrasepath=PASSPRHASE_PATH,
             cakeypath=CA_KEY_PATH,
             cacrtpath=CA_CRT_PATH,
-            days=3650,
+            days=CA_DURATION,
         )
         print(cmd)
         os.system(cmd)
