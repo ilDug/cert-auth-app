@@ -3,21 +3,17 @@
 
 :root {
     // colore di sfondo
-    --c-bg: hsl(163deg 11% 91%);
-    // --c-bg:  rgb(233 236 239);
+    --c-bg: hsl(270, 2%, 20%);
 
     // colore del testo
-    --c-body: var(--c-alter);
-    // --c-body: var(--c-gray-600);
+    --c-body: var(--c-gray-600);
 }
 
 
 $theme: (
-    // "main": rgb(255, 91, 96),
-    "main": rgb(223, 143, 69),
+    "main":  hsl(167, 23%, 36%),
     "vice": hsl(266, 40%, 60%),
-    "alter":  hsl(163deg 11% 30%),
-    // "alter": rgb(74, 89, 95),
+    "alter":  hsl(54, 23%, 36%),
     "accent": rgb(162, 1, 125),
     "error": hsl(0, 50%, 60%),
     "warn": hsl(50, 70%, 60%),

@@ -157,5 +157,5 @@ $dark-theme: mat.define-theme(
 
 html {
     @include mat.core();
-    @include mat.all-component-themes($ek-theme);
+    @include mat.all-component-themes($dark-theme);
 }
