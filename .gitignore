@@ -2,6 +2,7 @@ pki/
 import/
 .DS_Store
 
+.angular/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
