@@ -1,0 +1,22 @@
+@use "core";
+@use "common";
+@use "components";
+@use "pages";
+
+@use "material-3-theme"; // l'ho messo in angular.json
+
+
+/********************************************/
+body, app-root{
+    display:flex;
+    flex-direction:column;
+    min-height: 100vh;
+    margin: 0;
+    // background-color: $backgroundColor;
+}
+
+// imposta la pagina a tutta altezza per ciò che viene rappresentato nel router outlet
+router-outlet + *{
+    flex: 1 0 auto;
+}
+/********************************************/
