@@ -7,8 +7,8 @@ import { ToastDirective } from '@ildug/ngx-toast';
     standalone: true,
     imports: [RouterOutlet, ToastDirective, RouterLink, RouterLinkActive],
     template: `
-    <header dagToast></header>
-    <section id="main-container">
+    <header dagToast class="w-100" style="height: 2rem;"></header>
+    <section id="main-container" >
         <nav>
             <div id="logo">
                 <i class="fa-duotone fa-landmark-dome"></i>
