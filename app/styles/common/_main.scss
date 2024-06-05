@@ -1,5 +1,11 @@
 #main-container{
     display: grid;
     grid-template-columns: max-content 1fr;
-    ;
+    flex-grow: 1;
+
+    #application{
+        background: var(--c-bg-7);
+        border-top-left-radius: 1rem;
+        padding: 2rem;
+    }
 }
