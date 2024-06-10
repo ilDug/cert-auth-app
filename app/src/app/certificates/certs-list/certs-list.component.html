@@ -1,1 +1,34 @@
-<p>certs-list works!</p>
+<div class="p-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Certificato</th>
+                <th scope="col">Serial</th>
+                <th scope="col">Status</th>
+                <th scope="col">Scadenza</th>
+                <th scope="col">Revocato</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (c of certs$.collection(); track $index) {
+
+            <tr [routerLink]="['/certificates', c.common_name]">
+                <th scope="row">{{ $index + 1 }}</th>
+                <td>{{ c.common_name }}</td>
+                <td>{{ c.serial }}</td>
+                <td>{{ c.status }}</td>
+                <td>{{ c.exp_date | date }}</td>
+                <td>{{ c.revoke_date | date }}</td>
+            </tr>
+
+            } @empty {
+            <tr class="t-center t-xl t-warn">
+                <td [colSpan]="6">
+                    No certificates found
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
