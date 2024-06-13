@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { CertificatesService } from '../core';
-import { AddCertificateDialogComponent } from '../certificate/add-certificate-dialog/add-certificate-dialog.component';
+import { AddCertificateDialogComponent } from '../certificates/add-certificate-dialog/add-certificate-dialog.component';
 
 @Component({
   selector: 'ca-certificates',

@@ -5,6 +5,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { KeysComponent } from './keys/keys.component';
 import { KeysListComponent } from './keys/keys-list/keys-list.component';
 import { KeysDisplayComponent } from './keys/keys-display/keys-display.component';
+import { CertsDisplayComponent } from './certificates/certs-display/certs-display.component';
 
 export const routes: Routes = [
     { path: "", pathMatch: "full", redirectTo: "certificates" },
@@ -14,7 +15,7 @@ export const routes: Routes = [
         title: "Certificates",
         children: [
             { path: "", component: CertsListComponent },
-            { path: ":cert", component: CertsListComponent },
+            { path: ":cert", component: CertsDisplayComponent },
         ]
     },
     {
