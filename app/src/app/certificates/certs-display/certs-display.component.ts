@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'ca-certs-display',
   standalone: true,
-  imports: [CommonModule, MatIconButton, CdkCopyToClipboard, MatTooltip, PemDownloadDirective, RouterLink],
+  imports: [CommonModule,  CdkCopyToClipboard, MatTooltip, PemDownloadDirective, RouterLink],
   templateUrl: './certs-display.component.html',
   styles: ``
 })

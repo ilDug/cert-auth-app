@@ -1,1 +1,24 @@
-<p>keys-list works!</p>
+<div class="p-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Chiave</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (k of keys$.collection(); track $index) {
+
+            <tr [routerLink]="['/keys', k]">
+                <th scope="row">{{ $index + 1 }}</th>
+                <td>{{ k }}</td>
+            </tr>
+
+            } @empty {
+            <tr class="t-center t-xl t-warn">
+                <td [colSpan]="6">No keys found</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

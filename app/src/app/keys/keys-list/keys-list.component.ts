@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { KeysService } from '../../core';
 
 @Component({
   selector: 'ca-keys-list',
@@ -10,4 +11,7 @@ import { RouterModule } from '@angular/router';
   styles: ``
 })
 export class KeysListComponent {
+
+    keys$ = inject(KeysService);
+    
 }
