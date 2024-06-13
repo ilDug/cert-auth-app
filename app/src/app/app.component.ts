@@ -23,6 +23,10 @@ import { ToastDirective } from '@ildug/ngx-toast';
                     <li [routerLink]="['/keys']" routerLinkActive="active">
                         <i class="fa-solid fa-key-skeleton-left-right"></i>
                         <span class="link-description">chiavi</span>
+                    </li>                    
+                    <li [routerLink]="['/keys']" routerLinkActive="active">
+                        <i class="fa-solid fa-route-interstate"></i>
+                        <span class="link-description">root</span>
                     </li>
                     <li [routerLink]="['/settings']" routerLinkActive="active">
                         <i class="fa-solid fa-cog"></i>
