@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'ca-keys',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './keys.component.html',
   styles: ``
 })

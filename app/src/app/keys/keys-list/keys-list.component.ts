@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'ca-keys-list',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterModule],
   templateUrl: './keys-list.component.html',
   styles: ``
 })
 export class KeysListComponent {
-
 }
