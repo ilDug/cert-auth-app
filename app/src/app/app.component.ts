@@ -24,7 +24,7 @@ import { ToastDirective } from '@ildug/ngx-toast';
                         <i class="fa-solid fa-key-skeleton-left-right"></i>
                         <span class="link-description">chiavi</span>
                     </li>                    
-                    <li [routerLink]="['/keys']" routerLinkActive="active">
+                    <li [routerLink]="['/root']" routerLinkActive="active">
                         <i class="fa-solid fa-route-interstate"></i>
                         <span class="link-description">root</span>
                     </li>

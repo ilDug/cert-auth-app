@@ -1,0 +1,43 @@
+<h1><i class="fa-light fa-route-interstate me-3 t-error"></i> Root Certificate Authority</h1>
+
+<div class="flex g-3 justify-end p-2" style="border-bottom: 1px solid var(--c-bg-2)">
+    <a (click)="(null)" class="btn btn-main">
+        <i class="fa-light fa-download me-1"></i>download CRT
+    </a>
+
+    <a [routerLink]="['/certificates']" class="btn">
+        <i class="fa-certificate fa-list me-1"></i>certificates
+    </a>
+</div>
+
+<div class="mt-3 mx-auto " style="max-width: 700px;">
+    <div class="b-gray br-12 p-3 pos-relative">
+        <h4>Download Certification Authority zip</h4>
+        <p>
+            Scarica il certificato di ROOT della Certification Authority, insieme alla chiave
+            privata ed alla passphrase
+            <br />
+            <span class="t-warn">Attenzione:</span> il file contiene ainformazioni private che
+            devono essere conservate con per non compromettere l'authorità della CA.
+        </p>
+        <p class="t-right">
+            <button class="btn btn-charm" (click)="(null)">
+                <i class="fa-light fa-file-download me-2"></i>scarica
+            </button>
+        </p>
+    </div>
+
+    <div class="pos-relative bg-gray-900 p-2 br-5 mt-3">
+        <a
+            [cdkCopyToClipboard]="null"
+            matTooltip="copy"
+            class="pos-absolute"
+            style="right: 1rem; top: 1rem"
+        >
+            <i class="fa-light fa-copy fa-2x t-main"></i>
+        </a>
+        <pre class="t-sm p-2">{{
+            "Lorem ipsum dolor sit amet consectetur ."
+        }}</pre>
+    </div>
+</div>
