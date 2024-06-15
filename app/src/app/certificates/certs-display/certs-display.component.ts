@@ -1,7 +1,6 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
 import { CertificatesService } from '../../core';
 import { CommonModule } from '@angular/common';
-import { MatIconButton } from '@angular/material/button';
 import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 import { MatTooltip } from '@angular/material/tooltip';
 import { PemDownloadDirective } from '../../core/pem-download.directive';
