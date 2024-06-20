@@ -1,1 +1,40 @@
-<p>settings works!</p>
+<h1><i class="fa-light fa-cogs me-3 t-alter"></i> Impostazioni</h1>
+
+<div class="flex g-3 justify-end p-2" style="border-bottom: 1px solid var(--c-bg-2)">
+    <a [routerLink]="['/setings']" class="btn"> <i class="fa-sync fa-light me-1"></i>reload </a>
+</div>
+
+<article class="mt-3 mx-auto grid-1 g-3" style="max-width: 700px">
+    <!-- EXPORT PKI -->
+    <div class="b-gray-700 br-12 p-3">
+        <h4><i class="fa-thin fa-folder-tree me-2 t-main"></i> Export PKI</h4>
+        <p>
+            Esporta l'intera struttura della PKI in file ZIP, per poter creare un archivio della
+            Public Key Insfrastructure.
+            <br />
+            <span class="t-warn">Attenzione:</span> il file contiene anche le chiavi private e la
+            passphrase del certificato ROOT. Conservare il file con cura.
+        </p>
+        <p class="t-right">
+            <button class="btn btn-main">
+                <i class="fa-light fa-file-export me-2"></i>Esport PKI
+            </button>
+        </p>
+    </div>
+
+    <!-- EXPORT PKI -->
+    <div class="b-error-700 br-12 p-3">
+        <h4><i class="fa-thin fa-shield me-2 t-error"></i> RESET CA</h4>
+        <p>
+            Elimina e ricostruisce la Public Key Infrastructure.
+            <br />
+            <span class="t-error">Attenzione:</span> tutti i file verranno cancellati. Eseguire un
+            back-up prima di procedere.
+        </p>
+        <p class="t-right">
+            <button class="btn btn-error">
+                <i class="fa-light fa-trash-can-arrow-up me-2"></i>reset
+            </button>
+        </p>
+    </div>
+</article>
