@@ -32,11 +32,18 @@ export class UploadAreaDirective {
         const data: DataTransfer = event.dataTransfer; // recupera i dati del drop
         const file: File = data.files[0]; // recupera il file
 
-        if (!this.checkFileExtension(file))
-            this.error.emit(`L'estensione del file non è supportata. ALLOWED EXT: ${JSON.stringify(this.uploadOptions().validExtensions)}`); // emette l'errore
-
-        if (!this.checkFileDimension(file))
+        if (!this.checkFileExtension(file)) {
+            // emette l'errore
+            this.error.emit(`L'estensione del file non è supportata. ALLOWED EXT: ${JSON.stringify(this.uploadOptions().validExtensions)}`);
+            return false;
+        }
+        if (!this.checkFileDimension(file)) {
             this.error.emit(`Il file è troppo grande per essere caricato. MAX SIZE: ${this.uploadOptions().maxFileSize / 1000} kb.`); // emette l'errore
+            return false ;
+        }
+
+
+
 
         this.add.emit(file); // emette il file
 
