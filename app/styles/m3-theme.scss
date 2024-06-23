@@ -141,13 +141,13 @@ $dark-theme: mat.define-theme(
             theme-type: dark,
             primary: $_primary,
             tertiary: $_tertiary,
-            use-system-variables: true,
+            // use-system-variables: true,
         ),
         typography: (
             plain-family: "Montserrat",
             brand-family: "Josefin Sans",
             bold-weight: 900,
-            use-system-variables: true,
+            // use-system-variables: true,
         ),
         density: (
             scale: -2,
