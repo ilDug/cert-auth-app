@@ -1,4 +1,4 @@
-import { Directive, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';
+import { AfterViewInit, Directive, QueryList, ViewChildren, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';
 import { UploadService } from './upload.service';
 import { UploadItemDirective } from './upload-item.directive';
 import { Observable, Subject, merge, of } from 'rxjs';
@@ -10,38 +10,21 @@ import { Observable, Subject, merge, of } from 'rxjs';
 })
 export class UploadListDirective {
 
+    #upload$ = inject(UploadService);
+    // upload = new Subject();
 
-    upload$ = inject(UploadService)
-    upload = new Subject();
-
-    files = signal<File[]>([]);
+    files = this.#upload$.files; // SIGNAL<File[]>([]);
+    items = this.#upload$.items; // SIGNAL<UploadItem[]>([]);
+    
     length = computed(() => this.files().length);
     empty = computed(() => this.length() === 0);
 
-    // numero massimo di file ammessi 
-    filesLimit = input<number>(1); 
-
     endpoint = input.required<string>();
-    #endpointEffect = effect(() => this.upload$.endpoint = this.endpoint());
+    #endpointEffect = effect(() => this.#upload$.endpoint = this.endpoint());
 
-    // aggiiunge un file alla lista
-    add(file: File) {
-        if (this.length() >= this.filesLimit()) {
-            throw new Error(`Numero massimo di file raggiunto. MAX: ${this.filesLimit()}`);
-        }
-        this.files.update(files => [...files, file]);
-    }
-
-    // elimina tutti i file dalla lista
     clear() {
-        this.files.set([]);
+        this.#upload$.clearFileList();
     }
-
-    // rimuove un file dalla lista
-    remove(file: File) {
-        this.files.update(files => files.filter(f => f !== file));
-    }
-
 }
 
 

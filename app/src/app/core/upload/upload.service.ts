@@ -1,23 +1,84 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType } from "@angular/common/http";
-import { Injectable, inject, signal } from "@angular/core";
+import { Injectable, computed, inject, signal } from "@angular/core";
 import { Observable, catchError, filter, map, of } from "rxjs";
+import { UploadOptions } from "./upload-options.class";
+import { UploadItem } from "./upload-item";
 import { UploadItemDirective } from "./upload-item.directive";
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class UploadService {
     #http = inject(HttpClient);
 
     endpoint: string = null;
 
+    files = signal<File[]>([]);
+
+    items = computed(() => this.files().map(file => new UploadItem(file)));
+
+    //opzioni di caricamento
+    uploadOptions: Partial<UploadOptions>;
+
+    /******************************************************************** */
+    // FILES MANAGER
+    addFileToList(file: File) {
+        if (!this.checkFilesNumber()) {
+            throw new Error('UploadService: max number of files reached');
+        }
+
+        if (!this.checkFileExtension(file)) {
+            throw new Error(`UploadService: file extension not supported. ALLOWED EXT: ${JSON.stringify(this.uploadOptions.validExtensions)}`);
+        }
+
+        if (!this.checkFileDimension(file)) {
+            throw new Error(`UploadService: file is too big to be uploaded. MAX SIZE: ${this.uploadOptions.maxFileSize / 1000} kb.`);
+        }
+
+        this.files.update(files => [...files, file]);
+    }
+
+    // rimuove un file dalla lista
+    removeFileFromList(file: File) {
+        this.files.update(files => files.filter(f => f !== file));
+    }
+
+    // elimina tutti i file dalla lista
+    clearFileList() {
+        this.files.set([]);
+    }
+
+    // metodo privato che controlla il file passato come argomento per vedere se corrisponde alle regole di caricamento
+    private checkFileExtension(file: File): boolean {
+        // recupera l'estensione del file
+        const extension = file.name
+            .split('.')
+            .splice(-1)[0]
+            .toLowerCase();
+
+        return this.uploadOptions.validExtensions.includes(extension); // controlla se l'estensione è supportata
+    }
+
+    // metodo privato che controlla la dimensione del file passato come argomento
+    private checkFileDimension(file: File): boolean {
+        return file.size <= this.uploadOptions.maxFileSize; // controlla la dimensione del file
+    }
+
+
+    // metodo privato che controlla il numero di file caricati
+    private checkFilesNumber(): boolean {
+        return this.files().length < this.uploadOptions.maxFilesNum;
+    }
+
+
+    /******************************************************************** */
+    // UPLOAD HANDLERS
+
     /** intercetta gli eventi PROGRESS ed aggiorna il Subject progress dell' UploadSet */
-    protected handleProgressResponse = (file: UploadItemDirective) => (event: HttpEvent<any>) => {
+    protected handleProgressResponse = (item: UploadItem) => (event: HttpEvent<any>) => {
         if (event.type == HttpEventType.UploadProgress) {
             // calculate the progress percentage
             const percentDone = Math.round(100 * event.loaded / event.total);
             // pass the percentage into the progress-stream
-            file.progress$.next(percentDone);
+            item.progress$.next(percentDone);
 
             console.log(`UPLOAD PROGRESS EVENT: ${percentDone}`);
 
@@ -26,12 +87,12 @@ export class UploadService {
     }
 
     // intercetta l'evento di risposta finale
-    protected handleFinalResponse = (file: UploadItemDirective) => (event: HttpEvent<any>) => {
+    protected handleFinalResponse = (item: UploadItem) => (event: HttpEvent<any>) => {
         if (event.type == HttpEventType.Response) {
             const result = event.body;
 
             /** se il file è caricato il server resituisce un codice 200 */
-            if (result) file.progress$.complete();
+            if (result) item.progress$.complete();
 
             console.log(`UPLOAD FINAL EVENT: ${result}`);
 
@@ -40,17 +101,19 @@ export class UploadService {
     }
 
     // intercetta l'evento di errore
-    protected handleErrorResponse = (file: UploadItemDirective) => (err: HttpErrorResponse): Observable<null> => {
+    protected handleErrorResponse = (item: UploadItem) => (err: HttpErrorResponse): Observable<null> => {
         /** problemi di caricamento */
-        file.progress$.error(err.error);
+        item.progress$.error(err.error);
 
         console.log(`UPLOAD ERROR EVENT: ${err.error}`);
         console.log(err);
         return of(null);
     }
 
+    /******************************************************************** */
+    // UPLOAD METHODS
 
-    upload(item: UploadItemDirective): Observable<any> {
+    upload(item: UploadItem): Observable<any> {
         if (!this.endpoint)
             throw new Error('UploadService: endpoint not set');
 
