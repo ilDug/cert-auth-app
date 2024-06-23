@@ -1,0 +1,63 @@
+<h4><i class="fa-thin fa-file-arrow-up me-2 t-main"></i> Import PKI</h4>
+<p>
+    Importa una PKI esistente.
+    <br />
+    Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è
+    consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
+</p>
+
+<div
+    class="drop-area t-center grid-1"
+    UploadArea
+    [uploadOptions]="uploadOptions"
+    (error)="onError($event)"
+>
+    @if (list.empty()) {
+    <p class="t-main">drop pki archive (or click to select)</p>
+    }
+
+    <div class="upload-list" #list="UploadList" UploadList endpoint="/api/pki/import/archive">
+        @for (f of list.items(); track $index) {
+        <div UploadItem [item]="f" #item="UploadItem" class="grid-1 g-3">
+            <i class="fa-2x fa-duotone fa-file-zipper"></i>
+
+            <span>{{ item.filename() }}</span>
+            <span>{{ item.size() }} kB</span>
+
+            <div class="flex g-3 w-100">
+                @switch (item.status()) { @case("SUCCESS") {
+                <i class="fa-lg fa-regular fa-check t-goal"></i>
+                } @case("PENDING") {
+                <i class="fa-lg fa-regular fa-sync t-charm"></i>
+                } @case("ERROR") {
+                <i class="fa-lg fa-regular fa-exclamation-triangle t-warn"></i>
+                } }
+                <mat-progress-bar
+                    mode="determinate"
+                    color="primary"
+                    [value]="item.progress()"
+                ></mat-progress-bar>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+<p class="mt-3">
+    @if (error()) {
+    <span class="p-2 br-6 bg-error mt-3 t-gray-100" style="display: inline-block">
+        {{ error() }}
+    </span>
+
+    }
+</p>
+
+<p class="t-right">
+    @if(!list.empty()){
+    <button class="btn btn-error mr-3" (click)="list.clear()">
+        <i class="fa-sharp fa-solid fa-circle-xmark me-2"></i>Clear
+    </button>
+    }
+
+    <button class="btn btn-main"><i class="fa-light fa-file-arrow-up me-2"></i>Import PKI</button>
+</p>
