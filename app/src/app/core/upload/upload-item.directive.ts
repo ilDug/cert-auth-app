@@ -1,6 +1,8 @@
-import { Directive, computed, effect, input, output, signal } from '@angular/core';
+import { DestroyRef, Directive, computed, effect, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { Subject, filter, take } from 'rxjs';
+import { UploadListDirective } from './upload-list.directive';
+import { UploadService } from './upload.service';
 
 @Directive({
     selector: '[UploadItem]',
@@ -10,27 +12,20 @@ import { Subject } from 'rxjs';
 export class UploadItemDirective {
 
     constructor() {
-        this.progress$
-            .asObservable()
-            .pipe(
-                takeUntilDestroyed()
-            )
-            .subscribe({
-                next: p => this.progress.set(p),
-                error: err => {
-                    this.status.set("FAIL");
-                    this.error.set(err);
-                },
-                complete: () => {
-                    this.status.set("SUCCESS");
-                    this.loaded.emit(true);
-                }
+        this.list.upload
+            .pipe(takeUntilDestroyed(this.df))
+            .subscribe(() => {
+                if (this.pending()) this.upload();
             });
     }
 
+    private list = inject(UploadListDirective);
+    private upload$ = inject(UploadService);
+    private df = inject(DestroyRef);
+
     file = input.required<File>();
     filename = computed(() => this.file().name.trim().replace(/\s/g, "- "));
-
+    size = computed(() => Math.round(this.file().size / 1000));
     src = signal<string>(undefined);
     base64 = signal<string>(undefined);
 
@@ -74,5 +69,27 @@ export class UploadItemDirective {
     loaded = output<boolean>();
     // emette quando il file è da rimuovere
     remove = output<boolean>();
+
+
+    upload() {
+        this.progress$
+            .asObservable()
+            .pipe(
+                takeUntilDestroyed(this.df)
+            )
+            .subscribe({
+                next: p => this.progress.set(p),
+                error: err => {
+                    this.status.set("FAIL");
+                    this.error.set(err);
+                },
+                complete: () => {
+                    this.status.set("SUCCESS");
+                    this.loaded.emit(true);
+                }
+            });
+
+        this.upload$.upload(this);
+    }
 
 }
