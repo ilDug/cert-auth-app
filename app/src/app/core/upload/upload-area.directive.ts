@@ -6,13 +6,13 @@ import { UploadService } from './upload.service';
     selector: '[UploadArea]',
     standalone: true,
     host: {
-        '(drop)': 'onDrop($event)',
-        '(dragover)': 'onDragOver($event)',
-        '(dragleave)': 'onDragLeave($event)',
-        '(click)': 'selectFile()',
+        '(drop)': 'onDrop($event)', // evento di drop
+        '(dragover)': 'onDragOver($event)', // evento di dragover
+        '(dragleave)': 'onDragLeave($event)', // evento di dragleave
+        '(click)': 'selectFile()', // evento di click per aprire il filemanager dialog di sistema
         '[class.drag-hover]': 'isHover()', // classe da aggiungere in caso di hover
         '[hover]': 'isHover()', // attributo da aggiungere in caso di hover
-        '[attr.droppable]': 'true'
+        '[attr.droppable]': 'true' // aggiunge l'attributo droppable
     }
 })
 export class UploadAreaDirective {
@@ -68,7 +68,7 @@ export class UploadAreaDirective {
 
     }
 
-    
+    // azioni da eseguire all'aggiunta di un file
     #onAddFile(file: File) {
         try {
             this.#upload$.addFileToList(file); // aggiunge il file alla lista

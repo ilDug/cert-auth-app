@@ -8,36 +8,26 @@ import { UploadService } from './upload.service';
 })
 export class UploadListDirective {
 
+    // UploadService instance
     #upload$ = inject(UploadService);
-    // upload = new Subject();
 
-    // files = this.#upload$.files; // SIGNAL<File[]>([]);
-    items = this.#upload$.items; // SIGNAL<UploadItem[]>([]);
+    // SIGNAL<UploadItem[]>([]) from UploadService
+    items = this.#upload$.items;
+
+    // the number of items in the list
     length = computed(() => this.items().length);
+
+    // true if the list is empty
     empty = computed(() => this.length() === 0);
 
+    // the server endpoint for the upload
     endpoint = input.required<string>();
+
+    // update the endpoint in the UploadService when the directive's endpoint input changes
     #endpointEffect = effect(() => this.#upload$.endpoint = this.endpoint());
 
+    // add an item to the list of uploads in the UploadService
     clear() {
         this.#upload$.clearItemList();
     }
 }
-
-
-// items = viewChildren(UploadItemDirective);
-
-// requests = computed<Observable<string>[]>(() => {
-//     console.log('files', this.files());
-//     return this.items()
-//         .filter(item => !item.completed)
-//         .map(item => this.upload$.upload(item));
-// });
-
-
-/** emette uno alla volta */
-// const s = merge(...this.requests())
-//     .subscribe(results => this.uploaded.emit(results));
-
-/** emette alla  fine */
-// const s = forkJoin(uploadRequests).subscribe(results => this.uploadEvent.emit(results));
