@@ -1,4 +1,3 @@
-import { Subject } from "rxjs";
 
 export class UploadOptions {
     constructor(o: Partial<UploadOptions>) {

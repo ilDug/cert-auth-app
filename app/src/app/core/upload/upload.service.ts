@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType } from "@angular/common/http";
-import { Injectable, computed, inject, signal } from "@angular/core";
+import { Injectable, inject, signal } from "@angular/core";
 import { Observable, catchError, delay, filter, forkJoin, map, merge, of, tap } from "rxjs";
 import { UploadOptions } from "./upload-options.class";
 import { UploadItem } from "./upload-item";

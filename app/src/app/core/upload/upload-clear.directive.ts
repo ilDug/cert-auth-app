@@ -1,4 +1,4 @@
-import { Directive, inject, input, output } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { UploadService } from './upload.service';
 
 @Directive({

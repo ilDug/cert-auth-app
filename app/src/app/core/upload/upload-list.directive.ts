@@ -1,7 +1,5 @@
-import { AfterViewInit, Directive, QueryList, ViewChildren, computed, effect, inject, input, output, signal, viewChildren } from '@angular/core';
+import { Directive, computed, effect, inject, input } from '@angular/core';
 import { UploadService } from './upload.service';
-import { UploadItemDirective } from './upload-item.directive';
-import { Observable, Subject, merge, of } from 'rxjs';
 
 @Directive({
     selector: '[UploadList]',
