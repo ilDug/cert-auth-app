@@ -1,5 +1,5 @@
 import { CommonModule, } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { UploadModule, UploadOptions, UploadService } from '../../core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +21,7 @@ export class ImportPkiComponent {
     })
 
     error = signal<string>(null);
-    
+
     onError(e) {
         this.error.set(e);
         setTimeout(() => this.error.set(null), 5000);
@@ -33,5 +33,6 @@ export class ImportPkiComponent {
 
     onComplete(e) {
         console.log('Upload complete', e);
+
     }
 }

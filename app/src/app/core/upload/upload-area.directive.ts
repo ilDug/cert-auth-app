@@ -23,7 +23,7 @@ export class UploadAreaDirective {
     error = output<string>();
 
     //opzioni di caricamento
-    uploadOptions = input<Partial<UploadOptions>>();
+    uploadOptions = input<Partial<UploadOptions>>({});
     #optionsEffect = effect(() => this.#upload$.uploadOptions = new UploadOptions(this.uploadOptions()));
 
     // indica se il mouse è sopra l'area di caricamento

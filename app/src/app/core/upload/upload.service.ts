@@ -1,9 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType } from "@angular/common/http";
 import { Injectable, computed, inject, signal } from "@angular/core";
-import { Observable, catchError, filter, map, of } from "rxjs";
+import { Observable, catchError, delay, filter, forkJoin, map, merge, of, tap } from "rxjs";
 import { UploadOptions } from "./upload-options.class";
 import { UploadItem } from "./upload-item";
-import { UploadItemDirective } from "./upload-item.directive";
 
 @Injectable()
 export class UploadService {
@@ -11,12 +10,10 @@ export class UploadService {
 
     endpoint: string = null;
 
-    files = signal<File[]>([]);
-
-    items = computed(() => this.files().map(file => new UploadItem(file)));
+    items = signal<UploadItem[]>([]);
 
     //opzioni di caricamento
-    uploadOptions: Partial<UploadOptions>;
+    uploadOptions: UploadOptions;
 
     /******************************************************************** */
     // FILES MANAGER
@@ -33,18 +30,28 @@ export class UploadService {
             throw new Error(`UploadService: file is too big to be uploaded. MAX SIZE: ${this.uploadOptions.maxFileSize / 1000} kb.`);
         }
 
-        this.files.update(files => [...files, file]);
+        this.items.update(items => [...items, new UploadItem(file)]);
     }
 
     // rimuove un file dalla lista
-    removeFileFromList(file: File) {
-        this.files.update(files => files.filter(f => f !== file));
+    removeFileFromList(item: UploadItem) {
+        const i = this.items().indexOf(item);
+        if (i < 0) return;
+        this.items()[i].unsubscribe();
+        this.items.update(items => {
+            items.splice(i, 1);
+            return [...items]
+        });
     }
 
     // elimina tutti i file dalla lista
-    clearFileList() {
-        this.files.set([]);
+    clearItemList() {
+        this.items().forEach(item => item.unsubscribe());
+        this.items.set([]);
     }
+
+    /******************************************************************** */
+    // CHECKERS
 
     // metodo privato che controlla il file passato come argomento per vedere se corrisponde alle regole di caricamento
     private checkFileExtension(file: File): boolean {
@@ -65,7 +72,7 @@ export class UploadService {
 
     // metodo privato che controlla il numero di file caricati
     private checkFilesNumber(): boolean {
-        return this.files().length < this.uploadOptions.maxFilesNum;
+        return this.items().length < this.uploadOptions.maxFilesNum;
     }
 
 
@@ -113,7 +120,7 @@ export class UploadService {
     /******************************************************************** */
     // UPLOAD METHODS
 
-    upload(item: UploadItem): Observable<any> {
+    uploadItem(item: UploadItem): Observable<any> {
         if (!this.endpoint)
             throw new Error('UploadService: endpoint not set');
 
@@ -125,7 +132,7 @@ export class UploadService {
             observe: 'events'
         });
 
-        return req.pipe(
+        const _ = req.pipe(
             /** filtra solo gli eventi UploadProgress e Response*/
             filter((event: HttpEvent<any>) => [HttpEventType.UploadProgress, HttpEventType.Response].includes(event.type)),
 
@@ -145,5 +152,27 @@ export class UploadService {
             /** intercetta l'evento di risposta finale */
             map(this.handleFinalResponse(item)),
         )
+
+        return of(item).pipe(
+            delay(1000),
+            tap(() => item.progress$.next(50)),
+            delay(1000),
+            tap(() => item.progress$.next(100)),
+            delay(1000),
+            tap(() => item.progress$.complete()),
+        )
+
+        return _;
+    }
+
+
+    uploadAll(waitAtTheEnd: boolean = false): Observable<any> | Observable<any[]> {
+        const requests = this.items()
+            .filter(item => !item.completed())
+            .map(item => this.uploadItem(item));
+
+        return waitAtTheEnd
+            ? forkJoin(requests) /** emette alla  fine */
+            : merge(...requests)/** emette uno alla volta */
     }
 }

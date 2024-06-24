@@ -13,17 +13,16 @@ export class UploadListDirective {
     #upload$ = inject(UploadService);
     // upload = new Subject();
 
-    files = this.#upload$.files; // SIGNAL<File[]>([]);
+    // files = this.#upload$.files; // SIGNAL<File[]>([]);
     items = this.#upload$.items; // SIGNAL<UploadItem[]>([]);
-    
-    length = computed(() => this.files().length);
+    length = computed(() => this.items().length);
     empty = computed(() => this.length() === 0);
 
     endpoint = input.required<string>();
     #endpointEffect = effect(() => this.#upload$.endpoint = this.endpoint());
 
     clear() {
-        this.#upload$.clearFileList();
+        this.#upload$.clearItemList();
     }
 }
 

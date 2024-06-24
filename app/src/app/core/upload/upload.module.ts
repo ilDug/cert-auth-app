@@ -1,19 +1,25 @@
 import { NgModule } from '@angular/core';
 import { UploadAreaDirective } from './upload-area.directive';
-import { UploadItemDirective } from './upload-item.directive';
 import { UploadListDirective } from './upload-list.directive';
+import { UploadClearDirective } from './upload-clear.directive';
+import { UploadStartDirective } from './upload-start.directive';
+import { UploadRemoveDirective } from './upload-remove.directive';
 
 
 @NgModule({
     imports: [
         UploadAreaDirective,
-        UploadItemDirective,
-        UploadListDirective
+        UploadListDirective,
+        UploadClearDirective,
+        UploadStartDirective,
+        UploadRemoveDirective
     ],
     exports: [
-        UploadAreaDirective, 
-        UploadItemDirective,
-        UploadListDirective
+        UploadAreaDirective,
+        UploadListDirective,
+        UploadClearDirective,
+        UploadStartDirective,
+        UploadRemoveDirective
     ]
 })
 export class UploadModule { }

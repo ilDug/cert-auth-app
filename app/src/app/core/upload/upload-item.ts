@@ -1,6 +1,5 @@
-import { WritableSignal, computed, effect, signal } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
-import { Subject } from "rxjs";
+import { WritableSignal, computed, signal } from "@angular/core";
+import { Subject, Subscription } from "rxjs";
 
 export class UploadItem {
     constructor(file: File) {
@@ -22,6 +21,8 @@ export class UploadItem {
 
         // legge il file come base64
         reader.readAsDataURL(this.file());
+
+        this.progressSubscription = this.progress$.subscribe(this.onLoad);
     }
 
     file: WritableSignal<File>;
@@ -29,7 +30,11 @@ export class UploadItem {
     size = computed(() => Math.round(this.file()?.size / 1000));
     src = signal<string>(undefined);
     base64 = signal<string>(undefined);
+    
     progress$ = new Subject<number>();
+    progress = signal<number>(0);
+    private progressSubscription: Subscription;
+
     text = computed(() => {
         try {
             return atob(this.base64());
@@ -37,5 +42,33 @@ export class UploadItem {
             return "BINARY FILE";
         }
     })
-    // progress = toSignal(this.progress$);
+
+    error = signal<string>(undefined);
+    status = signal<"PENDING" | "SUCCESS" | "FAIL">(undefined);
+    pending = computed(() => this.status() == "PENDING");
+    completed = computed(() => this.status() == "SUCCESS");
+    failed = computed(() => this.status() == "FAIL");
+
+    // pipe //
+    private onLoad = {
+        next: p => {
+            this.status.set("PENDING");
+            this.progress.set(p);
+        },
+        error: err => {
+            this.status.set("FAIL");
+            this.error.set(err);
+        },
+        complete: () => {
+            this.status.set("SUCCESS");
+        }
+    }
+
+    unsubscribe() {
+        this.progressSubscription.unsubscribe();
+    }
+
+
 }
+
+

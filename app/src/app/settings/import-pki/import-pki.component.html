@@ -17,9 +17,9 @@
 </div>
 }
 
-<div class="upload-list p-3 " #list="UploadList" UploadList endpoint="/api/pki/import/archive">
+<div class="upload-list" #list="UploadList" UploadList endpoint="/api/pki/import/archive">
     @for (item of list.items(); track $index) {
-    <div class="grid-1 g-3 pos-relative mb-3 bg-gray-800 p-3 br-6" >
+    <div class="grid-1 g-3 pos-relative mb-3 bg-gray-800 p-3 br-6">
         <i class="fa-2x fa-duotone fa-file-zipper"></i>
 
         <span>{{ item.filename() }}</span>
@@ -36,7 +36,10 @@
             <mat-progress-bar mode="determinate" [value]="item.progress()"></mat-progress-bar>
         </div>
         <span class="t-error">{{ item.failed() ? item.error() : "" }}</span>
-        <span class="pos-absolute" style="right: 1rem; top:1rem;" [uploadRemoveItem]="item">
+        @if (item.completed())     {
+            <span class="t-main">{{"Caricamento completato" }}</span>
+        }
+        <span class="pos-absolute" style="right: 1rem; top: 1rem" [uploadRemoveItem]="item">
             <i class="fa-solid fa-circle-xmark t-error"></i>
         </span>
     </div>
@@ -62,6 +65,8 @@
     <button
         class="btn btn-main"
         uploadStart
+        [removeAfterDelay]="2000"
+        [waitAtTheEnd]="false"
         (complete)="onComplete($event)"
         (load)="onLoad($event)"
         (fail)="onError($event)"
