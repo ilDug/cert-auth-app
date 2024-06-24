@@ -17,12 +17,21 @@ export class ImportPkiComponent {
     uploadOptions: UploadOptions = new UploadOptions({
         validExtensions: ["zip"],
         maxFileSize: 4000000,
-        maxFilesNum: 1
+        maxFilesNum: 2
     })
 
     error = signal<string>(null);
+    
     onError(e) {
         this.error.set(e);
         setTimeout(() => this.error.set(null), 5000);
+    }
+
+    onLoad(e) {
+        console.log(e);
+    }
+
+    onComplete(e) {
+        console.log('Upload complete', e);
     }
 }
