@@ -10,23 +10,24 @@ Install the package `@ildug/ngx-upload` via **npm**:
 npm install @ildug/ngx-upload --save
 ```
 
-This will download and install the package and its dependencies into your project.
+This command downloads and installs the package and its dependencies into your project.
 
-Once the installation is finished, you can start using `@ildug/ngx-upload` in your project.
+Once the installation is complete, you can start using `@ildug/ngx-upload `in your project.
 
-Please note that you may need to configure and import the package according to its documentation to make it work properly in your application.
+Please note that you may need to configure and import the package according to its documentation to ensure it works properly in your application.
 
 ## Add the module to Component
 
-This module can be used in standalone Angular component.
+This module can be used in standalone Angular components. 
 It provides the necessary functionality and dependencies for the component to work independently.
+
 
 Usage:
 
 1. Import this module in the component's module file.
 2. Add the module to the `imports` array of the component's module.
 3. Use the component in your template by adding its selectors.
-4. Add the service to `providers` list. Each Component must specify an istance of `NgxUploadService`, so you can add more than one (with different endpoints).
+4. Add the service to `providers` list. Each component must specify an instance of `NgxUploadService`, allowing you to add more than one (with different endpoints).
 
 Example:
 
@@ -74,7 +75,7 @@ Add the directive `UploadArea` into html template.
 ```
 
 This area can be used to load files.
-It can be dropped or selected with fileManager , by clicking the area.
+It can be dropped or selected with **file manager** , by clicking the area.
 
 When you drag a file over the area, the class `.drag-hover` and the attribute `hover` will be automatically added.
 
@@ -152,5 +153,53 @@ Add the directive `UploadArea` into html template.
 </div>
 ```
 
+## NgxUploadRemoveDirective
 
+Use this directive to remove an item from the list, passing the reference of item to it.
 
+```html
+<span [uploadRemoveItem]="item">
+    <i class="fa-solid fa-circle-xmark t-error"></i>
+</span>
+```
+
+## NgxUploadClearDirective
+
+This directive clear the entire list of item.
+
+```html
+@if(!list.empty()){
+    <button class="btn btn-error mr-3" uploadClear>
+        <i class="fa-sharp fa-solid fa-circle-xmark me-2"></i>Clear
+    </button>
+}
+```
+
+## NgxUploadStartDirective
+
+To initiate the upload of all items through the service, add this directive to trigger the upload process.
+
+The result of the upload is emitted by the `load` output, and any error messages are emitted by the `fail` output.
+
+Once the upload is completed, the result is emitted by the `complete` output.
+
+```html
+<button
+    class="btn btn-main"
+    uploadStart
+    [removeAfterDelay]="2000"
+    [waitAtTheEnd]="false"
+    (complete)="onComplete()"
+    (load)="onLoad($event)"
+    (fail)="onError($event)"
+>
+    <i class="fa-light fa-file-arrow-up me-2"></i>Import PKI
+</button>
+```
+
+There are some options to control the behavior of the upload process:
+
+-  `removeAfterDelay` [*@Input*] : Number of milliseconds of delay that the service waits before removing each completed item. If it is `null`, the items won't be removed.
+-  `waitAtTheEnd` [*@Input*] : You can choose the method to trigger the upload. All items are uploaded concurrently, but
+    - if `true`, the service emits the result after all requests are completed. This uses the **forkJoin** method.
+    - if `false` [default], the service emits the result as soon as a single item is completed. This uses the **merge** method.
