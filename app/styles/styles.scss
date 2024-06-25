@@ -5,16 +5,23 @@
 @use "m3-theme";
 
 /********************************************/
-body, app-root{
-    display:flex;
-    flex-direction:column;
+body,
+app-root {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
     margin: 0;
     // background-color: $backgroundColor;
 }
 
 // imposta la pagina a tutta altezza per ciò che viene rappresentato nel router outlet
-router-outlet + *{
+router-outlet + * {
     flex: 1 0 auto;
 }
 /********************************************/
+
+:root {
+    --toast-c: var(--c-body) !important;
+    --toast-bg: var(--c-bg-5) !important;
+    --toast-b: var(--c-bg-4) !important;
+}

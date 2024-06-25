@@ -158,6 +158,7 @@ $app-theme: mat.define-theme(
 :root {
     @include mat.core();
     @include mat.dialog-theme($app-theme);
+    @include mat.button-theme($app-theme);
     @include mat.progress-bar-theme($app-theme);
 }
 
