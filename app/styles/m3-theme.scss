@@ -4,7 +4,7 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 
-// Note: Color palettes are generated from primary: #487269, secondary: #716d47
+// Note: Color palettes are generated from primary: #477168, secondary: #9470c2, tertiary: #a2017d
 $_palettes: (
     primary: (
         0: #000000,
@@ -26,38 +26,38 @@ $_palettes: (
     ),
     secondary: (
         0: #000000,
-        10: #1f1c00,
-        20: #353100,
-        25: #413d00,
-        30: #4d4800,
-        35: #5a5400,
-        40: #676000,
-        50: #817900,
-        60: #9c931e,
-        70: #b8ae39,
-        80: #d4ca52,
-        90: #f1e66b,
-        95: #fff47e,
-        98: #fffae2,
+        10: #2a0054,
+        20: #401b6d,
+        25: #4c2879,
+        30: #583485,
+        35: #644092,
+        40: #714d9f,
+        50: #8b66ba,
+        60: #a57fd6,
+        70: #c19af3,
+        80: #d9b9ff,
+        90: #eedcff,
+        95: #f8edff,
+        98: #fff7ff,
         99: #fffbff,
         100: #ffffff,
     ),
     tertiary: (
         0: #000000,
-        10: #001e2f,
-        20: #123348,
-        25: #1f3e54,
-        30: #2c4a60,
-        35: #38566c,
-        40: #446278,
-        50: #5d7a92,
-        60: #7694ad,
-        70: #90afc8,
-        80: #abcae5,
-        90: #cae6ff,
-        95: #e6f2ff,
-        98: #f6f9ff,
-        99: #fcfcff,
+        10: #3b002c,
+        20: #600049,
+        25: #740059,
+        30: #880068,
+        35: #9d0079,
+        40: #ae1687,
+        50: #cd38a1,
+        60: #ee54bd,
+        70: #ff7ed0,
+        80: #ffaedc,
+        90: #ffd8eb,
+        95: #ffecf3,
+        98: #fff8f8,
+        99: #fffbff,
         100: #ffffff,
     ),
     neutral: (
@@ -135,7 +135,7 @@ $_rest: (
 $_primary: map.merge(map.get($_palettes, primary), $_rest);
 $_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
 
-$dark-theme: mat.define-theme(
+$app-theme: mat.define-theme(
     (
         color: (
             theme-type: dark,
@@ -155,7 +155,9 @@ $dark-theme: mat.define-theme(
     )
 );
 
-html {
+:root {
     @include mat.core();
-    @include mat.all-component-themes($dark-theme);
+    @include mat.dialog-theme($app-theme);
+    @include mat.progress-bar-theme($app-theme);
 }
+

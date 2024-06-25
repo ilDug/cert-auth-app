@@ -13,11 +13,11 @@ registerLocaleData(localeIt);
 export const appConfig: ApplicationConfig = {
     providers: [
         provideExperimentalZonelessChangeDetection(),
-        // provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes, withComponentInputBinding()),
         provideAnimationsAsync(),
         provideHttpClient(),
-        { provide: LOCALE_ID, useValue: 'it-IT' },
+        { provide: LOCALE_ID, useValue: 'it-IT' }, 
+        provideAnimationsAsync(),
         // { provide: APP_BASE_HREF, useFactory: (pl: PlatformLocation) => pl.getBaseHrefFromDOM(), deps: [PlatformLocation] },
     ]
 };
