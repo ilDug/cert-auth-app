@@ -33,7 +33,7 @@
             } @case("FAIL") {
             <i class="fa-lg fa-regular fa-exclamation-triangle t-warn"></i>
             } }
-            <mat-progress-bar mode="determinate" [value]="item.progress()"></mat-progress-bar>
+            <mat-progress-bar mode="determinate" [value]="item.progress()" color="warn"></mat-progress-bar>
         </div>
         <span class="t-error">{{ item.failed() ? item.error() : "" }}</span>
         @if (item.completed())     {
@@ -51,7 +51,6 @@
     <span class="p-2 br-6 bg-error mt-3 t-gray-100" style="display: inline-block">
         {{ error() }}
     </span>
-
     }
 </p>
 

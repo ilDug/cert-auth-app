@@ -1,1 +1,66 @@
-<p>import-root works!</p>
+<h4><i class="fa-thin fa-file-arrow-up me-2 t-main"></i> Import ROOT CERTIFICATION AUTHORITY</h4>
+
+<p>
+    Importa il certificato Root della Certification Authority esistente, insieme alla chiave privata
+    e alla passphrase. Utile per quando si posiede già un certificato distribuito ai singoli client,
+    e con il quale si ha la necessità di ricostruire una pki. Caricare i file ed inserire la
+    passphrase.
+</p>
+
+<p>
+    <span class="t-warn">Attenzione</span> tutto il contenuto dell'attuale PKI verrà cancellato.
+    Prevedere una copia di backup.
+</p>
+
+<div class="grid-2 g-3 align-end">
+    <div class="section" id="certificate">
+        <div class="drop-area t-center grid-1" fileDrop [(value)]="certificate">
+            @if (!certificate()) {
+            <p class="t-main">
+                drop <br />
+                <span class="t-accent">CA CERTIFICATE</span> <br />
+                (or click to select)
+            </p>
+            }@else {
+            <p class="t-alter">
+                <i class="fa-light fa-file-certificate me-2 fa-2x"></i>{{ certificate().length }} bytes
+            </p>
+            }
+        </div>
+    </div>
+
+    <div class="section" id="private">
+        <div class="drop-area t-center grid-1" fileDrop [(value)]="privateKey">
+            @if (!privateKey()) {
+            <p class="t-main">
+                drop <br />
+                <span class="t-charm">PRIVATE KEY</span> <br />
+                (or click to select)
+            </p>
+            }@else {
+            <p class="t-alter">
+                <i class="fa-light fa-key-skeleton me-2 fa-2x"></i>{{ privateKey().length }} bytes
+            </p>
+            }
+        </div>
+    </div>
+
+    <div class="section" id="passphrase">
+        <div class="field">
+            <label for="passphrase">Passphrase</label>
+            <input
+                type="text"
+                id="passphrase"
+                name="passphrase"
+                placeholder="Enter passphrase"
+                [formControl]="passphrase"
+            />
+        </div>
+    </div>
+
+    <p class="t-right">
+        <button class="btn btn-main">
+            <i class="fa-light fa-file-arrow-up me-2"></i>Import ROT CA
+        </button>
+    </p>
+</div>

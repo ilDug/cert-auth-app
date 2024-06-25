@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
     selector: 'ca-import-pki',
     standalone: true,
-    imports: [CommonModule, UploadModule, MatProgressBarModule, MatButtonModule],
+    imports: [CommonModule, UploadModule, MatProgressBarModule],
     templateUrl: './import-pki.component.html',
     styles: ``,
     providers: [UploadService]
@@ -17,7 +17,7 @@ export class ImportPkiComponent {
     uploadOptions: UploadOptions = new UploadOptions({
         validExtensions: ["zip"],
         maxFileSize: 4000000,
-        maxFilesNum: 2
+        maxFilesNum: 1
     })
 
     error = signal<string>(null);
