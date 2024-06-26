@@ -13,6 +13,9 @@ export class CertificatesService {
     // indicalo stato del caricamento
     private PENDING = signal(false);
 
+    // se modificato, ricarica la lista di certificati
+    private refresh = signal(0);
+
     // lista di certificati
     collection = signal<Certificate[]>([]);
 
@@ -36,7 +39,10 @@ export class CertificatesService {
 
     // esegue la richiesta al server per recuperare la lista di oggetti
     #loadCertificatesEffect = effect(() => {
+        console.log('loadCertificatesEffect', this.refresh());
+
         this.PENDING.set(true);
+
         const _ = this.http.get<Certificate[]>(`/api/certificates`, { params: this.#params() })
             .pipe(
                 catchError((err: HttpErrorResponse) => of([])),
@@ -44,7 +50,9 @@ export class CertificatesService {
                 tap(list => this.collection.set(list)),
                 finalize(() => this.PENDING.set(false))
             )
+
         lastValueFrom(_);
+
     }, { allowSignalWrites: true });
 
 
@@ -59,7 +67,7 @@ export class CertificatesService {
     add(csr: CertificateSigningRequest): Observable<string> {
         return this.http.post(`/api/generate/certificate`, csr, { responseType: 'text' as 'text' })
             .pipe(
-                finalize(() => this.query.update(q => q))
+                finalize(() => this.refresh.update(r => r + 1))
             )
     }
 
@@ -67,7 +75,7 @@ export class CertificatesService {
     remove(_id: string): Observable<boolean> {
         return this.http.delete<boolean>(`/api/${_id}`)
             .pipe(
-                finalize(() => this.query.update(q => q))
+                finalize(() => this.refresh.update(r => r++))
             )
     }
 }

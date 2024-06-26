@@ -13,6 +13,9 @@ export class KeysService {
     // indicalo stato del caricamento
     private PENDING = signal(false);
 
+    // se modificato, ricarica la lista di certificati
+    private refresh = signal(0);
+
     // lista di certificati
     collection = signal<string[]>([]);
 
