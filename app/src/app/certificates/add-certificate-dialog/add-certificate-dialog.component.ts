@@ -5,6 +5,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { NgxErrorsModule } from '@ildug/ngx-errors';
 import { CertificateSigningRequest, CertificatesService } from '../../core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-add-certificate-dialog',
@@ -14,7 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     styles: ``
 })
 export class AddCertificateDialogComponent {
-
+    toast = inject(NgxToastService);
     #ref = inject(MatDialogRef);
     cert$ = inject(CertificatesService);
     min: number = 2;
@@ -32,12 +33,15 @@ export class AddCertificateDialogComponent {
         if (this.form.invalid) return;
 
         const { subject, days, wildcard } = this.form.value;
-        const csr = new CertificateSigningRequest({ subject, days });
+        const csr = new CertificateSigningRequest({ subject, days: 200000 });
         if (wildcard) {
             csr.alt_names.push(`*.${subject}`);
         }
 
-        this.cert$.add(csr).subscribe(() => this.#ref.close());
+        this.cert$.add(csr).subscribe(() => {
+            this.toast.info(`${subject} certificate added`, 5000);
+            this.#ref.close();
+        });
     }
 
 
