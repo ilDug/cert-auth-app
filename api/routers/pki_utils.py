@@ -5,6 +5,7 @@ from controllers import Installer, PKIController, Importer
 from core.install import install
 import aiofiles
 from core.utils.remove_tmp_file import remove_tmp_file
+from core.models import RootPackage
 
 router = APIRouter(tags=["import"])
 
@@ -47,12 +48,12 @@ async def import_pki_zip(file: UploadFile):
 
 
 @router.post("/pki/import/root")
-async def import_root(
-    crt: UploadFile,
-    key: UploadFile,
-    passphrase: str = Form(..., media_type="multipart/form-data"),
-):
+async def import_root(package: RootPackage = Body(...)):
     """genera tutta l'infrastruttira della PKI importando la chiave ed il certificato root. Eventuali strutture esistenti verranno cancellate"""
+    crt = package.crt
+    key = package.key
+    passphrase = package.passphrase
+
     importer = Importer()
     importer.clean_structure()
     importer.scaffolding()

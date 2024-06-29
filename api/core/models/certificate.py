@@ -16,3 +16,9 @@ class Certificate(BaseModel):
     serial: int
     filename_unknown: str
     common_name: str
+
+
+class RootPackage(BaseModel):
+    crt: str
+    key: str
+    passphrase: str

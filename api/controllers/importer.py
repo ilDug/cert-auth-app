@@ -28,20 +28,24 @@ class Importer(Installer):
         except Exception as e :
             raise HTTPException(500, f"impossibile estrare archivio: {str(e)}")
 
-    async def import_root(self, crt: UploadFile, key: UploadFile, passphrase: str):
+    async def import_root(self, crt: str, key: str, passphrase: str):
         try:
-            async with aiofiles.open(CA_CRT_PATH, "wb") as out_crt:
-                while content := await crt.read(1024):  # async read chunk
-                    await out_crt.write(content)  # async write chunk
+            # async with aiofiles.open(CA_CRT_PATH, "wb") as out_crt:
+            #     while content := await crt.read(1024):  # async read chunk
+            #         await out_crt.write(content)  # async write chunk
 
-            async with aiofiles.open(CA_KEY_PATH, "wb") as out_key:
-                while content := await key.read(1024):  # async read chunk
-                    await out_key.write(content)  # async write chunk
+            # async with aiofiles.open(CA_KEY_PATH, "wb") as out_key:
+            #     while content := await key.read(1024):  # async read chunk
+            #         await out_key.write(content)  # async write chunk
 
+            CA_CRT_PATH.write_text(crt)
+            CA_KEY_PATH.write_text(key)
             PASSPRHASE_PATH.write_text(passphrase)
-            PASSPRHASE_PATH.chmod(400)
-            CA_KEY_PATH.chmod(400)
+
             CA_CRT_PATH.chmod(444)
+            CA_KEY_PATH.chmod(400)
+            PASSPRHASE_PATH.chmod(400)
+
             return True
         except Exception:
             HTTPException(500, "Errori durante il salvataggio dei files")
