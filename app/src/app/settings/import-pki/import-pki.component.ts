@@ -1,6 +1,6 @@
 import { CommonModule, } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { UploadModule, UploadOptions, UploadService } from '../../core';
+import { CertificatesService, KeysService, UploadModule, UploadOptions, UploadService } from '../../core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxToastService } from '@ildug/ngx-toast';
@@ -15,6 +15,8 @@ import { NgxToastService } from '@ildug/ngx-toast';
 })
 export class ImportPkiComponent {
     private toast = inject(NgxToastService);
+    private certs$ = inject(CertificatesService);
+    private key$ = inject(KeysService);
 
     uploadOptions: UploadOptions = new UploadOptions({
         validExtensions: ["zip"],
@@ -36,5 +38,7 @@ export class ImportPkiComponent {
     onComplete(e) {
         console.log('Upload complete', e);
         this.toast.info('Upload complete', 5000);
+        this.certs$.refresh();
+        this.key$.refresh();
     }
 }

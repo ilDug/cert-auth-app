@@ -33,7 +33,7 @@ export class AddCertificateDialogComponent {
         if (this.form.invalid) return;
 
         const { subject, days, wildcard } = this.form.value;
-        const csr = new CertificateSigningRequest({ subject, days: 200000 });
+        const csr = new CertificateSigningRequest({ subject, days });
         if (wildcard) {
             csr.alt_names.push(`*.${subject}`);
         }

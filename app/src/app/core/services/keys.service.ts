@@ -14,7 +14,9 @@ export class KeysService {
     private PENDING = signal(false);
 
     // se modificato, ricarica la lista di certificati
-    private refresh = signal(0);
+    #refresh = signal(0);
+
+    refresh() { this.#refresh.update(r => r + 1); }
 
     // lista di certificati
     collection = signal<string[]>([]);
@@ -39,6 +41,8 @@ export class KeysService {
 
     // esegue la richiesta al server per recuperare la lista di oggetti
     #loadKeysEffect = effect(() => {
+        console.log('loadKeysEffect', this.#refresh());
+
         this.PENDING.set(true);
 
         const _ = this.http.get<string[]>(`/api/keys`, { params: this.#params() })
