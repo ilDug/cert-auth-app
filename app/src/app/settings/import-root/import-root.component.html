@@ -53,13 +53,13 @@
                 id="passphrase"
                 name="passphrase"
                 placeholder="Enter passphrase"
-                [formControl]="passphrase"
+                [formControl]="passphraseCtrl"
             />
         </div>
     </div>
 
     <p class="t-right">
-        <button class="btn btn-alter">
+        <button class="btn btn-alter" [disabled]="invalid()" (click)="importRoot()">
             <i class="fa-light fa-file-arrow-up me-2"></i>Import ROT CA
         </button>
     </p>

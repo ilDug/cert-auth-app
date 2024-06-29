@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { pipe, map, Observable } from "rxjs";
+import { pipe, map, Observable, of, throwError } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -54,14 +54,10 @@ export class PKIService {
     }
 
 
-    // public uploadRoot(crt: UploadSet, key: UploadSet, passphrase: string) {
-    //     const formdata = new FormData();
-    //     formdata.append('crt', crt.file)
-    //     formdata.append('key', key.file)
-    //     formdata.append('passphrase', passphrase)
-
-    //     return this.http.post(`/api/pki/import/root`, formdata)
-    // }
+    public uploadRoot(crt: string, key: string, passphrase: string): Observable<boolean> {
+        const body = { crt, key, passphrase }
+        return this.http.post<boolean>(`/api/pki/import/root`, body)
+    }
 
 
 }
