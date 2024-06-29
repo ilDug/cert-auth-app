@@ -1,6 +1,6 @@
 <h4><i class="fa-thin fa-file-arrow-up me-2 t-main"></i> Import PKI</h4>
 <p>
-    Importa una PKI esistente.
+    Importa una PKI esistente, riscrivendo i file presenti nella struttura corrente.
     <br />
     Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è
     consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
@@ -64,11 +64,12 @@
     <button
         class="btn btn-main"
         uploadStart
-        [removeAfterDelay]="2000"
+        [removeAfterDelay]="5000"
         [waitAtTheEnd]="false"
         (complete)="onComplete($event)"
         (load)="onLoad($event)"
         (fail)="onError($event)"
+        [disabled]="list.empty()"
     >
         <i class="fa-light fa-file-arrow-up me-2"></i>Import PKI
     </button>

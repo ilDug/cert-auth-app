@@ -16,7 +16,7 @@
             passphrase del certificato ROOT. Conservare il file con cura.
         </p>
         <p class="t-right">
-            <button class="btn btn-main">
+            <button class="btn btn-main" (click)="downloadPKI()">
                 <i class="fa-light fa-file-export me-2"></i>Esport PKI
             </button>
         </p>
@@ -34,7 +34,7 @@
 
     <!-- RESET CA -->
     <div class="b-error-700 br-12 p-3">
-        <h4><i class="fa-thin fa-shield me-2 t-error"></i> RESET CA</h4>
+        <h4><i class="fa-thin fa-shield me-2 t-error"></i> RESET PKI Certificate Authority</h4>
         <p>
             Elimina e ricostruisce la Public Key Infrastructure.
             <br />
@@ -42,7 +42,7 @@
             back-up prima di procedere.
         </p>
         <p class="t-right">
-            <button class="btn btn-error" ngxConfirm (confirm)="alert()">
+            <button class="btn btn-error" ngxConfirm (confirm)="resetPKI()">
                 <i class="fa-light fa-trash-can-arrow-up me-2"></i>reset
             </button>
         </p>

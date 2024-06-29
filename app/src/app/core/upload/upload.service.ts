@@ -140,7 +140,7 @@ export class UploadService {
             map(this.handleProgressResponse(item)),
 
             /** filtra solo gli eventi Response */
-            filter((event: HttpEvent<any>) => event.type == HttpEventType.Response),
+            filter((event: HttpEvent<any>) => !!event && event.type == HttpEventType.Response),
 
             /** elabora le riposte di errore */
             catchError(this.handleErrorResponse(item)),
@@ -153,15 +153,7 @@ export class UploadService {
             map(this.handleFinalResponse(item)),
         )
 
-        return of(item).pipe(
-            delay(1000),
-            tap(() => item.progress$.next(50)),
-            delay(1000),
-            tap(() => item.progress$.next(100)),
-            delay(1000),
-            tap(() => item.progress$.complete()),
-        )
-
+        console.log(req);
         return _;
     }
 
