@@ -57,3 +57,8 @@ async def root():
     return f"""API SERVER RUNNING... FASTAPI {fastapi_version()}.
 Server time: {datetime.now()} (isoformat: {datetime.now().isoformat() })
 """
+
+
+@app.get("health_check")
+async def health_check():
+    return True
