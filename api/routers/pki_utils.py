@@ -3,7 +3,6 @@ from fastapi import APIRouter, Body, BackgroundTasks, Form, UploadFile, HTTPExce
 from fastapi.responses import PlainTextResponse, FileResponse
 from controllers import Installer, PKIController, Importer
 from core.install import install
-import aiofiles
 from core.utils.remove_tmp_file import remove_tmp_file
 from core.models import RootPackage
 
