@@ -1,0 +1,38 @@
+<h2 class="t-main px-5 mt-3">New Certificate</h2>
+
+<mat-dialog-content class="px-5">
+    <form [formGroup]="form">
+        <div class="field">
+            <label for="subject">FQDN</label>
+            <input type="text" id="subject" placeholder="common name" formControlName="subject">
+            <div dagErrors="subject" class="error">
+                <div dagError="required" when="touched"> Please, insert a value</div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="days">Validity [days]</label>
+            <input type="number" id="days" placeholder="expiration [days, min 2]" formControlName="days">
+            <div dagErrors="days" class="error">
+                <div dagError="required" when="touched"> Please, insert a value</div>
+                <div dagError="min" when="touched"> Minimum value is {{min}}</div>
+                <div dagError="max" when="touched"> Maximum value is {{max}} </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <mat-checkbox color="secondary"  formControlName="wildcard">Wildcard</mat-checkbox>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<div class="p-5 justify-end flex g-3">
+    <a class="btn ">
+        <i class="fa-light fa-times me-1" mat-dialog-close></i>
+        Cancel
+    </a>
+    <button class="btn btn-main" (click)="addCertificate()" [disabled]="form.invalid">
+        <i class="fa-light fa-save me-1"></i>
+        Add
+    </button>
+</div>

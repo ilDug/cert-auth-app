@@ -1,23 +1,14 @@
-<section id="keys">
-    <div class="container">
+<h1> <i class="fa-light fa-key-skeleton-left-right  t-vice mr-3"></i> Keys</h1>
 
-        <div class="row">
-            <div class="col-12">
-                <h1 [routerLink]="['/keys']"><i class="fa-light fa-key me-3"></i>Crypto Keys</h1>
-            </div>
-        </div>
+<div class="flex g-3 justify-end p-2" style="border-bottom: 1px solid var(--c-bg-2)">
 
-        <div class="row">
-            <div class="col-12">
-                <div class="commands">
-                    <ul>
-                        <li [routerLink]="['/keys']"><i class="fa-light fa-list me-1"></i>lista </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <!-- <a (click)="addCertificate()" class="btn btn-main">
+        <i class="fa-light fa-plus me-1"></i>aggiungi
+    </a> -->
 
-        <router-outlet></router-outlet>
-    </div>
+    <a [routerLink]="['/keys']" class="btn"> <i class="fa-light fa-list me-1"></i>lista </a>
+    
+</div>
 
-</section>
+
+<router-outlet></router-outlet>

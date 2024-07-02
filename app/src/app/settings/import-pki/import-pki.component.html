@@ -1,37 +1,76 @@
-<div class="setting-box">
-    <h4><i class="fa-thin fa-file-arrow-up me-2"></i> Import PKI</h4>
-    <p><small>
-            Importa una PKI esistente.
-            <br>
-            Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
-        </small></p>
+<h4><i class="fa-thin fa-file-arrow-up me-2 t-main"></i> Import PKI</h4>
+<p>
+    Importa una PKI esistente, riscrivendo i file presenti nella struttura corrente.
+    <br />
+    Caricare un file .zip che contiene la tipica struttura PKI. Per assicurare la compatibilità è
+    consigliabile utilizzare un file precedentemete scaricato, senza modificarne il contenuto.
+</p>
 
-    <div class="drop-area" NgxUploadArea [uploadOptions]="{validExtensions:['zip']}" (add)="fl.add($event)" (error)="onError($event)">
-        <p class="text-primary" *ngIf="fl.empty">drop pki archive (or click to select)</p>
-
-        <div class="file-upload-list" NgxUploadList #fl="NgxUploadList" (upload)="fl.markAsUploaded()">
-            <ng-container *ngFor="let f of fl.files">
-                <div class="pki-zip file-item" [ngxUploadItem]="f" #fitem="ngxUploadItem">
-                    <span class="file-icon" >
-                        <i class="fa-duotone fa-file-zipper"></i>
-
-                        <span class="file-item-status completed" *ngIf="fitem.completed"><i class="fa-regular fa-check"></i></span>
-
-                        <span class="file-item-status pending" *ngIf="fitem.pending"><i class="fa-regular fa-sync"></i></span>
-
-                        <span class="file-item-status error" *ngIf="fitem.invalid"><i class="fa-regular fa-exclamation-triangle"></i></span>
-
-                        <span class="remove-file" NgxUploadRemove><i class="fa-light fa-times-circle text-danger"></i></span>
-                    </span>
-                    <span class="file-text">{{f.filename}}</span>
-                    <span class="file-text">{{f.file.size/1000}} kB</span>
-                </div>
-            </ng-container>
-        </div>
-
-    </div>
-
-    <div class="actions">
-        <button class="btn btn-primary" (click)="import()" [disabled]="fl.empty"><i class="fa-light fa-file-upload me-2"></i>carica</button>
-    </div>
+@if (list.empty()) {
+<div
+    class="drop-area t-center grid-1"
+    UploadArea
+    [uploadOptions]="uploadOptions"
+    (error)="onError($event)"
+>
+    <p class="t-main">drop pki archive (or click to select)</p>
 </div>
+}
+
+<div class="upload-list" #list="UploadList" UploadList endpoint="/api/pki/import/archive">
+    @for (item of list.items(); track $index) {
+    <div class="grid-1 g-3 pos-relative mb-3 bg-gray-800 p-3 br-6">
+        <i class="fa-2x fa-duotone fa-file-zipper"></i>
+
+        <span>{{ item.filename() }}</span>
+        <span>{{ item.size() }} kB</span>
+
+        <div class="flex g-3 w-100">
+            @switch (item.status()) { @case("SUCCESS") {
+            <i class="fa-lg fa-regular fa-check t-goal"></i>
+            } @case("PENDING") {
+            <i class="fa-lg fa-regular fa-sync t-charm fa-spin"></i>
+            } @case("FAIL") {
+            <i class="fa-lg fa-regular fa-exclamation-triangle t-warn"></i>
+            } }
+            <mat-progress-bar mode="determinate" [value]="item.progress()" color="warn"></mat-progress-bar>
+        </div>
+        <span class="t-error">{{ item.failed() ? item.error() : "" }}</span>
+        @if (item.completed())     {
+            <span class="t-main">{{"Caricamento completato" }}</span>
+        }
+        <span class="pos-absolute" style="right: 1rem; top: 1rem" [uploadRemoveItem]="item">
+            <i class="fa-solid fa-circle-xmark t-error"></i>
+        </span>
+    </div>
+    }
+</div>
+
+<p class="mt-3">
+    @if (error()) {
+    <span class="p-2 br-6 bg-error mt-3 t-gray-100" style="display: inline-block">
+        {{ error() }}
+    </span>
+    }
+</p>
+
+<p class="t-right">
+    @if(!list.empty()){
+    <button class="btn btn-error mr-3" uploadClear>
+        <i class="fa-sharp fa-solid fa-circle-xmark me-2"></i>Clear
+    </button>
+    }
+
+    <button
+        class="btn btn-main"
+        uploadStart
+        [removeAfterDelay]="5000"
+        [waitAtTheEnd]="false"
+        (complete)="onComplete($event)"
+        (load)="onLoad($event)"
+        (fail)="onError($event)"
+        [disabled]="list.empty()"
+    >
+        <i class="fa-light fa-file-arrow-up me-2"></i>Import PKI
+    </button>
+</p>

@@ -1,54 +1,59 @@
-import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
+import { CertificatesService, FileDropDirective, KeysService, PKIService } from '../../core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { NgxToastService } from '@ildug/ngx-toast';
-import { pipe, tap } from 'rxjs';
-import { UploadSet, UPLOAD_ENDPOINT, UPLOAD_STRATEGY } from 'src/app/core/modules/ngx-upload';
-import { NgxUploadListDirective } from 'src/app/core/modules/ngx-upload/ngx-upload-list.directive';
-import { NgxUploadService } from 'src/app/core/modules/ngx-upload/ngx-upload.service';
-import { PKIService } from 'src/app/pki.service';
-import { APIURL } from 'src/environments';
 
 @Component({
-    selector: 'app-import-root',
+    selector: 'ca-import-root',
+    standalone: true,
+    imports: [CommonModule, MatProgressBarModule, ReactiveFormsModule, FileDropDirective],
     templateUrl: './import-root.component.html',
-    styleUrls: ['./import-root.component.scss'],
-    providers: [
-        { provide: UPLOAD_ENDPOINT, useValue: APIURL + "/pki/import/root" },
-        { provide: UPLOAD_STRATEGY, useValue: "FORMDATA" },
-        NgxUploadService
-    ]
-
+    styles: ``,
 })
 export class ImportRootComponent {
+    private pki$ = inject(PKIService);
+    private cert$ = inject(CertificatesService);
+    private key$ = inject(KeysService);
 
-    constructor(
-        private toast: NgxToastService,
-        private pki$: PKIService
-    ) { }
+    toast = inject(NgxToastService);
 
-    @ViewChild('flcrt', { static: true }) certList: NgxUploadListDirective
-    @ViewChild('flkey', { static: true }) keysList: NgxUploadListDirective
+    // form control for passphrase
+    passphraseCtrl = new FormControl(null, Validators.required);
 
-    public passphrase: string
+    // passpharse signal to get the value from the form control
+    passphrase = toSignal(
+        this.passphraseCtrl
+            .valueChanges
+            .pipe(map(v => v.trim()))
+        , { initialValue: null }
+    );
 
-    onError(e) {
-        this.toast.error(e, 3000)
-    }
+    // certificate and private key signals to get the values from the file drop directive
+    certificate = signal<string>(null);
+    privateKey = signal<string>(null);
 
-    submit() {
-        const crt: UploadSet = this.certList.files[0]
-        const key: UploadSet = this.keysList.files[0]
+    // invalid signal to check if all values are valid
+    invalid = computed(() => {
+        console.log(this.passphrase());
+        return this.passphraseCtrl.invalid || !this.certificate() || !this.privateKey();
+    })
 
-        if (!this.passphrase || !crt || !key) return;
+    // send the certificate and private key to the server 
+    importRoot() {
+        if (this.invalid()) return;
 
-        this.pki$.uploadRoot(crt, key, this.passphrase)
-            .pipe(
-                tap(_ => this.certList.markAsUploaded()),
-                tap(_ => this.keysList.markAsUploaded()),
-            )
+        this.pki$.uploadRoot(this.certificate(), this.privateKey(), this.passphrase())
             .subscribe({
-                next: success => this.toast.info("Evvai,  importazione avvenuta", 3000),
-                error: err => this.toast.error(err, 3000),
+                next: () => {
+                    this.cert$.refresh();
+                    this.key$.refresh();
+                    this.toast.info('Root certificate imported successfully', 5000);
+                },
+                error: err => this.toast.error(err, 5000)
             })
     }
-
 }

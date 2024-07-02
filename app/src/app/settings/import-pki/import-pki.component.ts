@@ -1,37 +1,43 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { CertificatesService, KeysService, UploadModule, UploadOptions, UploadService } from '../../core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgxToastService } from '@ildug/ngx-toast';
-import { UPLOAD_ENDPOINT, UPLOAD_STRATEGY } from 'src/app/core/modules/ngx-upload';
-import { NgxUploadListDirective } from 'src/app/core/modules/ngx-upload/ngx-upload-list.directive';
-import { NgxUploadService } from 'src/app/core/modules/ngx-upload/ngx-upload.service';
-import { PKIService } from 'src/app/pki.service';
-import { APIURL } from 'src/environments';
 
 @Component({
-    selector: 'app-import-pki',
+    selector: 'ca-import-pki',
+    standalone: true,
+    imports: [CommonModule, UploadModule, MatProgressBarModule],
     templateUrl: './import-pki.component.html',
-    styleUrls: ['./import-pki.component.scss'],
-    providers: [
-        { provide: UPLOAD_ENDPOINT, useValue: APIURL + "/pki/import/archive" },
-        { provide: UPLOAD_STRATEGY, useValue: "FORMDATA" },
-        NgxUploadService
-    ]
+    styles: ``,
+    providers: [UploadService]
 })
 export class ImportPkiComponent {
-    constructor(
-        public pki$: PKIService,
-        public toast: NgxToastService
-    ) { }
+    private toast = inject(NgxToastService);
+    private certs$ = inject(CertificatesService);
+    private key$ = inject(KeysService);
 
-    @ViewChild('fl', { static: true }) fl: NgxUploadListDirective
+    uploadOptions: UploadOptions = new UploadOptions({
+        validExtensions: ["zip"],
+        maxFileSize: 4000000,
+        maxFilesNum: 1
+    })
 
-    import() {
-        if (this.fl.empty) return;
-        if (this.fl.length > 1) return;
-        this.fl.uploadAll()
-    }
+    error = signal<string>(null);
 
     onError(e) {
-        this.toast.error(e, 3000)
+        this.error.set(e);
+        setTimeout(() => this.error.set(null), 5000);
     }
 
+    onLoad(e) {
+        console.log(e);
+    }
+
+    onComplete(e) {
+        console.log('Upload complete', e);
+        this.toast.info('Upload complete', 5000);
+        this.certs$.refresh();
+        this.key$.refresh();
+    }
 }

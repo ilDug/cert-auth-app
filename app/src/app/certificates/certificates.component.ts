@@ -1,28 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { filter, switchMap } from 'rxjs';
-import { CertificatesService } from '../certificates.service';
-import { CertificateSigningRequest } from '../core/classes/certificate.class';
-import { AddCertificateComponent } from './add-certificate/add-certificate.component';
+import { AddCertificateDialogComponent } from '../certificates/add-certificate-dialog/add-certificate-dialog.component';
 
 @Component({
-  selector: 'app-certificates',
+  selector: 'ca-certificates',
+  standalone: true,
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './certificates.component.html',
-  styleUrls: ['./certificates.component.scss']
+  styles: ``
 })
 export class CertificatesComponent {
-    constructor(
-        private dialog: MatDialog,
-        private certs$: CertificatesService,
-    ) { }
+    private dialog = inject(MatDialog);
 
-    addCertificate() {
-        this.dialog.open(AddCertificateComponent, { hasBackdrop: false, minWidth: "50%" })
-            .afterClosed()
-            .pipe(
-                filter(_ => !!_),
-                switchMap((csr: CertificateSigningRequest) => this.certs$.add(csr))
-            )
-            .subscribe()
+    addCertificate(){
+        this.dialog.open(AddCertificateDialogComponent, { hasBackdrop: false, minWidth: "50vw" })
     }
 }

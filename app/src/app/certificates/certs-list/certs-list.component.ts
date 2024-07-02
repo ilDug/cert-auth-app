@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
-import { CertificatesService } from 'src/app/certificates.service';
+import { Component, inject } from '@angular/core';
+import { CertificatesService } from '../../core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-certs-list',
-  templateUrl: './certs-list.component.html',
-  styleUrls: ['./certs-list.component.scss']
+    selector: 'ca-certs-list',
+    standalone: true,
+    imports: [CommonModule, RouterModule],
+    templateUrl: './certs-list.component.html',
+    styles: ``
 })
 export class CertsListComponent {
-    constructor(
-        public certs$: CertificatesService
-    ) { }
-
-
+    certs$ = inject(CertificatesService);
 }

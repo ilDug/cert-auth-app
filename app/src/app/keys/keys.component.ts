@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { KeysService } from '../keys.service';
+import { Component, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-keys',
+  selector: 'ca-keys',
+  standalone: true,
+  imports: [RouterLink, RouterOutlet],
   templateUrl: './keys.component.html',
-  styleUrls: ['./keys.component.scss']
+  styles: ``
 })
 export class KeysComponent {
-    constructor(
-        public keys$: KeysService
-    ) { }
+
 }

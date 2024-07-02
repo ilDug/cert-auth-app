@@ -1,66 +1,61 @@
 name: build & test
 
 on:
-  push:
-    branches: [ "main" ]
-  
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ["main"]
 
-  workflow_dispatch:
+    pull_request:
+        branches: ["main"]
+
+    workflow_dispatch:
 
 jobs:
+    build_app:
+        name: Node ${{ matrix.node-version }} build
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18.x, 20.x, 22.x]
 
-  build_app:
-    name: Node ${{ matrix.node-version }} build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
-        # node-version: [14.x, 16.x, 18.x]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+            - name: Install Packages
+              run: |
+                  cd ./app
+                  pwd
+                  FONTAWESOME_NPM_AUTH_TOKEN=${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }} npm ci
 
-    - name: Install Packages
-      run: |
-        cd ./app
-        pwd
-        FONTAWESOME_NPM_AUTH_TOKEN=${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }} npm ci
+            - name: Build Angular App
+              run: |
+                  cd ./app
+                  pwd
+                  npm run build
 
-    - name: Build Angular App
-      run: |
-        cd ./app
-        pwd
-        npm run build 
-    
+    # cypress-test:
+    #   needs: build
+    #   runs-on: ubuntu-latest
 
-      
+    #   strategy:
+    #     matrix:
+    #       browser: [chrome, edge, firefox]
 
-  # cypress-test:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-    
-  #   strategy:
-  #     matrix:
-  #       browser: [chrome, edge, firefox]
-    
-  #   name: Cypress Test on  ${{ matrix.browser }} 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    #   name: Cypress Test on  ${{ matrix.browser }}
+    #   steps:
+    #     - name: Checkout
+    #       uses: actions/checkout@v3
 
-  #     # Install NPM dependencies, cache them correctly
-  #     # and run all Cypress tests
-  #     - name: Cypress run on  ${{ matrix.browser }} 
-  #       uses: cypress-io/github-action@v4 # use the explicit version number
-  #       with:
-  #         build: npm run build
-  #         start: npm run serve:test
-  #         browser: ${{ matrix.browser }}
+    #     # Install NPM dependencies, cache them correctly
+    #     # and run all Cypress tests
+    #     - name: Cypress run on  ${{ matrix.browser }}
+    #       uses: cypress-io/github-action@v4 # use the explicit version number
+    #       with:
+    #         build: npm run build
+    #         start: npm run serve:test
+    #         browser: ${{ matrix.browser }}

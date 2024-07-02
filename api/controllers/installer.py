@@ -2,7 +2,7 @@ import shutil
 import os
 from pathlib import Path
 from core.openssl_commands import CA_CRT_GEN, CA_KEY_GEN, CA_PUB_KEY_GEN, PASSPHRASE_GEN
-from config import (
+from core.config import (
     CA_CRT_PATH,
     CA_KEY_PATH,
     CA_PUB_PATH,
@@ -11,7 +11,7 @@ from config import (
     CONFIGS_PATH,
     PASSPRHASE_PATH,
     PKI_PATH,
-    CA_DURATION
+    CA_DURATION,
 )
 
 

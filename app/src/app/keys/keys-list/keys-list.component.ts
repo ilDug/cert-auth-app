@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
-import { KeysService } from 'src/app/keys.service';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { KeysService } from '../../core';
 
 @Component({
-  selector: 'app-keys-list',
+  selector: 'ca-keys-list',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './keys-list.component.html',
-  styleUrls: ['./keys-list.component.scss']
+  styles: ``
 })
 export class KeysListComponent {
-    constructor(
-        public keys$: KeysService
-    ) { }
+
+    keys$ = inject(KeysService);
+    
 }

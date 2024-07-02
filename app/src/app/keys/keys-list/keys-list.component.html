@@ -1,23 +1,24 @@
-<div class="row">
-    <div class="col-12 pt-3">
-        <p>lista:</p>
+<div class="p-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Chiave</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (k of keys$.collection(); track $index) {
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">chiave</th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngFor="let k of keys$ | async; index as i">
-                    <tr [routerLink]="['/keys', k]">
-                        <th scope="row">{{i+1}}</th>
-                        <td>{{k}}</td>
-                    </tr>
-                </ng-container>
+            <tr [routerLink]="['/keys', k]">
+                <th scope="row">{{ $index + 1 }}</th>
+                <td>{{ k }}</td>
+            </tr>
 
-            </tbody>
-        </table>
-    </div>
+            } @empty {
+            <tr class="t-center t-xl t-warn">
+                <td [colSpan]="6">No keys found</td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
