@@ -8,6 +8,6 @@ def fastapi_version():
 
     with requirements.open() as file:
         for line in file:
-            if "fastapi" in line:
+            if "fastapi==" in line:
                 version = line.rstrip().split("==")[1]
     return version
