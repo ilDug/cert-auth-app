@@ -9,7 +9,7 @@ from core.openssl_commands import (
     CERT_VERIFY,
     PUB_KEY_PRINT,
 )
-from config import CERTS_PATH, KEYS_PATH, PUBLIC_PATH, CA_CRT_PATH
+from core.config import CERTS_PATH, KEYS_PATH, PUBLIC_PATH, CA_CRT_PATH
 
 
 class CertificateController:

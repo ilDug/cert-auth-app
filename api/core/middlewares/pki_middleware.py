@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from config import PKI_PATH
+from core.config import PKI_PATH
 
 
 def pki_middleware():

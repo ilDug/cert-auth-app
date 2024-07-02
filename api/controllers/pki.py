@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 import shutil
-from config.conf import (
+from core.config import (
     CERTS_PATH,
     PKI_DB,
     KEYS_PATH,

@@ -1,6 +1,6 @@
 import subprocess
 from fastapi import HTTPException
-from config import (
+from core.config import (
     PKI_PATH,
     KEYS_PATH,
     CONFIGS_PATH,
