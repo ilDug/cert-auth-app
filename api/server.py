@@ -11,6 +11,7 @@ from core.middlewares import (
 )
 from core.install import install
 from core.utils.version import fastapi_version
+from routers import display_router, generate_router, pki_utils_router
 
 from icecream import ic
 
@@ -42,7 +43,9 @@ app.add_exception_handler(HTTPException, http_rewrite_header_handler)
 
 
 # ROUTERS
-
+app.include_router(display_router)
+app.include_router(generate_router)
+app.include_router(pki_utils_router)
 
 #  STATIC FILES
 # app.mount("/assets", StaticFiles(directory=ASSETS_PATH), name="static_media")
