@@ -1,5 +1,4 @@
 from controllers import Installer
-from config import PKI_PATH
 
 
 def install():

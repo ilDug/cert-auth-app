@@ -1,9 +1,9 @@
 from pathlib import Path
+from typing import Annotated
 from fastapi import APIRouter, Body, BackgroundTasks, Form, UploadFile, HTTPException
-from fastapi.responses import PlainTextResponse, FileResponse
+from fastapi.responses import FileResponse
 from controllers import Installer, PKIController, Importer
 from core.install import install
-import aiofiles
 from core.utils.remove_tmp_file import remove_tmp_file
 from core.models import RootPackage
 
@@ -48,7 +48,7 @@ async def import_pki_zip(file: UploadFile):
 
 
 @router.post("/pki/import/root")
-async def import_root(package: RootPackage = Body(...)):
+async def import_root(package: Annotated[RootPackage, Body(...)]) -> bool:
     """genera tutta l'infrastruttira della PKI importando la chiave ed il certificato root. Eventuali strutture esistenti verranno cancellate"""
     crt = package.crt
     key = package.key

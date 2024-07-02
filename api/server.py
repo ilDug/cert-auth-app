@@ -1,49 +1,29 @@
 from datetime import datetime
-from starlette.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Request
-from fastapi.exceptions import HTTPException, RequestValidationError
-from fastapi.responses import PlainTextResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
 from core.middlewares import (
-    req_validation_error_handler,
-    dag_http_error_handler,
+    cors_mw_config,
     pki_middleware,
+    validation_exception_handler,
+    http_rewrite_header_handler,
 )
 from core.install import install
-import logging
+from core.utils.version import fastapi_version
+from routers import display_router, generate_router, pki_utils_router
 
-from routers import generate_router, display_router, pki_utils_router
+from icecream import ic
 
+ic.configureOutput(includeContext=True)
+
+
+# MAIN FASTAPI APP
 app = FastAPI(root_path="/api")
-# app = FastAPI(root_path="/")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=[
-        "http://localhost:4200",
-        "http://127.0.0.1:4200",
-    ],
-    allow_methods=["OPTIONS", "POST", "PUT", "GET", "DELETE"],
-    expose_headers=[
-        "Origin",
-        "Content-Type",
-        "Set-Cookie",
-        "X-Error",
-        "X-Auth-Token",
-        "Authorization",
-        "Content-Disposition"
-    ],
-    allow_headers=[
-        "Origin",
-        "Content-Type",
-        "Set-Cookie",
-        "X-Error",
-        "Accept",
-        "Authorization",
-    ],
-    # allow_headers=["*"],)
-)
+
+# MIDDLEWARE
+app.add_middleware(CORSMiddleware, **cors_mw_config)
 
 
 @app.middleware("http")
@@ -51,30 +31,29 @@ async def check_pki(request: Request, call_next):
     """controlla che sia istanziata una pki"""
     if not pki_middleware():
         # return JSONResponse("nessuna PKI instanziata", status_code=500)
-        print("PKI directory creation...")
+        ic("PKI directory creation...")
         install()
     response = await call_next(request)
     return response
 
 
-app.add_exception_handler(RequestValidationError, req_validation_error_handler)
-app.add_exception_handler(HTTPException, dag_http_error_handler)
-# app.add_exception_handler(PyMongoError, mongo_error_handler)
+#  EXCEPTION HANDLERS
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(HTTPException, http_rewrite_header_handler)
 
-app.include_router(generate_router)
+
+# ROUTERS
 app.include_router(display_router)
+app.include_router(generate_router)
 app.include_router(pki_utils_router)
 
+#  STATIC FILES
 # app.mount("/assets", StaticFiles(directory=ASSETS_PATH), name="static_media")
 
 
+# MAIN ROUTE
 @app.get("/", response_class=PlainTextResponse)
 async def root():
-    now = datetime.now()
-    # now = datetime.isoformat(datetime.now())
-    return f"API SERVER RUNNING... FAST. Server time: {now} (isoformat: {datetime.isoformat(now)})"
-
-
-@app.get("/health-check")
-async def health_check():
-    return True
+    return f"""API SERVER RUNNING... FASTAPI {fastapi_version()}.
+Server time: {datetime.now()} (isoformat: {datetime.now().isoformat() })
+"""

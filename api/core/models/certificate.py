@@ -12,7 +12,7 @@ class CommonNameBodyRequest(BaseModel):
 class Certificate(BaseModel):
     status: str
     exp_date: datetime
-    revoke_date: Optional[datetime]
+    revoke_date: datetime | None = None
     serial: int
     filename_unknown: str
     common_name: str

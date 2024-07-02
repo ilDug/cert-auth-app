@@ -2,7 +2,7 @@ from pathlib import Path
 import aiofiles
 from .installer import Installer
 import zipfile
-from config.conf import PKI_PATH, CA_CRT_PATH, CA_KEY_PATH, PASSPRHASE_PATH
+from core.config import PKI_PATH, CA_CRT_PATH, CA_KEY_PATH, PASSPRHASE_PATH
 from fastapi import HTTPException, UploadFile
 from core.utils.remove_tmp_file import remove_tmp_file
 
