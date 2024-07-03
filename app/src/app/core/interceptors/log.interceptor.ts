@@ -10,15 +10,20 @@ export const logInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req)
         .pipe(
             tap(event => {
-                const ok = event instanceof HttpResponse ? 'succeeded' : 'failed'
-                const msg = `${req.method} "${req.urlWithParams}" ${ok} `;
+                const msg = `${req.method} "${req.urlWithParams}"`;
                 if (event instanceof HttpResponse) console.log(msg, event);
             }),
-            catchError((error: HttpErrorResponse) => {
-                console.log('error', error);
+            catchError((err: HttpErrorResponse) => {
+                console.log('response error =====>', err);
 
-                toast.error(error.error, 10000)
-                return throwError(() => error)
+                const { headers } = err
+
+                const error = headers.has('X-Error')
+                    ? headers.get('X-Error')
+                    : err.error.error
+
+                toast.error(error, 10000)
+                return throwError(() => err)
             })
         )
 };
