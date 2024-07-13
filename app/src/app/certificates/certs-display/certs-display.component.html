@@ -2,7 +2,7 @@
     <h2>{{ subject() }}</h2>
 
     <div class="flex justify-end g-3 p-2">
-        <a class="btn btn-error" (click)="remove()">
+        <a class="btn btn-error" ngxConfirm (confirm)="remove()">
             <i class="fa-light fa-trash me-1"></i>
             delete
         </a>
@@ -10,7 +10,7 @@
             <i class="fa-light fa-download me-1"></i>
             download
         </a>
-        <a class="btn btn-main" [routerLink]="['/keys', subject()]" >
+        <a class="btn btn-main" [routerLink]="['/keys', subject()]">
             <i class="fa-light fa-key me-1"></i>
             keys
         </a>
@@ -31,22 +31,12 @@
 
     <div class="pos-relative bg-gray-900 p-2 br-5">
         @switch (tab()) { @case ('info') {
-        <a
-            [cdkCopyToClipboard]="info()"
-            matTooltip="copy"
-            class="pos-absolute"
-            style="right: 1rem; top: 1rem"
-        >
+        <a [cdkCopyToClipboard]="info()" matTooltip="copy" class="pos-absolute" style="right: 1rem; top: 1rem">
             <i class="fa-light fa-copy fa-2x t-main"></i>
         </a>
         <pre class="t-sm p-2">{{ info() }}</pre>
         } @case ('pem') {
-        <a
-            [cdkCopyToClipboard]="pem()"
-            matTooltip="copy"
-            class="pos-absolute"
-            style="right: 1rem; top: 1rem"
-        >
+        <a [cdkCopyToClipboard]="pem()" matTooltip="copy" class="pos-absolute" style="right: 1rem; top: 1rem">
             <i class="fa-light fa-copy fa-2x t-main"></i>
         </a>
         <pre class="t-sm p-2">{{ pem() }}</pre>
