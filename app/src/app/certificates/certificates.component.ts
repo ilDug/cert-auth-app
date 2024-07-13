@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddCertificateDialogComponent } from '../certificates/add-certificate-dialog/add-certificate-dialog.component';
+import { CertificatesService } from '../core';
 
 @Component({
   selector: 'ca-certificates',
@@ -12,8 +13,13 @@ import { AddCertificateDialogComponent } from '../certificates/add-certificate-d
 })
 export class CertificatesComponent {
     private dialog = inject(MatDialog);
+    certs$ = inject(CertificatesService);
 
     addCertificate(){
         this.dialog.open(AddCertificateDialogComponent, { hasBackdrop: false, minWidth: "50vw" })
+    }
+
+    reload() {
+        this.certs$.refresh();
     }
 }

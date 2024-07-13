@@ -18,6 +18,7 @@ export class CertificatesService {
 
     refresh() {
         this.#refresh.update(r => r + 1);
+        return this.#refresh();
     }
 
     // lista di certificati
@@ -43,7 +44,7 @@ export class CertificatesService {
 
     // esegue la richiesta al server per recuperare la lista di oggetti
     #loadCertificatesEffect = effect(() => {
-        console.log('loadCertificatesEffect', this.#refresh());
+        console.log(`loading certificates... attempt: ${this.#refresh()}`);
 
         this.PENDING.set(true);
 
@@ -76,8 +77,8 @@ export class CertificatesService {
     }
 
     /** method to DELETE object from server */
-    remove(_id: string): Observable<boolean> {
-        return this.http.delete<boolean>(`/api/${_id}`)
+    remove(subject: string): Observable<boolean> {
+        return this.http.delete<boolean>(`/api/erase/certificate/${subject}`)
             .pipe(
                 finalize(() => this.refresh())
             )
