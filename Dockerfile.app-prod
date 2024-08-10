@@ -5,7 +5,7 @@ WORKDIR /app
 COPY ./config/nginx/ /etc/nginx/conf.d/
 
 # cartelle del sito
-COPY ./app/dist/cert-auth /app 
+COPY ./app/dist/app/browser /app 
 
 EXPOSE 80
 
