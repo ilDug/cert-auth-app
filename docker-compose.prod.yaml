@@ -20,7 +20,7 @@ services:
 
   api:
     container_name: certauth-api
-    image: ghcr.io/ildug/cert-auth-app-api
+    image: ghcr.io/ildug/cert-auth-app-api:latest
     restart: unless-stopped
     environment:
       MODE: PRODUCTION
@@ -45,7 +45,7 @@ services:
 
   app:
     container_name: certauth-app
-    image: ghcr.io/ildug/cert-auth-app-web
+    image: ghcr.io/ildug/cert-auth-app-web:latest
     restart: unless-stopped
     environment:
       MODE: PRODUCTION
