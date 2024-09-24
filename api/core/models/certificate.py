@@ -13,7 +13,7 @@ class Certificate(BaseModel):
     status: str
     exp_date: datetime
     revoke_date: datetime | None = None
-    serial: int
+    serial: str
     filename_unknown: str
     common_name: str
 
