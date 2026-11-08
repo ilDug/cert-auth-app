@@ -58,7 +58,7 @@ export class CertificatesService {
 
         lastValueFrom(_);
 
-    }, { allowSignalWrites: true });
+    });
 
 
     // interrga il server restituendo il certificato richiesto nella forma specificata

@@ -54,7 +54,7 @@ export class KeysService {
                 finalize(() => this.PENDING.set(false))
             )
         lastValueFrom(_);
-    }, { allowSignalWrites: true });
+    });
 
 
     privateKey(subject: string, type: "info" | "pem" | "file"): Observable<string> {
