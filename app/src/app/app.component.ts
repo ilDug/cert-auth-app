@@ -4,7 +4,6 @@ import { ToastDirective } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'app-root',
-    standalone: true,
     imports: [RouterOutlet, ToastDirective, RouterLink, RouterLinkActive],
     template: `
     <header dagToast class="w-100" style="height: 2rem;"></header>
@@ -41,7 +40,7 @@ import { ToastDirective } from '@ildug/ngx-toast';
         </div>
     </section>
   `,
-    styles: [],
+    styles: []
 })
 export class AppComponent {
 }

@@ -9,7 +9,6 @@ import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-add-certificate-dialog',
-    standalone: true,
     imports: [MatDialogModule, ReactiveFormsModule, CommonModule, NgxErrorsModule, MatCheckboxModule],
     templateUrl: './add-certificate-dialog.component.html',
     styles: ``

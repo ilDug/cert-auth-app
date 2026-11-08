@@ -9,10 +9,9 @@ import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-import-root',
-    standalone: true,
     imports: [CommonModule, MatProgressBarModule, ReactiveFormsModule, FileDropDirective],
     templateUrl: './import-root.component.html',
-    styles: ``,
+    styles: ``
 })
 export class ImportRootComponent {
     private pki$ = inject(PKIService);

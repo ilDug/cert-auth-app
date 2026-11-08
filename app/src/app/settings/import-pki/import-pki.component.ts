@@ -6,7 +6,6 @@ import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-import-pki',
-    standalone: true,
     imports: [CommonModule, UploadModule, MatProgressBarModule],
     templateUrl: './import-pki.component.html',
     styles: ``,

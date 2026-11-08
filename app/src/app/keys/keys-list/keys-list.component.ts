@@ -4,11 +4,10 @@ import { RouterModule } from '@angular/router';
 import { KeysService } from '../../core';
 
 @Component({
-  selector: 'ca-keys-list',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './keys-list.component.html',
-  styles: ``
+    selector: 'ca-keys-list',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './keys-list.component.html',
+    styles: ``
 })
 export class KeysListComponent {
 

@@ -8,7 +8,6 @@ import { KeysService } from '../../core';
 
 @Component({
     selector: 'ca-keys-display',
-    standalone: true,
     imports: [CommonModule, CdkCopyToClipboard, MatTooltip, PemDownloadDirective, RouterLink],
     templateUrl: './keys-display.component.html',
     styles: ``

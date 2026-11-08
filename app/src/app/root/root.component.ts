@@ -9,7 +9,6 @@ import { PemDownloadDirective } from '../core/pem-download.directive';
 
 @Component({
     selector: 'ca-root',
-    standalone: true,
     imports: [RouterLink, RouterOutlet, CdkCopyToClipboard, MatTooltip, CommonModule, PemDownloadDirective],
     templateUrl: './root.component.html',
     styles: ``

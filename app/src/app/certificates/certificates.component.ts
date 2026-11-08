@@ -5,11 +5,10 @@ import { AddCertificateDialogComponent } from '../certificates/add-certificate-d
 import { CertificatesService } from '../core';
 
 @Component({
-  selector: 'ca-certificates',
-  standalone: true,
-  imports: [RouterLink, RouterOutlet],
-  templateUrl: './certificates.component.html',
-  styles: ``
+    selector: 'ca-certificates',
+    imports: [RouterLink, RouterOutlet],
+    templateUrl: './certificates.component.html',
+    styles: ``
 })
 export class CertificatesComponent {
     private dialog = inject(MatDialog);

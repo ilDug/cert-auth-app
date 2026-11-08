@@ -8,7 +8,6 @@ import { CertificatesService, KeysService, PKIService } from '../core';
 
 @Component({
     selector: 'ca-settings',
-    standalone: true,
     imports: [RouterModule, ImportPkiComponent, ImportRootComponent, NgxToastModule, NgxConfirmDirective],
     templateUrl: './settings.component.html',
     styles: ``

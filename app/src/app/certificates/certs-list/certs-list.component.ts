@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'ca-certs-list',
-    standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './certs-list.component.html',
     styles: ``

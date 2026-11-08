@@ -9,7 +9,6 @@ import { NgxConfirmDirective } from '@ildug/ngx-confirm';
 
 @Component({
     selector: 'ca-certs-display',
-    standalone: true,
     imports: [CommonModule, CdkCopyToClipboard, MatTooltip, PemDownloadDirective, RouterLink, NgxConfirmDirective],
     templateUrl: './certs-display.component.html',
     styles: ``
