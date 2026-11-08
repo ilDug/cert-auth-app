@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -9,7 +9,7 @@ import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-add-certificate-dialog',
-    imports: [MatDialogModule, ReactiveFormsModule, CommonModule, NgxErrorsModule, MatCheckboxModule],
+    imports: [MatDialogModule, ReactiveFormsModule, NgxErrorsModule, MatCheckboxModule],
     templateUrl: './add-certificate-dialog.component.html',
     styles: ``
 })

@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { KeysService } from '../../core';
 
 @Component({
     selector: 'ca-keys-list',
-    imports: [CommonModule, RouterModule],
+    imports: [RouterModule],
     templateUrl: './keys-list.component.html',
     styles: ``
 })

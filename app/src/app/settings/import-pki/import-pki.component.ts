@@ -1,4 +1,4 @@
-import { CommonModule, } from '@angular/common';
+
 import { Component, inject, signal } from '@angular/core';
 import { CertificatesService, KeysService, UploadModule, UploadOptions, UploadService } from '../../core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -6,7 +6,7 @@ import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-import-pki',
-    imports: [CommonModule, UploadModule, MatProgressBarModule],
+    imports: [UploadModule, MatProgressBarModule],
     templateUrl: './import-pki.component.html',
     styles: ``,
     providers: [UploadService]

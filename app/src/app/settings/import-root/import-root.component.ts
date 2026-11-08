@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, signal } from '@angular/core';
 import { CertificatesService, FileDropDirective, KeysService, PKIService } from '../../core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -9,7 +9,7 @@ import { NgxToastService } from '@ildug/ngx-toast';
 
 @Component({
     selector: 'ca-import-root',
-    imports: [CommonModule, MatProgressBarModule, ReactiveFormsModule, FileDropDirective],
+    imports: [MatProgressBarModule, ReactiveFormsModule, FileDropDirective],
     templateUrl: './import-root.component.html',
     styles: ``
 })
