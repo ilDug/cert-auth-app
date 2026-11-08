@@ -1,0 +1,18 @@
+ul.header-tabs {
+    display: flex;
+
+    li {
+        cursor: pointer;
+        padding: 0.6rem 3rem;
+        font-size: 1rem;
+
+        &.active,
+        &:hover {
+            background: var(--c-gray-800);
+        }
+
+        &.active {
+            border-bottom: 2px solid var(--c-main);
+        }
+    }
+}

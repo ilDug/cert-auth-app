@@ -1,0 +1,9 @@
+@use "../core/colors" as c;
+
+
+table.table{
+    background: c.shade-color(c.$c-bg, 15%);
+    tr td, tr th{
+        padding: 1rem;
+    }
+}

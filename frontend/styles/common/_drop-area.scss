@@ -1,0 +1,14 @@
+.drop-area{
+    max-width: 20rem;
+    min-height: 10rem;
+    background: var(--c-bg);
+    transition: all 0.5s;
+    border-radius: 0.5rem;
+    display: grid;
+    align-items: center;
+    padding: 1rem;
+
+    &.drag-hover{
+        background: var(--c-bg-2);
+    }
+}
