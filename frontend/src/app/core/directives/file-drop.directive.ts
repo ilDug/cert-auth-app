@@ -8,7 +8,7 @@ import { Directive, model, output, signal } from '@angular/core';
         '(dragover)': 'onDragOver($event)',
         '(dragleave)': 'onDragLeave($event)',
         '[class.drag-hover]': 'isHover()',
-        '[hover]': 'isHover()',
+        '[attr.hover]': "isHover() ? '' : null",
         '[attr.droppable]': 'true',
         '(click)': 'selectFile()'
     }

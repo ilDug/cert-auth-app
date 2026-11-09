@@ -22,7 +22,8 @@
     "@ildug/ngx-errors": "^2.5.1",
     "@ildug/ngx-toast": "^3.4.0",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "uuid": "^14.0.3"
   },
   "devDependencies": {
     "@angular/build": "^22.2.6",

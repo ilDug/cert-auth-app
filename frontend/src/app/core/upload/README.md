@@ -77,7 +77,7 @@ Add the directive `UploadArea` into html template.
 This area can be used to load files.
 It can be dropped or selected with **file manager** , by clicking the area.
 
-When you drag a file over the area, the class `.drag-hover` and the attribute `hover` will be automatically added.
+When you drag a file over the area, the class `.drag-hover` and the attribute `hover` will be automatically added. Both are removed when the drag leaves the area or the file is dropped.
 
 ```css
 .drop-area[hover],

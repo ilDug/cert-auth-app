@@ -11,7 +11,7 @@ import { UploadService } from './upload.service';
         '(dragleave)': 'onDragLeave($event)', // evento di dragleave
         '(click)': 'selectFile()', // evento di click per aprire il filemanager dialog di sistema
         '[class.drag-hover]': 'isHover()', // classe da aggiungere in caso di hover
-        '[hover]': 'isHover()', // attributo da aggiungere in caso di hover
+        '[attr.hover]': "isHover() ? '' : null", // attributo da aggiungere in caso di hover
         '[attr.droppable]': 'true' // aggiunge l'attributo droppable
     }
 })
