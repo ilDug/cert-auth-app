@@ -14,7 +14,8 @@ class Settings(BaseSettings):
     MODE: Literal["PRODUCTION", "DEVELOPMENT"] = "PRODUCTION"
     ROOT: Path = Path(__file__).resolve().parents[2]
     LIB: Path = ROOT / "lib"
-    PKI: Path = Path('/PKI')
+    NG_PATH: Path = ROOT / "browser"
+    PKI: Path = Path("/PKI")
 
     PKI_DB: Path = PKI / "index.txt"
     KEYS_PATH: Path = PKI / "private"
@@ -23,7 +24,7 @@ class Settings(BaseSettings):
     CERTS_PATH: Path = PKI / "certs"
     PASSPRHASE_PATH: Path = PKI / "private/_passphrase"
     PUBLIC_PATH: Path = PKI / "public"
-    
+
     CONFIG_FILE: Path = CONFIGS_PATH / "openssl.cnf"
     CA_CRT_PATH: Path = CERTS_PATH / "ca.crt"
     CA_KEY_PATH: Path = KEYS_PATH / "ca.key"
