@@ -1,0 +1,27 @@
+[project]
+name = "app"
+version = "0.4.0"
+description = "A backend for certificate-based authentication"
+readme = "README.md"
+authors = [
+    { name = "ilDug", email = "dognini.marco@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "fastapi[standard]>=0.162.2",
+    "icecream>=2.2.0",
+    "pymongo>=4.19.0",
+]
+
+[tool.ruff.lint]
+ignore = [
+    "E501",
+    # line too long
+    "E266",
+    # too many leading '#' for block comment
+    "F403",
+    # 'from module import *' used; unable to detect undefined names
+    "E731",
+    # do not assign a lambda expression, use a definition   instead
+]
