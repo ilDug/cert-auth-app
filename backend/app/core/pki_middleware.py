@@ -1,10 +1,11 @@
 from pathlib import Path
 
-def pki_middleware(pki_path: Path):
+
+def pki_middleware(PKI: Path):
     try:
-        if not pki_path.exists():
+        if not PKI.exists():
             return False
-        is_empty = not any(pki_path.iterdir())
+        is_empty = not any(PKI.iterdir())
         if is_empty:
             return False
         return True

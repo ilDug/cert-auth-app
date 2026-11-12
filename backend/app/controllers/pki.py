@@ -1,23 +1,19 @@
 from datetime import datetime
 from pathlib import Path
 import shutil
-from core.config import (
-    CERTS_PATH,
-    PKI_DB,
-    KEYS_PATH,
-    PKI_PATH,
-    CA_CRT_PATH,
-    CA_KEY_PATH,
-    PASSPRHASE_PATH,
-)
+from core.config import Settings
 from models import Certificate
 import zipfile
 from datetime import datetime
 
 
 class PKIController:
+
+    def __init__(self, cnf: Settings):
+        self.cnf = cnf
+
     def list_keys(self):
-        keys = [c.name for c in KEYS_PATH.iterdir() if c.is_file()]
+        keys = [c.name for c in self.cnf.KEYS_PATH.iterdir() if c.is_file()]
         keys.remove("_passphrase")
         keys = [c.split(".")[:-1] for c in keys]
         keys = [".".join(c) for c in keys]
@@ -25,7 +21,7 @@ class PKIController:
         return keys
 
     def list_certificates(self):
-        with PKI_DB.open("r") as db:
+        with self.cnf.PKI_DB.open("r") as db:
             lines = [line.rstrip() for line in db]
             items = [line.split("\t") for line in lines]
             certificates = [
@@ -50,7 +46,7 @@ class PKIController:
     def export(self):
         zipname = f"pki-{datetime.now().strftime('%Y%d%m-%H%M%S')}.zip"
         zippath = Path("/tmp") / zipname
-        pki = PKI_PATH
+        pki = self.cnf.PKI
 
         with zipfile.ZipFile(
             zippath, mode="w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
@@ -64,7 +60,11 @@ class PKIController:
         zippath = Path("/tmp") / zipname
 
         with zipfile.ZipFile(zippath, mode="w") as archive:
-            for f in [CA_KEY_PATH, CA_CRT_PATH, PASSPRHASE_PATH]:
+            for f in [
+                self.cnf.CA_KEY_PATH,
+                self.cnf.CA_CRT_PATH,
+                self.cnf.PASSPRHASE_PATH,
+            ]:
                 archive.write(f, arcname=f.name)
 
         with zipfile.ZipFile(zippath, mode="r") as archive:

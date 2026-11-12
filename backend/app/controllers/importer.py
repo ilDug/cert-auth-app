@@ -2,12 +2,13 @@ from pathlib import Path
 import aiofiles
 from .installer import Installer
 import zipfile
-from core.config import PKI_PATH, CA_CRT_PATH, CA_KEY_PATH, PASSPRHASE_PATH
+from core.config import Settings
 from fastapi import HTTPException, UploadFile
 
 class Importer(Installer):
-    def __init__(self) -> None:
-        super().__init__()
+
+    def __init__(self, cnf: Settings) -> None:
+        super().__init__(cnf)
 
     async def extract_pki(self, archive: UploadFile):
         temp_path = Path("/tmp/imported_pki.zip")
@@ -18,7 +19,7 @@ class Importer(Installer):
 
             with zipfile.ZipFile(temp_path, mode="r") as zip_file:
                 for file in zip_file.namelist():
-                    zip_file.extract(file, PKI_PATH)
+                    zip_file.extract(file, self.cnf.PKI)
 
             return True
         except Exception as e:
@@ -37,13 +38,12 @@ class Importer(Installer):
             #     while content := await key.read(1024):  # async read chunk
             #         await out_key.write(content)  # async write chunk
 
-            CA_CRT_PATH.write_text(crt)
-            CA_KEY_PATH.write_text(key)
-            PASSPRHASE_PATH.write_text(passphrase)
-
-            CA_CRT_PATH.chmod(444)
-            CA_KEY_PATH.chmod(400)
-            PASSPRHASE_PATH.chmod(400)
+            self.cnf.CA_CRT_PATH.write_text(crt)
+            self.cnf.CA_KEY_PATH.write_text(key)
+            self.cnf.PASSPRHASE_PATH.write_text(passphrase)
+            self.cnf.CA_CRT_PATH.chmod(444)
+            self.cnf.CA_KEY_PATH.chmod(400)
+            self.cnf.PASSPRHASE_PATH.chmod(400)
 
             return True
         except Exception:

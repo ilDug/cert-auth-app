@@ -1,16 +1,6 @@
 import subprocess
 from fastapi import HTTPException
-from core.config import (
-    PKI_PATH,
-    KEYS_PATH,
-    CONFIGS_PATH,
-    REQS_PATH,
-    CNF_BASE_DEFAULT,
-    CONFIG_FILE,
-    PASSPRHASE_PATH,
-    CERTS_PATH,
-    CA_CRT_PATH,
-)
+from core.config import Settings
 from core.openssl_commands import (
     PRIV_KEY_GEN,
     REQ_GEN,
@@ -23,10 +13,14 @@ from core.openssl_commands import (
 
 
 class Generator:
+
+    def __init__(self, cnf: Settings):
+        self.cnf = cnf
+
     def priv_key(self, subject: str):
         """genera la chiave privata a 2048 bits con il nome file passato come argomento"""
 
-        key = KEYS_PATH / f"{subject}.key"
+        key = self.cnf.KEYS_PATH / f"{subject}.key"
 
         cmd = PRIV_KEY_GEN.substitute(bits=2048, keypath=key)
         subprocess.run(cmd, shell=True, check=True)
@@ -41,9 +35,9 @@ class Generator:
         # crea la configurazione
         self.create_config(subject, alt_names)
 
-        key = KEYS_PATH / f"{subject}.key"
-        config = CONFIGS_PATH / f"{subject}.cnf"
-        csr = REQS_PATH / f"{subject}.csr"
+        key = self.cnf.KEYS_PATH / f"{subject}.key"
+        config = self.cnf.CONFIGS_PATH / f"{subject}.cnf"
+        csr = self.cnf.REQS_PATH / f"{subject}.csr"
 
         if not key.exists() or not config.exists():
             raise HTTPException(
@@ -60,7 +54,7 @@ class Generator:
     def create_config(self, subject: str, alt_names: list[str]):
         """Crea la configurazione per la creazione del CSR."""
 
-        config = CONFIGS_PATH / f"{subject}.cnf"
+        config = self.cnf.CONFIGS_PATH / f"{subject}.cnf"
         extensions = [
             "subjectAltName = @alt_names\n",
             "[alt_names]\n",
@@ -72,7 +66,7 @@ class Generator:
             s = "DNS." + str(i + 1) + " = " + alt_names[i] + "\n"
             extensions.append(s)
 
-        with open(CNF_BASE_DEFAULT, "r") as old:
+        with open(self.cnf.CNF_BASE_DEFAULT, "r") as old:
             with open(config, "w") as new:
                 for line in old:
                     new.write(line.replace("__subject__", subject))
@@ -81,16 +75,16 @@ class Generator:
 
     def certificate(self, subject: str, alt_names: list[str], days: int = 1825):
         """crea il certificato, deve esistere la chiave privata el la richiesta CSR"""
-        key = KEYS_PATH / f"{subject}.key"
-        ext = CONFIGS_PATH / f"{subject}.cnf"
-        csr = REQS_PATH / f"{subject}.csr"
-        crt = CERTS_PATH / f"{subject}.crt"
+        key = self.cnf.KEYS_PATH / f"{subject}.key"
+        ext = self.cnf.CONFIGS_PATH / f"{subject}.cnf"
+        csr = self.cnf.REQS_PATH / f"{subject}.csr"
+        crt = self.cnf.CERTS_PATH / f"{subject}.crt"
 
         cmd = CERT_GEN.substitute(
-            confpath=CONFIG_FILE,
+            confpath=self.cnf.CONFIG_FILE,
             days=days,
             extpath=ext,
-            passphrsepath=PASSPRHASE_PATH,
+            passphrsepath=self.cnf.PASSPRHASE_PATH,
             csrpath=csr,
             crtpath=crt,
         )
@@ -101,6 +95,6 @@ class Generator:
         subprocess.run(cmd, shell=True, check=True)
 
         print("Verifica certificato")
-        cmd = CERT_VERIFY.substitute(capath=CA_CRT_PATH, crtpath=crt)
+        cmd = CERT_VERIFY.substitute(capath=self.cnf.CA_CRT_PATH, crtpath=crt)
         subcmd = cmd.split(" ")
         return subprocess.run(subcmd, capture_output=True, text=True).stdout
