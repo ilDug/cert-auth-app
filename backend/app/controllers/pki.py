@@ -14,10 +14,12 @@ class PKIController:
 
     def list_keys(self):
         keys = [c.name for c in self.cnf.KEYS_PATH.iterdir() if c.is_file()]
-        keys.remove("_passphrase")
+        if "_passphrase" in keys:
+            keys.remove("_passphrase")
         keys = [c.split(".")[:-1] for c in keys]
         keys = [".".join(c) for c in keys]
-        keys.remove("ca")
+        if "ca" in keys:
+            keys.remove("ca")
         return keys
 
     def list_certificates(self):
