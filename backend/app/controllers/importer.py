@@ -4,16 +4,14 @@ from .installer import Installer
 import zipfile
 from core.config import PKI_PATH, CA_CRT_PATH, CA_KEY_PATH, PASSPRHASE_PATH
 from fastapi import HTTPException, UploadFile
-from core.utils.remove_tmp_file import remove_tmp_file
-
 
 class Importer(Installer):
     def __init__(self) -> None:
         super().__init__()
 
     async def extract_pki(self, archive: UploadFile):
+        temp_path = Path("/tmp/imported_pki.zip")
         try:
-            temp_path = Path("/tmp/imported_pki.zip")
             async with aiofiles.open(temp_path, "wb") as out_file:
                 while content := await archive.read(1024):  # async read chunk
                     await out_file.write(content)  # async write chunk
@@ -22,11 +20,12 @@ class Importer(Installer):
                 for file in zip_file.namelist():
                     zip_file.extract(file, PKI_PATH)
 
-            remove_tmp_file(temp_path)
-
             return True
-        except Exception as e :
+        except Exception as e:
             raise HTTPException(500, f"impossibile estrare archivio: {str(e)}")
+        finally:
+            if temp_path.exists():
+                temp_path.unlink(missing_ok=True)
 
     async def import_root(self, crt: str, key: str, passphrase: str):
         try:
@@ -48,4 +47,4 @@ class Importer(Installer):
 
             return True
         except Exception:
-            HTTPException(500, "Errori durante il salvataggio dei files")
+            raise HTTPException(500, "Errori durante il salvataggio dei files")
