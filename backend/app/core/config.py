@@ -50,3 +50,35 @@ def get_settings() -> Settings:
 # type alias for the application configuration dependency injection
 # this allows us to use AppConfig as a dependency in FastAPI routes
 AppConfig = Annotated[Settings, Depends(get_settings)]
+
+
+# CORS
+###############################
+CORS = {
+    "allow_credentials": True,
+    "allow_origins": [
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "https://ca.ek.lan",
+    ],
+    "allow_methods": ["OPTIONS", "POST", "PUT", "GET", "DELETE"],
+    "expose_headers": [
+        "Origin",
+        "Content-Type",
+        "Set-Cookie",
+        "X-Error",
+        "X-Auth-Token",
+        "Authorization",
+        "X-Dag-Head",
+        # "Access-Control-Expose-Headers"
+    ],
+    "allow_headers": [
+        "Origin",
+        "Content-Type",
+        "Set-Cookie",
+        "X-Error",
+        "Accept",
+        "Authorization",
+        # "Access-Control-Expose-Headers"
+    ],
+}
