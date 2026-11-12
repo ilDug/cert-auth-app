@@ -33,7 +33,7 @@ app.add_middleware(CORSMiddleware, **CORS)
 @app.middleware("http")
 async def check_pki(request: Request, call_next):
     """controlla che sia istanziata una pki"""
-    if not pki_middleware():
+    if not pki_middleware(settings.PKI_PATH):
         ic("PKI directory creation...")
         install()
     response = await call_next(request)

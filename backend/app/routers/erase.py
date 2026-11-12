@@ -1,6 +1,4 @@
 from fastapi import APIRouter
-from fastapi.responses import PlainTextResponse
-
 from controllers import Eraser
 
 

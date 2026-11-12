@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Path, HTTPException
 from fastapi.responses import PlainTextResponse, FileResponse
 from controllers import CertificateController, PKIController
-from core.config import CERTS_PATH, KEYS_PATH, PUBLIC_PATH
+from core.config import AppConfig
 
 router = APIRouter(tags=["display"])
 
@@ -34,8 +34,8 @@ async def display_certificate_info(subject: Annotated[str, Path()]):
 
 
 @router.get("/display/certificate/file/{subject}")
-async def display_certificate_file(subject: Annotated[str, Path()]):
-    file = CERTS_PATH / f"{subject}.crt"
+async def display_certificate_file(subject: Annotated[str, Path()], cnf: AppConfig):
+    file = cnf.CERTS_PATH / f"{subject}.crt"
     if not file.exists():
         raise HTTPException(404, "certificato inesistente")
     return FileResponse(file, media_type="plain/text", filename=f"{subject}.crt")
@@ -56,8 +56,8 @@ async def display_privatekey_pem(subject: Annotated[str, Path()]):
 
 
 @router.get("/display/privatekey/file/{subject}")
-async def display_privatekey_file(subject: Annotated[str, Path()]):
-    file = KEYS_PATH / f"{subject}.key"
+async def display_privatekey_file(subject: Annotated[str, Path()], cnf: AppConfig):
+    file = cnf.KEYS_PATH / f"{subject}.key"
     if not file.exists():
         raise HTTPException(404, "key inesistente")
     return FileResponse(file, media_type="plain/text", filename=f"{subject}.key")
@@ -71,8 +71,8 @@ async def display_publickey_pem(subject: Annotated[str, Path()]):
 
 
 @router.get("/display/publickey/file/{subject}")
-async def display_publickey_file(subject: Annotated[str, Path()]):
-    file = PUBLIC_PATH / f"{subject}.pub.pem"
+async def display_publickey_file(subject: Annotated[str, Path()], cnf: AppConfig):
+    file = cnf.PUBLIC_PATH / f"{subject}.pub.pem"
     if not file.exists():
         raise HTTPException(404, "chiave pubblica inesistente")
     return FileResponse(file, media_type="plain/text", filename=f"{subject}.pub.pem")

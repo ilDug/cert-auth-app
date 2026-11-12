@@ -1,12 +1,10 @@
-from core.config import PKI_PATH
+from pathlib import Path
 
-
-def pki_middleware():
-    cwd = PKI_PATH
+def pki_middleware(pki_path: Path):
     try:
-        if not cwd.exists():
+        if not pki_path.exists():
             return False
-        is_empty = not any(cwd.iterdir())
+        is_empty = not any(pki_path.iterdir())
         if is_empty:
             return False
         return True
