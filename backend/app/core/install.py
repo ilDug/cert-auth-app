@@ -1,9 +1,10 @@
+from core.config import Settings
 from controllers import Installer
 
 
-def install():
+def install(cnf: Settings):
     """genera tutta l'infrastruttira della PKI compreso il certificato root"""
-    installer = Installer()
+    installer = Installer(cnf)
     installer.clean_structure()
     installer.scaffolding()
 
