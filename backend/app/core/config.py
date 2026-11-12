@@ -13,7 +13,7 @@ ic.configureOutput(includeContext=True)
 class Settings(BaseSettings):
     MODE: Literal["PRODUCTION", "DEVELOPMENT"] = "PRODUCTION"
     ROOT: Path = Path(__file__).resolve().parents[2]
-    LIB: Path = ROOT / "lib"
+    LIB: Path = ROOT / "assets"
     NG_PATH: Path = ROOT / "browser"
     PKI: Path = ROOT / "PKI"
 

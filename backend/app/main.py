@@ -46,10 +46,10 @@ app.add_exception_handler(HTTPException, http_rewrite_header_handler)
 # app.add_exception_handler(PyMongoError, mongo_error_handler)
 
 # ROUTERS
-app.include_router(display_router)
-app.include_router(generate_router)
-app.include_router(pki_utils_router)
-app.include_router(erase_router)
+app.include_router(display_router, prefix="/api")
+app.include_router(generate_router, prefix="/api")
+app.include_router(pki_utils_router, prefix="/api")
+app.include_router(erase_router, prefix="/api")
 
 
 # FRONTEND
