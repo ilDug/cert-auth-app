@@ -20,7 +20,6 @@ from core.openssl_commands import (
     CERT_VERIFY,
     PRIV_KEY_PRINT,
 )
-import os
 
 
 class Generator:
@@ -30,11 +29,11 @@ class Generator:
         key = KEYS_PATH / f"{subject}.key"
 
         cmd = PRIV_KEY_GEN.substitute(bits=2048, keypath=key)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
         print("chiave privata generata")
         cmd = PRIV_KEY_PRINT.substitute(keypath=key)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
     def request(self, subject: str, alt_names: list[str]):
         """genera il Certificate Signing Request. Il nome deve essere lo stesso della chiave privata generata in preventivamente."""
@@ -52,11 +51,11 @@ class Generator:
             )
 
         cmd = REQ_GEN.substitute(configpath=config, keypath=key, csrpath=csr)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
         print("Certificate Signing Request generata")
         cmd = REQ_PRINT.substitute(csrpath=csr)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
     def create_config(self, subject: str, alt_names: list[str]):
         """Crea la configurazione per la creazione del CSR."""
@@ -95,11 +94,11 @@ class Generator:
             csrpath=csr,
             crtpath=crt,
         )
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
         print("Certificato generato")
         cmd = CERT_PRINT.substitute(crtpath=crt)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
         print("Verifica certificato")
         cmd = CERT_VERIFY.substitute(capath=CA_CRT_PATH, crtpath=crt)

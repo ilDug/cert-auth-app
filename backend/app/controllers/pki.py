@@ -10,7 +10,7 @@ from core.config import (
     CA_KEY_PATH,
     PASSPRHASE_PATH,
 )
-from core.models import Certificate
+from models import Certificate
 import zipfile
 from datetime import datetime
 

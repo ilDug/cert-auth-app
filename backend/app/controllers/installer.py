@@ -1,5 +1,5 @@
 import shutil
-import os
+import subprocess
 from pathlib import Path
 from core.openssl_commands import CA_CRT_GEN, CA_KEY_GEN, CA_PUB_KEY_GEN, PASSPHRASE_GEN
 from core.config import (
@@ -8,12 +8,10 @@ from core.config import (
     CA_PUB_PATH,
     CNF_BASE_OPENSSL,
     CONFIG_FILE,
-    CONFIGS_PATH,
     PASSPRHASE_PATH,
     PKI_PATH,
     CA_DURATION,
 )
-
 
 class Installer:
     dirs = [
@@ -61,7 +59,7 @@ class Installer:
         )
         print(cmd)
 
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
         PASSPRHASE_PATH.chmod(400)
 
     ######################################################################################
@@ -70,7 +68,7 @@ class Installer:
         cmd = CA_KEY_GEN.substitute(
             passphrasepath=PASSPRHASE_PATH, cakeypath=CA_KEY_PATH
         )
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
         CA_KEY_PATH.chmod(400)
 
     ######################################################################################
@@ -84,20 +82,26 @@ class Installer:
             days=CA_DURATION,
         )
         print(cmd)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
         CA_CRT_PATH.chmod(444)
 
     ######################################################################################
 
     def generate_public_key(self):
         cmd = CA_PUB_KEY_GEN.substitute(cacrtpath=CA_CRT_PATH, pubkeypath=CA_PUB_PATH)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
         print(CA_PUB_PATH)
 
     ######################################################################################
 
     def verify_ca_crt(self):
-        os.system(f"openssl x509 -noout -text -in {CA_CRT_PATH}")
-        os.system(
-            f"openssl rsa -check -in {CA_KEY_PATH}  -noout -text -passin file:{PASSPRHASE_PATH}"
+        subprocess.run(
+            f"openssl x509 -noout -text -in {CA_CRT_PATH}",
+            shell=True,
+            check=True,
+        )
+        subprocess.run(
+            f"openssl rsa -check -in {CA_KEY_PATH}  -noout -text -passin file:{PASSPRHASE_PATH}",
+            shell=True,
+            check=True,
         )

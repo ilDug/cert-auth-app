@@ -1,4 +1,3 @@
-import os
 import subprocess
 from fastapi import HTTPException
 import core.openssl_commands as cmds
@@ -22,7 +21,7 @@ class CertificateController:
 
         if not pub.exists():
             cmd = cmds.PUB_KEY_GEN.substitute(crtpath=crt, pubkeypath=pub)
-            os.system(cmd)
+            subprocess.run(cmd, shell=True, check=True)
 
             cmd = cmds.PUB_KEY_PRINT.substitute(keypath=key)
             subcmd = cmd.split(" ")
@@ -57,10 +56,6 @@ class CertificateController:
 
         cmd = cmds.CERT_PRINT.substitute(crtpath=crt)
         subcmd = cmd.split(" ")
-
-        # os.system(cmd)
-        # result = subprocess.run(subcmd, stdout=subprocess.PIPE)
-        # return result.stdout.decode("utf-8")
         return subprocess.run(subcmd, capture_output=True, text=True).stdout
 
     def verify(self, subject: str):
