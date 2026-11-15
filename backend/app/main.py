@@ -2,12 +2,12 @@ from datetime import datetime
 
 import fastapi
 from core.config import CORS, settings
-from core.exception_handlers import (
+from core.handlers.exception_handlers import (
     http_rewrite_header_handler,
     validation_exception_handler,
 )
 from core.install import install
-from core.pki_middleware import pki_middleware
+from core.middlewares import pki_middleware
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,7 +26,6 @@ app = FastAPI(
 
 # MIDDLEWARE
 app.add_middleware(CORSMiddleware, **CORS)
-
 
 @app.middleware("http")
 async def check_pki(request: Request, call_next):
