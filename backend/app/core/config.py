@@ -1,10 +1,10 @@
+from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Literal
+
 from fastapi import Depends
-from functools import lru_cache
 from icecream import ic
 from pydantic_settings import BaseSettings
-
 
 ic.configureOutput(includeContext=True)
 

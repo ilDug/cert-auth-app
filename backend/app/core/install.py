@@ -1,5 +1,6 @@
-from core.config import Settings
 from controllers import Installer
+
+from core.config import Settings
 
 
 def install(cnf: Settings):

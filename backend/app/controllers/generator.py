@@ -1,15 +1,16 @@
 import subprocess
-from fastapi import HTTPException
+
 from core.config import Settings
 from core.openssl_commands import (
-    PRIV_KEY_GEN,
-    REQ_GEN,
-    REQ_PRINT,
     CERT_GEN,
     CERT_PRINT,
     CERT_VERIFY,
+    PRIV_KEY_GEN,
     PRIV_KEY_PRINT,
+    REQ_GEN,
+    REQ_PRINT,
 )
+from fastapi import HTTPException
 
 
 class Generator:
@@ -68,8 +69,7 @@ class Generator:
 
         with open(self.cnf.CNF_BASE_DEFAULT, "r") as old:
             with open(config, "w") as new:
-                for line in old:
-                    new.write(line.replace("__subject__", subject))
+                new.writelines(line.replace("__subject__", subject) for line in old)
                 if len(alt_names) > 0:
                     new.writelines(extensions)
 

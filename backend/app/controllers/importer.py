@@ -1,9 +1,12 @@
-from pathlib import Path
-import aiofiles
-from .installer import Installer
 import zipfile
+from pathlib import Path
+
+import aiofiles
 from core.config import Settings
 from fastapi import HTTPException, UploadFile
+
+from .installer import Installer
+
 
 class Importer(Installer):
 
@@ -23,7 +26,7 @@ class Importer(Installer):
 
             return True
         except Exception as e:
-            raise HTTPException(500, f"impossibile estrare archivio: {str(e)}")
+            raise HTTPException(500, f"impossibile estrare archivio: {e!s}")
         finally:
             if temp_path.exists():
                 temp_path.unlink(missing_ok=True)

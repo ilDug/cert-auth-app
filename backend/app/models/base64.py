@@ -1,7 +1,8 @@
+import base64
 from typing import Annotated
+
 from fastapi import Path
 from pydantic import AfterValidator
-import base64
 
 
 def decoded_base64_param(b64):

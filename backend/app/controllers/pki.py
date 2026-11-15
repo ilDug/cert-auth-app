@@ -1,10 +1,9 @@
-from datetime import datetime
-from pathlib import Path
-import shutil
-from core.config import Settings
-from models import Certificate
 import zipfile
 from datetime import datetime
+from pathlib import Path
+
+from core.config import Settings
+from models import Certificate
 
 
 class PKIController:
@@ -58,7 +57,7 @@ class PKIController:
         return zippath
 
     def download_ca_root(self):
-        zipname = f"ca-root.zip"
+        zipname = "ca-root.zip"
         zippath = Path("/tmp") / zipname
 
         with zipfile.ZipFile(zippath, mode="w") as archive:

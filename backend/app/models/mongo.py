@@ -1,14 +1,15 @@
+from typing import Annotated, Any
+
+from bson import ObjectId
 from pydantic import (
     BaseModel,
     ConfigDict,
+    Field,
     PlainSerializer,
     PlainValidator,
     WithJsonSchema,
-    Field,
 )
 from pydantic.alias_generators import to_camel
-from bson import ObjectId
-from typing import Annotated, Any
 
 ######################################
 ### PYDANTIC V2

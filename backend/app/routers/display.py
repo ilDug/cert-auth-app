@@ -1,8 +1,9 @@
 from typing import Annotated
-from fastapi import APIRouter, Path, HTTPException
-from fastapi.responses import PlainTextResponse, FileResponse
+
 from controllers import CertificateController, PKIController
 from core.config import AppConfig
+from fastapi import APIRouter, HTTPException, Path
+from fastapi.responses import FileResponse, PlainTextResponse
 
 router = APIRouter(tags=["display"])
 

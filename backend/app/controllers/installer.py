@@ -1,8 +1,10 @@
 import shutil
 import subprocess
 from pathlib import Path
-from core.openssl_commands import CA_CRT_GEN, CA_KEY_GEN, CA_PUB_KEY_GEN, PASSPHRASE_GEN
+
 from core.config import Settings
+from core.openssl_commands import CA_CRT_GEN, CA_KEY_GEN, CA_PUB_KEY_GEN, PASSPHRASE_GEN
+
 
 class Installer:
 
@@ -43,8 +45,7 @@ class Installer:
         # compila i file di opzioni
         with open(self.cnf.CNF_BASE_OPENSSL) as base_conf_file:
             with open(self.cnf.CONFIG_FILE, "w") as cnf:
-                for line in base_conf_file:
-                    cnf.write(line.replace("__pki_dir__", str(self.cnf.PKI.as_posix())))
+                cnf.writelines(line.replace("__pki_dir__", str(self.cnf.PKI.as_posix())) for line in base_conf_file)
 
     ######################################################################################
 

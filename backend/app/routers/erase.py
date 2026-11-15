@@ -1,6 +1,6 @@
-from fastapi import APIRouter
 from controllers import Eraser
 from core.config import AppConfig
+from fastapi import APIRouter
 
 router = APIRouter(tags=["erase"])
 

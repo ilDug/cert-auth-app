@@ -1,7 +1,4 @@
-from dataclasses import dataclass
-from pathlib import Path
 from string import Template
-
 
 PRIV_KEY_GEN = Template("openssl genrsa -out $keypath $bits")
 # PRIV_KEY_GEN.substitute(keypath=None,bits=2048')

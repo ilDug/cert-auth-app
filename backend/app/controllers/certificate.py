@@ -1,7 +1,9 @@
 import subprocess
-from fastapi import HTTPException
+
 import core.openssl_commands as cmds
 from core.config import Settings
+from fastapi import HTTPException
+
 
 class CertificateController:
 

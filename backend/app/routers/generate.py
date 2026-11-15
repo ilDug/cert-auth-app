@@ -1,9 +1,10 @@
 from typing import Annotated
+
+from controllers import CertificateController, Generator
+from core.config import AppConfig
 from fastapi import APIRouter, Body
 from fastapi.responses import PlainTextResponse
-from controllers import Generator, CertificateController
 from models import CommonNameBodyRequest
-from core.config import AppConfig
 
 router = APIRouter(tags=["generate"])
 

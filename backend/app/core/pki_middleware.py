@@ -9,5 +9,5 @@ def pki_middleware(PKI: Path):
         if is_empty:
             return False
         return True
-    except Exception as e:
+    except Exception:
         return False

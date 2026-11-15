@@ -1,21 +1,19 @@
-from fastapi.responses import PlainTextResponse
-import fastapi
 from datetime import datetime
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from core.config import CORS, settings, AppConfig
-from core.pki_middleware import pki_middleware
-from core.install import install
-from fastapi.exceptions import RequestValidationError
-from fastapi import HTTPException
-from pymongo.errors import PyMongoError
-from core.exception_handlers import (
-    validation_exception_handler,
-    http_rewrite_header_handler,
-)
-from routers import display_router, generate_router, pki_utils_router, erase_router
 
+import fastapi
+from core.config import CORS, settings
+from core.exception_handlers import (
+    http_rewrite_header_handler,
+    validation_exception_handler,
+)
+from core.install import install
+from core.pki_middleware import pki_middleware
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
 from icecream import ic
+from routers import display_router, erase_router, generate_router, pki_utils_router
 
 ic.configureOutput(includeContext=True)
 
