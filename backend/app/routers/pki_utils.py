@@ -40,7 +40,11 @@ async def download_root(background_tasks: BackgroundTasks, cnf: AppConfig):
 
 @router.post("/pki/import/archive")
 async def import_pki_zip(file: UploadFile, cnf: AppConfig):
-    if file.content_type not in ["application/zip", "application/zip-compressed", "application/x-zip-compressed"]:
+    if file.content_type not in [
+        "application/zip",
+        "application/zip-compressed",
+        "application/x-zip-compressed",
+    ]:
         raise HTTPException(400, "il file deve essere un archivio zip")
 
     importer = Importer(cnf)

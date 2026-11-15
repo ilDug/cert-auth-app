@@ -67,15 +67,14 @@ class Generator:
             s = "DNS." + str(i + 1) + " = " + alt_names[i] + "\n"
             extensions.append(s)
 
-        with open(self.cnf.CNF_BASE_DEFAULT, "r") as old:
-            with open(config, "w") as new:
-                new.writelines(line.replace("__subject__", subject) for line in old)
-                if len(alt_names) > 0:
-                    new.writelines(extensions)
+        with open(self.cnf.CNF_BASE_DEFAULT, "r") as old, open(config, "w") as new:
+            new.writelines(line.replace("__subject__", subject) for line in old)
+            if len(alt_names) > 0:
+                new.writelines(extensions)
 
     def certificate(self, subject: str, alt_names: list[str], days: int = 1825):
         """crea il certificato, deve esistere la chiave privata el la richiesta CSR"""
-        key = self.cnf.KEYS_PATH / f"{subject}.key"
+        # key = self.cnf.KEYS_PATH / f"{subject}.key"
         ext = self.cnf.CONFIGS_PATH / f"{subject}.cnf"
         csr = self.cnf.REQS_PATH / f"{subject}.csr"
         crt = self.cnf.CERTS_PATH / f"{subject}.crt"
@@ -97,4 +96,4 @@ class Generator:
         print("Verifica certificato")
         cmd = CERT_VERIFY.substitute(capath=self.cnf.CA_CRT_PATH, crtpath=crt)
         subcmd = cmd.split(" ")
-        return subprocess.run(subcmd, capture_output=True, text=True).stdout
+        return subprocess.run(subcmd, capture_output=True, text=True, check=True).stdout

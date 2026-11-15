@@ -6,8 +6,6 @@ def pki_middleware(PKI: Path):
         if not PKI.exists():
             return False
         is_empty = not any(PKI.iterdir())
-        if is_empty:
-            return False
-        return True
+        return not is_empty
     except Exception:
         return False

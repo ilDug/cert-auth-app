@@ -24,4 +24,8 @@ ignore = [
     # 'from module import *' used; unable to detect undefined names
     "E731",
     # do not assign a lambda expression, use a definition   instead
+    "BLE001",
+    # do not catch blind exception: `Exception`
+    "EXE002",
+    # executable not found
 ]

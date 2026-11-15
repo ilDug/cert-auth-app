@@ -27,7 +27,9 @@ class CertificateController:
 
             cmd = cmds.PUB_KEY_PRINT.substitute(keypath=key)
             subcmd = cmd.split(" ")
-            return subprocess.run(subcmd, capture_output=True, text=True).stdout
+            return subprocess.run(
+                subcmd, capture_output=True, text=True, check=False
+            ).stdout
         else:
             return pub.read_text()
 
@@ -58,7 +60,9 @@ class CertificateController:
 
         cmd = cmds.CERT_PRINT.substitute(crtpath=crt)
         subcmd = cmd.split(" ")
-        return subprocess.run(subcmd, capture_output=True, text=True).stdout
+        return subprocess.run(
+            subcmd, capture_output=True, text=True, check=False
+        ).stdout
 
     def verify(self, subject: str):
         crt = self.cnf.CERTS_PATH / f"{subject}.crt"
@@ -68,4 +72,6 @@ class CertificateController:
 
         cmd = cmds.CERT_VERIFY.substitute(capath=self.cnf.CA_CRT_PATH, crtpath=crt)
         subcmd = cmd.split(" ")
-        return subprocess.run(subcmd, capture_output=True, text=True).stdout
+        return subprocess.run(
+            subcmd, capture_output=True, text=True, check=False
+        ).stdout

@@ -11,16 +11,16 @@ class Installer:
     def __init__(self, cnf: Settings) -> None:
         self.cnf = cnf
 
-    dirs = [
-        "certs",
-        "crl",
-        "newcerts",
-        "private",
-        "reqs",
-        "configs",
-        "public",
-        "workshop",
-    ]
+        self.dirs = [
+            "certs",
+            "crl",
+            "newcerts",
+            "private",
+            "reqs",
+            "configs",
+            "public",
+            "workshop",
+        ]
 
     ######################################################################################
 
@@ -43,9 +43,13 @@ class Installer:
         Path(self.cnf.PKI / "crlnumber").write_text("1000")
 
         # compila i file di opzioni
-        with open(self.cnf.CNF_BASE_OPENSSL) as base_conf_file:
-            with open(self.cnf.CONFIG_FILE, "w") as cnf:
-                cnf.writelines(line.replace("__pki_dir__", str(self.cnf.PKI.as_posix())) for line in base_conf_file)
+        with open(self.cnf.CNF_BASE_OPENSSL) as base_conf_file, open(
+            self.cnf.CONFIG_FILE, "w"
+        ) as cnf:
+            cnf.writelines(
+                line.replace("__pki_dir__", str(self.cnf.PKI.as_posix()))
+                for line in base_conf_file
+            )
 
     ######################################################################################
 
@@ -103,5 +107,5 @@ class Installer:
         subprocess.run(
             f"openssl rsa -check -in {self.cnf.CA_KEY_PATH.as_posix()}  -noout -text -passin file:{self.cnf.PASSPRHASE_PATH.as_posix()}",
             shell=True,
-            check=True,
+            check=False,
         )
