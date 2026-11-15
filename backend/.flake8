@@ -10,6 +10,7 @@ ignore =
     F841,
     ; local variable is assigned but never used
 
+
 exclude = 
 	.git,
 	__pycache__,

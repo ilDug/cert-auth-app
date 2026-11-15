@@ -15,7 +15,7 @@ async def certs_list(cnf: AppConfig):
 
 
 @router.get("/keys")
-async def certs_list(cnf: AppConfig):
+async def keys_list(cnf: AppConfig):
     c = PKIController(cnf)
     return c.list_keys()
 
@@ -73,7 +73,6 @@ async def display_publickey_pem(subject: Annotated[str, Path()], cnf: AppConfig)
 
 @router.get("/display/publickey/file/{subject}")
 async def display_publickey_file(subject: Annotated[str, Path()], cnf: AppConfig):
-    c = CertificateController(cnf)
     file = cnf.PUBLIC_PATH / f"{subject}.pub.pem"
     if not file.exists():
         raise HTTPException(404, "chiave pubblica inesistente")
