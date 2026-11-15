@@ -10,52 +10,57 @@ on:
     workflow_dispatch:
 
 jobs:
-    build_app:
-        name: Node ${{ matrix.node-version }} build
+    angular_build:
+        name: Angular App Node ${{ matrix.node-version }} build
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                node-version: [18.x, 20.x, 22.x]
+                node-version: [24.x, 26.x]
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v5
               with:
                   node-version: ${{ matrix.node-version }}
 
+            - name: Setup Bun
+              uses: oven-sh/setup-bun@v2
+
             - name: Install Packages
               run: |
-                  cd ./app
-                  pwd
-                  FONTAWESOME_NPM_AUTH_TOKEN=${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }} npm ci
+                  cd ./frontend
+                  bun install --frozen-lockfile
 
             - name: Build Angular App
               run: |
-                  cd ./app
+                  cd ./frontend
                   pwd
-                  npm run build
+                  bun run build
 
-    # cypress-test:
-    #   needs: build
-    #   runs-on: ubuntu-latest
+    python_check:
+        name: Python Check
+        runs-on: ubuntu-latest
 
-    #   strategy:
-    #     matrix:
-    #       browser: [chrome, edge, firefox]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
 
-    #   name: Cypress Test on  ${{ matrix.browser }}
-    #   steps:
-    #     - name: Checkout
-    #       uses: actions/checkout@v3
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.13
 
-    #     # Install NPM dependencies, cache them correctly
-    #     # and run all Cypress tests
-    #     - name: Cypress run on  ${{ matrix.browser }}
-    #       uses: cypress-io/github-action@v4 # use the explicit version number
-    #       with:
-    #         build: npm run build
-    #         start: npm run serve:test
-    #         browser: ${{ matrix.browser }}
+            - name: Install the latest version of uv
+              uses: astral-sh/setup-uv@v7
+
+            - name: Install Python dependencies
+              run: |
+                  cd ./backend
+                  uv sync --frozen
+
+            - name: Ruff check
+              run: |
+                  uvx ruff check
