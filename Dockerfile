@@ -20,6 +20,9 @@ COPY backend/ ./
 
 COPY --from=frontend-builder /frontend/dist/ca/browser /app/browser
 
+ENV SECURITY_TOKEN=NOT_SET
+ENV PKI_PATH_STRING=NOT_SET
+
 VOLUME ["/app/PKI"]
 EXPOSE 8000
 CMD ["uv",  "run", "fastapi", "run", "app/main.py", "--proxy-headers", "--port", "8000"]
@@ -30,4 +33,4 @@ CMD ["uv",  "run", "fastapi", "run", "app/main.py", "--proxy-headers", "--port",
 # docker build -t cert-auth:latest .
 
 # Run the Docker container
-# docker run -p 8000:8000 -v ./PKI:/app/PKI --env MODE=PRODUCTION cert-auth:latest
+# docker run -p 8000:8000 -v ./PKI:/app/PKI --env MODE=PRODUCTION --env SECURITY_TOKEN="ciaiciaicaiciaicia" cert-auth:latest

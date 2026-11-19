@@ -2,12 +2,12 @@ from datetime import datetime
 
 import fastapi
 from core.config import CORS, settings
-from core.exception_handlers import (
+from core.handlers.exception_handlers import (
     http_rewrite_header_handler,
     validation_exception_handler,
 )
 from core.install import install
-from core.pki_middleware import pki_middleware
+from core.middlewares import SecurityTokenMiddleware, pki_middleware
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,7 +26,7 @@ app = FastAPI(
 
 # MIDDLEWARE
 app.add_middleware(CORSMiddleware, **CORS)
-
+app.add_middleware(SecurityTokenMiddleware, token=settings.SECURITY_TOKEN)
 
 @app.middleware("http")
 async def check_pki(request: Request, call_next):
@@ -37,11 +37,20 @@ async def check_pki(request: Request, call_next):
     response = await call_next(request)
     return response
 
+# @app.middleware("http")
+# async def check_security_token(request: Request, call_next):
+#     """controlla che sia presente un token di sicurezza"""
+#     if not settings.SECURITY_TOKEN:
+#         ic("Security token not set")
+#     response = await call_next(request)
+#     return response
+
 
 # EXCEPTION HANDLERS
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(HTTPException, http_rewrite_header_handler)
 # app.add_exception_handler(PyMongoError, mongo_error_handler)
+
 
 # ROUTERS
 app.include_router(display_router, prefix="/api")
