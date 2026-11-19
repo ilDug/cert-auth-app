@@ -15,8 +15,7 @@ class Settings(BaseSettings):
     ROOT: Path = Path(__file__).resolve().parents[2]
     LIB: Path = ROOT / "assets"
     NG_PATH: Path = ROOT / "browser"
-    PKI_PATH_STRING: str | None = None
-    PKI: Path = ROOT / "PKI" if PKI_PATH_STRING is None else Path(PKI_PATH_STRING)
+    PKI: Path = ROOT / "PKI"
 
     PKI_DB: Path = PKI / "index.txt"
     KEYS_PATH: Path = PKI / "private"
