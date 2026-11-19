@@ -49,7 +49,6 @@ settings = Settings()
 def get_settings() -> Settings:
     """Get the cached settings instance."""
     ic("Getting cached settings instance")
-    ic(settings)
     return settings
 
 
