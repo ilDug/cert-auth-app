@@ -24,5 +24,49 @@ mkdir -p /path/to/PKI
 docker run -d \
   -p 8000:8000 \
   -v /path/to/pki:/app/pki \
+  --env MODE=PRODUCTION \
+  --env SECURITY_TOKEN=$(openssl rand -hex 32) \
+  ghcr.io/ildug/cert-auth-app:latest
+```
+
+## Run behind a reverse proxy
+
+When running the application behind a reverse proxy, make sure to configure the proxy to forward the appropriate headers and to use the correct port mapping. The application should be accessible through the proxy at the configured domain and port.
+
+### Example traefik configuration
+
+```bash 
+docker run -d \
+  -p 8000:8000 \
+  -v /path/to/pki:/app/pki \
+  --network proxy \
+  --env MODE=PRODUCTION \
+  --env SECURITY_TOKEN=$(openssl rand -hex 32) \
+  --label "traefik.enable=true" \
+  --label "traefik.http.routers.cert-auth-app.rule=Host(\`ca.example.com\`)" \
+  --label "traefik.http.routers.cert-auth-app.tls=true" \
+  --label "traefik.http.routers.cert-auth-app.entrypoints=websecure" \
+  --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
+  --label "traefik.http.routers.cert-auth-app.service=cert-auth-app" \
+  ghcr.io/ildug/cert-auth-app:latest
+```
+
+or run a a **service** 
+
+```bash 
+docker service create \
+  --name cert-auth-app \
+  --publish 8000:8000 \
+  --replicas 1 \
+  --mount type=bind,source=/path/to/pki,target=/app/pki \
+  --env MODE=PRODUCTION \
+  --env SECURITY_TOKEN=$(openssl rand -hex 32) \
+  --network proxy \
+  --label "traefik.enable=true" \
+  --label "traefik.http.routers.cert-auth-app.rule=Host(\`ca.example.com\`)" \
+  --label "traefik.http.routers.cert-auth-app.tls=true" \
+  --label "traefik.http.routers.cert-auth-app.entrypoints=websecure" \
+  --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
+  --label "traefik.http.routers.cert-auth-app.service=cert-auth-app" \
   ghcr.io/ildug/cert-auth-app:latest
 ```

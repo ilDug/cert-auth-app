@@ -21,7 +21,6 @@ COPY backend/ ./
 COPY --from=frontend-builder /frontend/dist/ca/browser /app/browser
 
 ENV SECURITY_TOKEN=NOT_SET
-ENV PKI_PATH_STRING=NOT_SET
 
 VOLUME ["/app/PKI"]
 EXPOSE 8000
