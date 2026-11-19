@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     CNF_BASE_DEFAULT: Path = LIB / "openssl/default.cnf"
     CNF_BASE_OPENSSL: Path = LIB / "openssl/openssl.cnf"
 
+    SECURITY_TOKEN: str | None = None
+
 
 # instance of the settings class to be used throughout the application
 settings = Settings()
