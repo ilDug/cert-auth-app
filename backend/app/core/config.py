@@ -4,7 +4,7 @@ from typing import Annotated, Literal
 
 from fastapi import Depends
 from icecream import ic
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ic.configureOutput(includeContext=True)
 
@@ -15,7 +15,8 @@ class Settings(BaseSettings):
     ROOT: Path = Path(__file__).resolve().parents[2]
     LIB: Path = ROOT / "assets"
     NG_PATH: Path = ROOT / "browser"
-    PKI: Path = ROOT / "PKI"
+    PKI_PATH_STRING: str | None = None
+    PKI: Path = ROOT / "PKI" if PKI_PATH_STRING is None else Path(PKI_PATH_STRING)
 
     PKI_DB: Path = PKI / "index.txt"
     KEYS_PATH: Path = PKI / "private"
@@ -36,6 +37,8 @@ class Settings(BaseSettings):
 
     SECURITY_TOKEN: str | None = None
 
+    model_config = SettingsConfigDict(env_file=".env", env_file_depth=1)
+
 
 # instance of the settings class to be used throughout the application
 settings = Settings()
@@ -46,6 +49,7 @@ settings = Settings()
 def get_settings() -> Settings:
     """Get the cached settings instance."""
     ic("Getting cached settings instance")
+    ic(settings)
     return settings
 
 
