@@ -28,6 +28,7 @@ app = FastAPI(
 app.add_middleware(CORSMiddleware, **CORS)
 app.add_middleware(SecurityTokenMiddleware, token=settings.SECURITY_TOKEN)
 
+
 @app.middleware("http")
 async def check_pki(request: Request, call_next):
     """controlla che sia istanziata una pki"""
@@ -36,6 +37,7 @@ async def check_pki(request: Request, call_next):
         install(settings)
     response = await call_next(request)
     return response
+
 
 # @app.middleware("http")
 # async def check_security_token(request: Request, call_next):

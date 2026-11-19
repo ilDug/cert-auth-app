@@ -1,6 +1,5 @@
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
-from icecream import ic
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.types import ASGIApp
 
@@ -22,6 +21,7 @@ class SecurityTokenMiddleware(BaseHTTPMiddleware):
     alla risposta il cookie con tale valore, limitato a ``/api`` e impostato
     con ``SameSite=Strict``, ``Secure`` e ``HttpOnly``.
     """
+
     context_endpoint: str = "/api"
 
     def __init__(self, app: ASGIApp, token: str | None):
