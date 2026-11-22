@@ -7,8 +7,8 @@ from core.handlers.exception_handlers import (
     validation_exception_handler,
 )
 from core.install import install
-from core.version import API_VERSION
 from core.middlewares import SecurityTokenMiddleware, pki_middleware
+from core.version import API_VERSION
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
