@@ -46,8 +46,9 @@ docker run -d \
   --label "traefik.http.routers.cert-auth-app.rule=Host(\`ca.example.com\`)" \
   --label "traefik.http.routers.cert-auth-app.tls=true" \
   --label "traefik.http.routers.cert-auth-app.entrypoints=websecure" \
-  --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
   --label "traefik.http.routers.cert-auth-app.service=cert-auth-app" \
+  --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
+  --label "traefik.http.services.cert-auth-app.loadbalancer.healthcheck.path=/health-check" \
   ghcr.io/ildug/cert-auth-app:latest
 ```
 
@@ -66,7 +67,8 @@ docker service create \
   --label "traefik.http.routers.cert-auth-app.rule=Host(\`ca.example.com\`)" \
   --label "traefik.http.routers.cert-auth-app.tls=true" \
   --label "traefik.http.routers.cert-auth-app.entrypoints=websecure" \
-  --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
   --label "traefik.http.routers.cert-auth-app.service=cert-auth-app" \
+  --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
+  --label "traefik.http.services.cert-auth-app.loadbalancer.healthcheck.path=/health-check" \
   ghcr.io/ildug/cert-auth-app:latest
 ```

@@ -76,6 +76,6 @@ Server time: {datetime.now()} (isoformat: {datetime.now().isoformat() })
 """
 
 
-@app.get("/health_check")
+@app.get("/health-check")
 async def health_check():
     return True
