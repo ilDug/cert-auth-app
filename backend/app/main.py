@@ -7,6 +7,7 @@ from core.handlers.exception_handlers import (
     validation_exception_handler,
 )
 from core.install import install
+from core.version import API_VERSION
 from core.middlewares import SecurityTokenMiddleware, pki_middleware
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -20,7 +21,7 @@ ic.configureOutput(includeContext=True)
 app = FastAPI(
     title="Cert Auth App",
     description="A FastAPI application for certificate Authority.",
-    version="0.0.0",
+    version=API_VERSION,
 )
 
 
