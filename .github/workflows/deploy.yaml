@@ -29,6 +29,7 @@ jobs:
                       type=ref,event=tag
                       type=semver,pattern={{version}}
                       type=semver,pattern={{major}}.{{minor}}
+                      type=sha
                       type=raw,value=latest,enable={{is_default_branch}}
 
             - name: Set up Docker Buildx
@@ -47,6 +48,8 @@ jobs:
               with:
                   context: .
                   file: ./Dockerfile
+                  build-args: |
+                    APP_VERSION=${{ steps.meta.outputs.tags[0] }}
                   platforms: linux/amd64,linux/arm64
                   push: true
                   tags: ${{ steps.meta.outputs.tags }}

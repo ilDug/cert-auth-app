@@ -1,10 +1,17 @@
 # Stage 1: build di Angular
 FROM oven/bun:latest AS frontend-builder
 WORKDIR /frontend
+ARG APP_VERSION=0.0.0-dev
+
 COPY frontend/package*.json ./
 COPY frontend/bun.lock ./
 RUN bun install --frozen-lockfile
 COPY frontend/ ./
+
+# crea in modo dinamico la versione dell'app
+# e la scrive nel file src/app/core/constants/version.ts
+RUN echo "export const APP_VERSION = '$APP_VERSION';" > frontend/src/app/core/version.ts
+
 RUN bun run build
 
 

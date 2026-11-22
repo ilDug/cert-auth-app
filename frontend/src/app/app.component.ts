@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ToastDirective } from '@ildug/ngx-toast';
+import { APP_VERSION } from './core/version'
 
 @Component({
     selector: 'app-root',
@@ -33,6 +34,9 @@ import { ToastDirective } from '@ildug/ngx-toast';
                     </li>
                 </ul>
             </div>
+            <div id="footer">
+                <p>© {{ year }} ilDug <br> {{ version }}</p>
+            </div>
         </nav>
         
         <div id="application">
@@ -43,4 +47,6 @@ import { ToastDirective } from '@ildug/ngx-toast';
     styles: []
 })
 export class AppComponent {
+    year = new Date().getFullYear();
+    version = APP_VERSION;
 }
