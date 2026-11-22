@@ -8,6 +8,7 @@ from core.handlers.exception_handlers import (
 )
 from core.install import install
 from core.middlewares import SecurityTokenMiddleware, pki_middleware
+from core.version import API_VERSION
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,7 +21,7 @@ ic.configureOutput(includeContext=True)
 app = FastAPI(
     title="Cert Auth App",
     description="A FastAPI application for certificate Authority.",
-    version="0.0.0",
+    version=API_VERSION,
 )
 
 
@@ -76,6 +77,6 @@ Server time: {datetime.now()} (isoformat: {datetime.now().isoformat() })
 """
 
 
-@app.get("/health_check")
+@app.get("/health-check")
 async def health_check():
     return True
