@@ -16,9 +16,9 @@ export class KeysDisplayComponent {
     subject = input<string>(null, { alias: "key" });
     tab = signal<string>("info");
 
-    privatePemResource = httpResource(() => `/api/display/privatekey/pem/${this.subject()}`)
-    publicPemResource = httpResource(() => `/api/display/publickey/pem/${this.subject()}`)
-    keyInfoResource = httpResource(() => `/api/display/privatekey/info/${this.subject()}`)
+    privatePemResource = httpResource.text(() => `/api/display/privatekey/pem/${this.subject()}`)
+    publicPemResource = httpResource.text(() => `/api/display/publickey/pem/${this.subject()}`)
+    keyInfoResource = httpResource.text(() => `/api/display/privatekey/info/${this.subject()}`)
 
     PENDING = computed(() =>
         this.privatePemResource.isLoading()
@@ -26,7 +26,7 @@ export class KeysDisplayComponent {
         || this.keyInfoResource.isLoading()
     )
 
-    privateKeyPem = signal<string>(null);
-    keyInfo = signal<string>(null);
-    publicKeyPem = signal<string>(null);
+    privateKeyPem = this.privatePemResource.value;
+    keyInfo = this.keyInfoResource.value;
+    publicKeyPem = this.publicPemResource.value;
 }
