@@ -51,8 +51,8 @@ jobs:
                   context: .
                   file: ./Dockerfile
                   build-args: |
-                      APP_VERSION=$DOCKER_METADATA_OUTPUT_VERSION
-                      API_VERSION=$DOCKER_METADATA_OUTPUT_VERSION
+                      APP_VERSION=${{ steps.meta.outputs.version }}
+                      API_VERSION=${{ steps.meta.outputs.version }}
                   platforms: linux/amd64,linux/arm64
                   push: true
                   tags: ${{ steps.meta.outputs.tags }}
