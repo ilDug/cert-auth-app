@@ -3,9 +3,10 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NgxErrorsModule } from '@ildug/ngx-errors';
-import { CertificateSigningRequest, CertificatesService } from '../../core';
+import { CertificatesService } from '../../core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxToastService } from '@ildug/ngx-toast';
+import { CertificateSigningRequest } from '../../core/interfaces';
 
 @Component({
     selector: 'ca-add-certificate-dialog',
@@ -32,7 +33,9 @@ export class AddCertificateDialogComponent {
         if (this.form.invalid) return;
 
         const { subject, days, wildcard } = this.form.value;
-        const csr = new CertificateSigningRequest({ subject, days });
+
+        const csr: CertificateSigningRequest = { subject, days, alt_names: [] }
+
         if (wildcard) {
             csr.alt_names.push(`*.${subject}`);
         }
