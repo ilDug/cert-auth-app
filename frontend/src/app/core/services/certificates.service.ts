@@ -13,7 +13,7 @@ export class CertificatesService {
     #parser = (response: Certificate[]) => response.map(item => ({
         ...item,
         exp_date: new Date(item.exp_date),
-        revoke_date: new Date(item.revoke_date)
+        revoke_date: item.revoke_date ? new Date(item.revoke_date) : null
     }))
 
 
