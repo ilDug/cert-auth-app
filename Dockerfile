@@ -10,7 +10,7 @@ COPY frontend/ ./
 
 # crea in modo dinamico la versione dell'app
 # e la scrive nel file src/app/core/constants/version.ts
-RUN echo "export const APP_VERSION = '$APP_VERSION';" > frontend/src/app/core/version.ts
+RUN echo "export const APP_VERSION = '$APP_VERSION';" > src/app/core/version.ts
 
 RUN bun run build
 
@@ -31,7 +31,7 @@ COPY --from=frontend-builder /frontend/dist/ca/browser /app/browser
 
 # crea in modo dinamico la versione dell'app
 # e la scrive nel file src/app/core/constants/version.ts
-RUN echo "API_VERSION = '$API_VERSION'" > backend/app/core/version.py
+RUN echo "API_VERSION = '$API_VERSION'" > app/core/version.py
 
 ENV SECURITY_TOKEN=NOT_SET
 
