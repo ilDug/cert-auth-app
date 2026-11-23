@@ -25,8 +25,8 @@ export class SettingsComponent {
     resetPKI() {
         this.pki$.resetPki().subscribe({
             next: success => {
-                this.cert$.refresh();
-                this.key$.refresh();
+                this.cert$.resource.reload();
+                this.key$.resource.reload();
                 this.toast.info("reset completato", 3000);
             },
             error: err => this.toast.error("Errore lato server", 3000)

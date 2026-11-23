@@ -48,8 +48,8 @@ export class ImportRootComponent {
         this.pki$.uploadRoot(this.certificate(), this.privateKey(), this.passphrase())
             .subscribe({
                 next: () => {
-                    this.cert$.refresh();
-                    this.key$.refresh();
+                    this.cert$.resource.reload();
+                    this.key$.resource.reload();
                     this.toast.info('Root certificate imported successfully', 5000);
                 },
                 error: err => this.toast.error(err, 5000)

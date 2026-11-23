@@ -13,10 +13,10 @@ export class CertificatesService {
     #parser = (response: Certificate[]) => response.map(item => ({ ...item, exp_date: new Date(item.exp_date), revoke_date: new Date(item.revoke_date) }))
 
 
-    certificateResource = httpResource<Certificate[]>(() => `/api/certificates`, { defaultValue: [], parse: this.#parser })
-    collections = this.certificateResource.value
-    PENDING = linkedSignal<boolean>(() => this.certificateResource.isLoading())
-    ERROR = this.certificateResource.error
+    resource = httpResource<Certificate[]>(() => `/api/certificates`, { defaultValue: [], parse: this.#parser })
+    collections = this.resource.value
+    PENDING = linkedSignal<boolean>(() => this.resource.isLoading())
+    ERROR = this.resource.error
 
 
     // interrga il server restituendo il certificato richiesto nella forma specificata
@@ -25,7 +25,7 @@ export class CertificatesService {
         let url = `/api/display/certificate/${type}/${subject}`
         return this.http.get(url, { responseType: 'text' as 'text' })
             .pipe(
-                finalize(() => this.certificateResource.reload())
+                finalize(() => this.resource.reload())
             )
     }
 
@@ -35,7 +35,7 @@ export class CertificatesService {
         this.PENDING.set(true);
         return this.http.post(`/api/generate/certificate`, csr, { responseType: 'text' as 'text' })
             .pipe(
-                finalize(() => this.certificateResource.reload())
+                finalize(() => this.resource.reload())
             )
     }
 
@@ -44,7 +44,7 @@ export class CertificatesService {
         this.PENDING.set(true);
         return this.http.delete<boolean>(`/api/erase/certificate/${subject}`)
             .pipe(
-                finalize(() => this.certificateResource.reload())
+                finalize(() => this.resource.reload())
             )
     }
 }
