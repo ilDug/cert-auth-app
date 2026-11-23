@@ -15,17 +15,20 @@ docker pull ghcr.io/ildug/cert-auth-app:latest
 ```
 
 
-The application needs a folder to store the entre PKI structure. Make sure to create a directory on your host machine and mount it to the container when running it.
+The application needs a folder to store the entre PKI structure. Make sure to create a directory on your host machine and mount it on `/app/PKI` to the container when running it.
 Expose the port 8000 to access the application from your host machine.
 
 ```bash
-mkdir -p /path/to/PKI
+mkdir -p /path/to/pki
 
 docker run -d \
-  -p 8000:8000 \
-  -v /path/to/pki:/app/pki \
+  --publish 8000:8000 \
+  --volume /path/to/pki:/app/PKI \
+  --volume /etc/localtime:/etc/localtime:ro \
   --env MODE=PRODUCTION \
+  --env TZ=Europe/Rome \
   --env SECURITY_TOKEN=$(openssl rand -hex 32) \
+  --network proxy \
   ghcr.io/ildug/cert-auth-app:latest
 ```
 
@@ -37,16 +40,19 @@ When running the application behind a reverse proxy, make sure to configure the 
 
 ```bash 
 docker run -d \
-  -p 8000:8000 \
-  -v /path/to/pki:/app/pki \
+  --publish 8000:8000 \
+  --volume /path/to/pki:/app/PKI \
+  --volume /etc/localtime:/etc/localtime:ro \
   --network proxy \
   --env MODE=PRODUCTION \
+  --env TZ=Europe/Rome \
   --env SECURITY_TOKEN=$(openssl rand -hex 32) \
   --label "traefik.enable=true" \
   --label "traefik.http.routers.cert-auth-app.rule=Host(\`ca.example.com\`)" \
   --label "traefik.http.routers.cert-auth-app.tls=true" \
   --label "traefik.http.routers.cert-auth-app.entrypoints=websecure" \
   --label "traefik.http.routers.cert-auth-app.service=cert-auth-app" \
+  --label "traefik.http.routers.cert-auth-app.middlewares=basic_auth@file" \
   --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
   --label "traefik.http.services.cert-auth-app.loadbalancer.healthcheck.path=/health-check" \
   ghcr.io/ildug/cert-auth-app:latest
@@ -59,8 +65,10 @@ docker service create \
   --name cert-auth-app \
   --publish 8000:8000 \
   --replicas 1 \
-  --mount type=bind,source=/path/to/pki,target=/app/pki \
+  --mount type=bind,source=/path/to/pki,target=/app/PKI \
+  --mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly \
   --env MODE=PRODUCTION \
+  --env TZ=Europe/Rome \
   --env SECURITY_TOKEN=$(openssl rand -hex 32) \
   --network proxy \
   --label "traefik.enable=true" \
@@ -68,6 +76,7 @@ docker service create \
   --label "traefik.http.routers.cert-auth-app.tls=true" \
   --label "traefik.http.routers.cert-auth-app.entrypoints=websecure" \
   --label "traefik.http.routers.cert-auth-app.service=cert-auth-app" \
+  --label "traefik.http.routers.cert-auth-app.middlewares=basic_auth@file" \
   --label "traefik.http.services.cert-auth-app.loadbalancer.server.port=8000" \
   --label "traefik.http.services.cert-auth-app.loadbalancer.healthcheck.path=/health-check" \
   ghcr.io/ildug/cert-auth-app:latest
