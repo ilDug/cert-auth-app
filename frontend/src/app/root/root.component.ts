@@ -1,7 +1,7 @@
 import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 import { Component, inject, signal } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CertificatesService, PKIService } from '../core';
 
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -10,7 +10,7 @@ import { httpResource } from '@angular/common/http';
 
 @Component({
     selector: 'ca-root',
-    imports: [RouterLink, RouterOutlet, CdkCopyToClipboard, MatTooltip, PemDownloadDirective],
+    imports: [RouterLink, CdkCopyToClipboard, MatTooltip, PemDownloadDirective],
     templateUrl: './root.component.html',
     styles: ``
 })
