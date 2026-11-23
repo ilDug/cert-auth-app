@@ -6,6 +6,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { PemDownloadDirective } from '../../core/pem-download.directive';
 import { Router, RouterLink } from '@angular/router';
 import { NgxConfirmDirective } from '@ildug/ngx-confirm';
+import { httpResource } from '@angular/common/http';
 
 @Component({
     selector: 'ca-certs-display',
@@ -20,14 +21,11 @@ export class CertsDisplayComponent {
 
     tab = signal<string>("info");
 
-    pem = signal<string>(null);
-    info = signal<string>(null);
+    pemResource = httpResource.text<string>(() => `/api/display/certificate/pem/${this.subject()}`)
+    infoResource = httpResource.text<string>(() => `/api/display/certificate/info/${this.subject()}`)
 
-    #loadEffect = effect(() => {
-        if (!this.subject()) return;
-        this.certs$.select(this.subject(), "pem").subscribe(this.pem.set);
-        this.certs$.select(this.subject(), "info").subscribe(this.info.set);
-    })
+    pem = this.pemResource.value;
+    info = this.infoResource.value;
 
 
     remove() {

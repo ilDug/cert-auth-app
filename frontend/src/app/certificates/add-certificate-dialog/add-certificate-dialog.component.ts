@@ -1,10 +1,10 @@
 
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NgxErrorsModule } from '@ildug/ngx-errors';
 import { CertificatesService } from '../../core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NgxToastService } from '@ildug/ngx-toast';
 import { CertificateSigningRequest } from '../../core/interfaces';
 
@@ -18,8 +18,8 @@ export class AddCertificateDialogComponent {
     toast = inject(NgxToastService);
     #ref = inject(MatDialogRef);
     cert$ = inject(CertificatesService);
-    min: number = 2;
-    max: number = 1825;
+    readonly min: number = 2;
+    readonly max: number = 1825;
 
     form = new FormGroup({
         subject: new FormControl('', [Validators.required]),

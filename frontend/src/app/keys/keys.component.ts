@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { KeysService } from '../core';
 
 @Component({
     selector: 'ca-keys',
@@ -8,4 +9,5 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     styles: ``
 })
 export class KeysComponent {
+    keys = inject(KeysService);
 }

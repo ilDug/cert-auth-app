@@ -19,6 +19,6 @@ export class CertificatesComponent {
     }
 
     reload() {
-        this.certs$.refresh();
+        this.certs$.resource.reload();
     }
 }

@@ -10,25 +10,17 @@ import { catchError, of, map, tap, finalize, lastValueFrom, Observable } from 'r
 export class CertificatesService {
     private http = inject(HttpClient);
 
-    #parser = (response: Certificate[]) => response.map(item => ({ ...item, exp_date: new Date(item.exp_date), revoke_date: new Date(item.revoke_date) }))
+    #parser = (response: Certificate[]) => response.map(item => ({
+        ...item,
+        exp_date: new Date(item.exp_date),
+        revoke_date: new Date(item.revoke_date)
+    }))
 
 
     resource = httpResource<Certificate[]>(() => `/api/certificates`, { defaultValue: [], parse: this.#parser })
-    collections = this.resource.value
+    list = this.resource.value
     PENDING = linkedSignal<boolean>(() => this.resource.isLoading())
     ERROR = this.resource.error
-
-
-    // interrga il server restituendo il certificato richiesto nella forma specificata
-    select(subject: string, type: "info" | "pem" | "file"): Observable<string> {
-        this.PENDING.set(true);
-        let url = `/api/display/certificate/${type}/${subject}`
-        return this.http.get(url, { responseType: 'text' as 'text' })
-            .pipe(
-                finalize(() => this.resource.reload())
-            )
-    }
-
 
     /** method to INSERT object to server */
     add(csr: CertificateSigningRequest): Observable<string> {
