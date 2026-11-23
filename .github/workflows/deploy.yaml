@@ -4,6 +4,8 @@ on:
     release:
         types: [published]
 
+    workflow_dispatch:
+
 env:
     # Use docker.io for Docker Hub if empty
     REGISTRY: ghcr.io
@@ -12,7 +14,7 @@ env:
 
 jobs:
     containerize:
-        name: Containerize Application - Build, tag and push to Github Container Registry 
+        name: Containerize Application - Build, tag and push to Github Container Registry
         runs-on: ubuntu-latest
         if: github.ref_type == 'tag'
 
@@ -42,23 +44,27 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build and push image
-              id: build
-              uses: docker/build-push-action@v5
-              with:
-                  context: .
-                  file: ./Dockerfile
-                  build-args: |
-                    APP_VERSION=${{ steps.meta.outputs.tags[0] }}
-                  platforms: linux/amd64,linux/arm64
-                  push: true
-                  tags: ${{ steps.meta.outputs.tags }}
-                  labels: ${{ steps.meta.outputs.labels }}
-                  cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE }}:buildcache
-                  cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE }}:buildcache,mode=max
-
             - name: Image digest
-              run: echo ${{ steps.build.outputs.digest }}
+              run: echo ${{ steps.meta.outputs.tags }}
+              
+            # - name: Build and push image
+            #   id: build
+            #   uses: docker/build-push-action@v5
+            #   with:
+            #       context: .
+            #       file: ./Dockerfile
+            #       build-args: |
+            #           APP_VERSION=${{ steps.meta.outputs.tags[0] }}
+            #           API_VERSION=${{ steps.meta.outputs.tags[1] }}
+            #       platforms: linux/amd64,linux/arm64
+            #       push: true
+            #       tags: ${{ steps.meta.outputs.tags }}
+            #       labels: ${{ steps.meta.outputs.labels }}
+            #       cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE }}:buildcache
+            #       cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE }}:buildcache,mode=max
+
+            # - name: Image digest
+            #   run: echo ${{ steps.build.outputs.digest }}
 
             # - name: API - Build and push image
             #   run: |
