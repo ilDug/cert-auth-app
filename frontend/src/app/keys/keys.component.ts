@@ -1,7 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { KeysService } from '../core';
 
 @Component({
     selector: 'ca-keys',
@@ -10,9 +8,4 @@ import { KeysService } from '../core';
     styles: ``
 })
 export class KeysComponent {
-    key$ = inject(KeysService);
-
-    reload() {
-        this.key$.refresh();
-    }
 }
