@@ -16,7 +16,7 @@ async def reset_pki(cnf: AppConfig):
     pki = Installer(cnf)
     pki.clean_structure()
     print("PKI directory creation...")
-    install()
+    install(cnf)
     return True
 
 
