@@ -1,4 +1,3 @@
-
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { KeysService } from '../../core';
@@ -10,7 +9,5 @@ import { KeysService } from '../../core';
     styles: ``
 })
 export class KeysListComponent {
-
-    keys$ = inject(KeysService);
-    
+    keys = inject(KeysService)
 }

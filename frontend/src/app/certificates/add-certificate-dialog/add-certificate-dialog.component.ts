@@ -1,15 +1,24 @@
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NgxErrorsModule } from '@ildug/ngx-errors';
-import { CertificateSigningRequest, CertificatesService } from '../../core';
+import { CertificatesService } from '../../core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NgxToastService } from '@ildug/ngx-toast';
+import { CertificateSigningRequest } from '../../core/interfaces';
+import { form, FormField, required, min, max } from '@angular/forms/signals';
+
+
+interface AddCertificateFormModel {
+    subject: string;
+    days: number;
+    wildcard: boolean;
+}
 
 @Component({
     selector: 'ca-add-certificate-dialog',
-    imports: [MatDialogModule, ReactiveFormsModule, NgxErrorsModule, MatCheckboxModule],
+    imports: [MatDialogModule, ReactiveFormsModule, NgxErrorsModule, MatCheckboxModule, FormField],
     templateUrl: './add-certificate-dialog.component.html',
     styles: ``
 })
@@ -17,22 +26,26 @@ export class AddCertificateDialogComponent {
     toast = inject(NgxToastService);
     #ref = inject(MatDialogRef);
     cert$ = inject(CertificatesService);
-    min: number = 2;
-    max: number = 1825;
 
-    form = new FormGroup({
-        subject: new FormControl('', [Validators.required]),
-        days: new FormControl(360, [Validators.required, Validators.min(this.min), Validators.max(this.max)]),
-        wildcard: new FormControl(true),
+    model = signal<AddCertificateFormModel>({
+        subject: '',
+        days: 360,
+        wildcard: true
     });
 
+    form = form(this.model, (schema) => {
+        required(schema.subject, { message: 'Subject is required' });
+        min(schema.days, 2, { message: 'Minimum value is 2' });
+        max(schema.days, 1825, { message: 'Maximum value is 1825' });
+    })
 
-    addCertificate() {
 
-        if (this.form.invalid) return;
+    addCertificate(event: SubmitEvent) {
+        event.preventDefault();
 
-        const { subject, days, wildcard } = this.form.value;
-        const csr = new CertificateSigningRequest({ subject, days });
+        const { subject, days, wildcard } = this.model();
+        const csr: CertificateSigningRequest = { subject, days, alt_names: [] }
+
         if (wildcard) {
             csr.alt_names.push(`*.${subject}`);
         }

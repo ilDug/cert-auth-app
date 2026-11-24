@@ -36,7 +36,7 @@ export class ImportPkiComponent {
     onComplete(e) {
         console.log('Upload complete', e);
         this.toast.info('Upload complete', 5000);
-        this.certs$.refresh();
-        this.key$.refresh();
+        this.certs$.resource.reload();
+        this.key$.resource.reload();
     }
 }

@@ -1,8 +1,12 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, LOCALE_ID } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
 import { routes } from './app.routes';
 import { logInterceptor } from './core/interceptors/log.interceptor';
+
+registerLocaleData(localeIt);
 
 export const appConfig: ApplicationConfig = {
   providers: [

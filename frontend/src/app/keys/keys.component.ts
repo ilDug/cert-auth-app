@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { KeysService } from '../core';
 
@@ -10,9 +9,5 @@ import { KeysService } from '../core';
     styles: ``
 })
 export class KeysComponent {
-    key$ = inject(KeysService);
-
-    reload() {
-        this.key$.refresh();
-    }
+    keys = inject(KeysService);
 }

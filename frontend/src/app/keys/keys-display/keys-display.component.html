@@ -1,61 +1,78 @@
 <div class="p-3">
-    <h2>{{ subject() }}</h2>
-    <div class="flex justify-end g-3 p-2">
-        <a class="btn btn-main" [routerLink]="['/certificates', subject()]">
-            <i class="fa-light fa-certificate me-1"></i>
-            Certificate
-        </a>
-    </div>
+  <h2>{{ subject() }}</h2>
+  <div class="flex justify-end g-3 p-2">
+    <a class="btn btn-main" [routerLink]="['/certificates', subject()]">
+      <i class="fa-light fa-certificate me-1"></i>
+      Certificate
+    </a>
+  </div>
 
-    <div>
-        <ul class="header-tabs">
-            <li [ngClass]="{ active: tab() == 'info' }" (click)="tab.set('info')">
-                <i class="fa-solid fa-file-certificate mr-2"></i>
-                info
-            </li>
-            <li [ngClass]="{ active: tab() == 'pem' }" (click)="tab.set('pem')">
-                <i class="fa-solid fa-code mr-2"></i>
-                pem
-            </li>
-        </ul>
-    </div>
+  <div>
+    <ul class="header-tabs">
+      <li [ngClass]="{ active: tab() == 'info' }" (click)="tab.set('info')">
+        <i class="fa-solid fa-file-certificate mr-2"></i>
+        info
+      </li>
+      <li [ngClass]="{ active: tab() == 'pem' }" (click)="tab.set('pem')">
+        <i class="fa-solid fa-code mr-2"></i>
+        pem
+      </li>
+    </ul>
+  </div>
 
-    @switch (tab()) { @case ('info') {
+  @if (PENDING()) {
     <div class="pos-relative bg-gray-900 p-2 br-5">
-        <a
-            [cdkCopyToClipboard]="info()"
+      <pre class="t-sm p-2">Loading...</pre>
+    </div>
+  } @else {
+    @switch (tab()) {
+      @case ('info') {
+        <div class="pos-relative bg-gray-900 p-2 br-5">
+          <a
+            [cdkCopyToClipboard]="keyInfo()"
             matTooltip="copy"
             class="pos-absolute"
             style="right: 1rem; top: 1rem"
-        >
+          >
             <i class="fa-light fa-copy fa-2x c-warn"></i>
-        </a>
-        <pre class="t-sm p-2">{{ info() }}</pre>
-    </div>
-    } @case ('pem') {
-    <div class="grid-2 g-3">
-        <div class="pos-relative bg-gray-900 p-2 br-5">
-            <span class="pos-absolute flex-col g-2" style="right: 1rem; top: 1rem">
-                <a [cdkCopyToClipboard]="privPem()" matTooltip="copy">
-                    <i class="fa-light fa-copy fa-2x t-main"></i>
-                </a>
-                <a  matTooltip="download" [pem-download]="privPem()" filename="{{ subject() }}.key">
-                    <i class="fa-light fa-download fa-2x t-vice"></i>
-                </a>
-            </span>
-            <pre class="t-sm p-2">{{ privPem() }}</pre>
+          </a>
+          <pre class="t-sm p-2">{{ keyInfo() }}</pre>
         </div>
-        <div class="pos-relative bg-gray-900 p-2 br-5">
+      }
+      @case ('pem') {
+        <div class="grid-2 g-3">
+          <div class="pos-relative bg-gray-900 p-2 br-5">
             <span class="pos-absolute flex-col g-2" style="right: 1rem; top: 1rem">
-                <a [cdkCopyToClipboard]="pubPem()" matTooltip="copy">
-                    <i class="fa-light fa-copy fa-2x t-main"></i>
-                </a>
-                <a  matTooltip="download" [pem-download]="pubPem()" filename="{{ subject() }}.pub.key">
-                    <i class="fa-light fa-download fa-2x t-vice"></i>
-                </a>
+              <a [cdkCopyToClipboard]="privateKeyPem()" matTooltip="copy">
+                <i class="fa-light fa-copy fa-2x t-main"></i>
+              </a>
+              <a
+                matTooltip="download"
+                [pem-download]="privateKeyPem()"
+                filename="{{ subject() }}.key"
+              >
+                <i class="fa-light fa-download fa-2x t-vice"></i>
+              </a>
             </span>
-            <pre class="t-sm p-2">{{ pubPem() }}</pre>
+            <pre class="t-sm p-2">{{ privateKeyPem() }}</pre>
+          </div>
+          <div class="pos-relative bg-gray-900 p-2 br-5">
+            <span class="pos-absolute flex-col g-2" style="right: 1rem; top: 1rem">
+              <a [cdkCopyToClipboard]="publicKeyPem()" matTooltip="copy">
+                <i class="fa-light fa-copy fa-2x t-main"></i>
+              </a>
+              <a
+                matTooltip="download"
+                [pem-download]="publicKeyPem()"
+                filename="{{ subject() }}.pub.key"
+              >
+                <i class="fa-light fa-download fa-2x t-vice"></i>
+              </a>
+            </span>
+            <pre class="t-sm p-2">{{ publicKeyPem() }}</pre>
+          </div>
         </div>
-    </div>
-    } }
+      }
+    }
+  }
 </div>
