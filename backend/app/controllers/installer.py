@@ -55,7 +55,7 @@ class Installer:
 
     def generate_passphrase(self, length: int = 24):
         cmd = PASSPHRASE_GEN.substitute(
-            passphrasepath=self.cnf.PASSPRHASE_PATH.as_posix(), length=24
+            passphrasepath=self.cnf.PASSPRHASE_PATH.as_posix(), length=length
         )
         print(cmd)
 
