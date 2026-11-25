@@ -11,6 +11,8 @@ ic.configureOutput(includeContext=True)
 
 # Application settings configuration
 class PkiPaths(BaseSettings):
+    ROOT: Path = Path(__file__).resolve().parents[2]
+
     MODE: Literal["development", "production"]
     PKI: Path = Path(__file__).resolve().parents[2] / "PKI"  #Path("/app/PKI")
 
@@ -26,6 +28,13 @@ class PkiPaths(BaseSettings):
     INTERMEDIATE_CRT: Path = INTERMEDIATE_CA / "certs/intermediate-ca.crt"
     INTERMEDIATE_KEY: Path = INTERMEDIATE_CA / "private/intermediate-ca.key"
     INTERMEDIATE_PASS: Path = INTERMEDIATE_CA / "private/passphrase"
+
+    CONFIGS_PATH: Path = ROOT / "configs"
+    CONFIG_ROOT: Path = CONFIGS_PATH / "root-ca.cnf"
+    CONFIG_INTERMEDIATE: Path = CONFIGS_PATH / "intermediate-ca.cnf"
+    CONFIG_LEAF: Path = CONFIGS_PATH / "leaf-certificate.cnf"
+    EXT_SERVER: Path = CONFIGS_PATH / "server.ext"
+    EXT_CLIENT: Path = CONFIGS_PATH / "client.ext"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_depth=1, extra="ignore")
 

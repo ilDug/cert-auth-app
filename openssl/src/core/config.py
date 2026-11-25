@@ -11,8 +11,8 @@ ic.configureOutput(includeContext=True)
 
 # Application settings configuration
 class Settings(BaseSettings):
+    MODE: Literal["development", "production"]
     ROOT: Path = Path(__file__).resolve().parents[2]
-    CONFIG_TEMPLATE_PATH: Path = ROOT / "configs"
     FRONTEND_PATH: Path = ROOT / "browser"
     SECURITY_TOKEN: str | None = None
 
