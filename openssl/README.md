@@ -12,10 +12,11 @@ extensions:
   `serverAuth` and `clientAuth` roles. They are not CA certificates.
 
 `ConfigController.compile_root_config()` renders `root-ca.cnf` into the root
-CA directory. Pass `country`, `state`, `locality`, `organization`,
-`organizational_unit`, and `common_name` as keyword arguments; the CA
-directory comes from `PkiPaths.ROOT_CA`. All values must be non-empty and
-contain no control characters. The root template uses Python `string.Template`
+CA directory. Pass a `RootCertificateConfigModel` containing `root_ca_dir`,
+`country`, `state`, `locality`, `organization`, `organizational_unit`, and
+`common_name`. The certificate configuration models validate and escape these
+values for OpenSSL: they must be non-empty and contain no control characters.
+The model fields contain the escaped values. The root template uses Python `string.Template`
 placeholders such as `${country}`; `$$dir` becomes OpenSSL's `$dir` in the
 compiled file. The template must be compiled before passing it to OpenSSL.
 
@@ -24,14 +25,14 @@ before passing it to OpenSSL. The other templates require these values:
 
 | Template | Template values |
 | --- | --- |
-| `intermediate-ca.cnf` | `intermediate_ca_dir`, `country`, `state`, `locality`, `organization`, `organizational_unit`, `common_name`, `email` |
-| `leaf-certificate.cnf` | `country`, `state`, `locality`, `organization`, `organizational_unit`, `common_name`, `email` |
+| `intermediate-ca.cnf` | `intermediate_ca_dir`, `country`, `state`, `locality`, `organization`, `organizational_unit`, `common_name` |
+| `leaf-certificate.cnf` | `country`, `state`, `locality`, `organization`, `organizational_unit`, `common_name` |
 | `server.ext` | `san` (for example, `DNS:api.example.test,IP:192.0.2.10`) |
 | `client.ext` | `san` (for example, `URI:spiffe://example.test/workload/client-1`) |
 
-`compile_root_config()` only renders the root template. Callers rendering the
-other templates must validate values and escape OpenSSL configuration special
-characters before substitution, as the root compiler does.
+`compile_intermediate_config()` and `compile_leaf_config()` validate their
+inputs with the corresponding models. Callers rendering the extension
+templates must validate and escape their values before substitution.
 
 The CA directory paths must point to the matching CA directories, which
 must contain the database, serial-number, and key/certificate paths configured

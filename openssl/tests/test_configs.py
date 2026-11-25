@@ -4,9 +4,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from controllers.configs import ConfigController
+from controllers.cnf import ConfigController
 from core.config import Settings
 from core.paths import PkiPaths
+from models.config_model import RootCertificateConfigModel
 
 
 class RootConfigTests(unittest.TestCase):
@@ -24,15 +25,15 @@ class RootConfigTests(unittest.TestCase):
             )
             controller = ConfigController(Settings(MODE="development"), paths)
             name = 'Example $name # "Root" \\ CA'
-            config = controller.compile_root_config(
+            config = controller.compile_root_config(RootCertificateConfigModel(
+                root_ca_dir=str(root),
                 country="US",
                 state="Test State",
                 locality="Test City",
                 organization="Example",
                 organizational_unit="PKI",
                 common_name=name,
-                email="ca@example.test",
-            )
+            ))
             self.assertEqual(config, paths.ROOT_CONF)
             self.assertEqual(original, template.read_text(encoding="utf-8"))
             compiled = config.read_text(encoding="utf-8")
@@ -83,15 +84,15 @@ class RootConfigTests(unittest.TestCase):
             paths = PkiPaths(MODE="development", ROOT_CA=root, ROOT_CONF=root / "root.cnf")
             controller = ConfigController(Settings(MODE="development"), paths)
             with self.assertRaises(ValueError):
-                controller.compile_root_config(
+                controller.compile_root_config(RootCertificateConfigModel(
+                    root_ca_dir=str(root),
                     country="US",
                     state="Test",
                     locality="Test",
                     organization="Example\nkeyUsage = anything",
                     organizational_unit="PKI",
                     common_name="Root",
-                    email="ca@example.test",
-                )
+                ))
             self.assertFalse(paths.ROOT_CONF.exists())
 
 
