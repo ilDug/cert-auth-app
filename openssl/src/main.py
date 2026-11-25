@@ -1,6 +1,7 @@
 from core.config import get_settings
 from core.paths import get_settings as get_paths
 from controllers.installer import Installer
+from controllers.root import RootController
 
 def main():
     settings = get_settings()
@@ -11,6 +12,9 @@ def main():
     installer.db_files()
     print("Hello from openssl!")
 
+    root = RootController(settings, paths)
+    root.passphrase()
+    root.private_key()
 
 if __name__ == "__main__":
     main()

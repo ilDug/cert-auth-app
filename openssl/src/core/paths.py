@@ -25,6 +25,7 @@ class PkiPaths(BaseSettings):
 
     INTERMEDIATE_CRT: Path = INTERMEDIATE_CA / "certs/intermediate-ca.crt"
     INTERMEDIATE_KEY: Path = INTERMEDIATE_CA / "private/intermediate-ca.key"
+    INTERMEDIATE_PASS: Path = INTERMEDIATE_CA / "private/passphrase"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_depth=1, extra="ignore")
 
