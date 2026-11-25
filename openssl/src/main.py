@@ -13,8 +13,8 @@ def main():
     print("Hello from openssl!")
 
     root = RootController(settings, paths)
-    root.passphrase()
-    root.private_key()
+    root.create_passphrase()
+    root.initialize_private_key()
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,61 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = ${ENV::ROOT_CA_DIR}
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database           = $dir/index.txt
+serial             = $dir/serial
+crlnumber          = $dir/crlnumber
+certificate        = $dir/certs/root.crt
+private_key        = $dir/private/root.key
+default_md         = sha256
+default_days       = 3650
+default_crl_days   = 30
+policy             = policy_strict
+email_in_dn        = no
+preserve            = no
+name_opt            = ca_default
+cert_opt            = ca_default
+unique_subject      = no
+copy_extensions     = none
+
+[ policy_strict ]
+countryName             = match
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+default_bits        = 4096
+default_md          = sha256
+prompt              = no
+distinguished_name  = root_dn
+x509_extensions     = v3_root_ca
+string_mask         = utf8only
+
+[ root_dn ]
+countryName             = ${ENV::ROOT_COUNTRY}
+stateOrProvinceName     = ${ENV::ROOT_STATE}
+localityName            = ${ENV::ROOT_LOCALITY}
+organizationName        = ${ENV::ROOT_ORGANIZATION}
+organizationalUnitName  = ${ENV::ROOT_ORG_UNIT}
+commonName              = ${ENV::ROOT_COMMON_NAME}
+emailAddress            = ${ENV::ROOT_EMAIL}
+
+[ v3_root_ca ]
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints        = critical,CA:true,pathlen:1
+keyUsage                = critical,keyCertSign,cRLSign
+
+[ v3_intermediate_ca ]
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints        = critical,CA:true,pathlen:0
+keyUsage                = critical,keyCertSign,cRLSign

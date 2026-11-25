@@ -63,17 +63,15 @@ class RootController(CAController):
     def __init__(self, cnf: Settings, paths: PkiPaths):
         super().__init__(cnf, paths)
 
-    def passphrase(self, passphrase: str = None):
+    def create_passphrase(self, passphrase: str = None):
         self.generate_passphrase(self.paths.ROOT_PASS, passphrase)
 
-    def private_key(self):
+    def initialize_private_key(self):
         self.generate_private_key(
             destination=self.paths.ROOT_KEY,
             passphrase=self.paths.ROOT_PASS.read_text(),
             bits=4096,
         )
-
-    
 
 
 ####################################################################################
@@ -82,10 +80,10 @@ class IntermediateController(CAController):
     def __init__(self, cnf: Settings, paths: PkiPaths):
         super().__init__(cnf, paths)
 
-    def passphrase(self, passphrase: str = None):
+    def create_passphrase(self, passphrase: str = None):
         self.generate_passphrase(self.paths.INTERMEDIATE_PASS, passphrase)
 
-    def private_key(self):
+    def initialize_private_key(self):
         self.generate_private_key(
             destination=self.paths.INTERMEDIATE_KEY,
             passphrase=self.paths.INTERMEDIATE_PASS.read_text(),

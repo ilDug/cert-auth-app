@@ -1,0 +1,54 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = ${ENV::INTERMEDIATE_CA_DIR}
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database           = $dir/index.txt
+serial             = $dir/serial
+crlnumber          = $dir/crlnumber
+certificate        = $dir/certs/intermediate-ca.crt
+private_key        = $dir/private/intermediate-ca.key
+default_md         = sha256
+default_days       = 825
+default_crl_days   = 30
+policy             = policy_loose
+email_in_dn        = no
+preserve            = no
+name_opt            = ca_default
+cert_opt            = ca_default
+unique_subject      = no
+copy_extensions     = none
+
+[ policy_loose ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+default_bits        = 3072
+default_md          = sha256
+prompt              = no
+distinguished_name  = intermediate_dn
+req_extensions      = v3_intermediate_req
+string_mask         = utf8only
+
+[ intermediate_dn ]
+countryName             = ${ENV::INTERMEDIATE_COUNTRY}
+stateOrProvinceName     = ${ENV::INTERMEDIATE_STATE}
+localityName            = ${ENV::INTERMEDIATE_LOCALITY}
+organizationName        = ${ENV::INTERMEDIATE_ORGANIZATION}
+organizationalUnitName  = ${ENV::INTERMEDIATE_ORG_UNIT}
+commonName              = ${ENV::INTERMEDIATE_COMMON_NAME}
+emailAddress            = ${ENV::INTERMEDIATE_EMAIL}
+
+[ v3_intermediate_req ]
+subjectKeyIdentifier    = hash
+basicConstraints        = critical,CA:true,pathlen:0
+keyUsage                = critical,keyCertSign,cRLSign

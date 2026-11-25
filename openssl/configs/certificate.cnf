@@ -1,0 +1,15 @@
+[ req ]
+default_bits        = 2048
+default_md          = sha256
+prompt              = no
+distinguished_name  = certificate_dn
+string_mask         = utf8only
+
+[ certificate_dn ]
+countryName             = ${ENV::CERT_COUNTRY}
+stateOrProvinceName     = ${ENV::CERT_STATE}
+localityName            = ${ENV::CERT_LOCALITY}
+organizationName        = ${ENV::CERT_ORGANIZATION}
+organizationalUnitName  = ${ENV::CERT_ORG_UNIT}
+commonName              = ${ENV::CERT_COMMON_NAME}
+emailAddress            = ${ENV::CERT_EMAIL}

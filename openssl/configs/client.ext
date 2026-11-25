@@ -1,0 +1,7 @@
+[ client_cert ]
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid,issuer
+basicConstraints        = critical,CA:false
+keyUsage                = critical,digitalSignature
+extendedKeyUsage        = clientAuth
+subjectAltName          = ${ENV::CLIENT_SAN}
