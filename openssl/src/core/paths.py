@@ -21,20 +21,23 @@ class PkiPaths(BaseSettings):
     CLIENTS: Path = PKI / "issued/clients"
     SERVERS: Path = PKI / "issued/servers"
 
-    ROOT_CRT: Path = ROOT_CA / "certs/root.crt"
-    ROOT_KEY: Path = ROOT_CA / "private/root.key"
     ROOT_PASS: Path = ROOT_CA / "private/passphrase"
+    ROOT_KEY: Path = ROOT_CA / "private/root.key"
+    ROOT_CONF: Path = ROOT_CA / "root-ca.cnf"
+    ROOT_CRT: Path = ROOT_CA / "certs/root.crt"
 
-    INTERMEDIATE_CRT: Path = INTERMEDIATE_CA / "certs/intermediate-ca.crt"
-    INTERMEDIATE_KEY: Path = INTERMEDIATE_CA / "private/intermediate-ca.key"
     INTERMEDIATE_PASS: Path = INTERMEDIATE_CA / "private/passphrase"
+    INTERMEDIATE_KEY: Path = INTERMEDIATE_CA / "private/intermediate-ca.key"
+    INTERMEDIATE_CONF: Path = INTERMEDIATE_CA / "intermediate-ca.cnf"
+    INTERMEDIATE_CSR: Path = INTERMEDIATE_CA / "intermediate-ca.csr"
+    INTERMEDIATE_CRT: Path = INTERMEDIATE_CA / "certs/intermediate-ca.crt"
 
-    CONFIGS_PATH: Path = ROOT / "configs"
-    CONFIG_ROOT: Path = CONFIGS_PATH / "root-ca.cnf"
-    CONFIG_INTERMEDIATE: Path = CONFIGS_PATH / "intermediate-ca.cnf"
-    CONFIG_LEAF: Path = CONFIGS_PATH / "leaf-certificate.cnf"
-    EXT_SERVER: Path = CONFIGS_PATH / "server.ext"
-    EXT_CLIENT: Path = CONFIGS_PATH / "client.ext"
+    CONFIGS_TEMPLATE_PATH: Path = ROOT / "configs"
+    CONFIG_ROOT_TEMPLATE: Path = CONFIGS_TEMPLATE_PATH / "root-ca.cnf"
+    CONFIG_INTERMEDIATE_TEMPLATE: Path = CONFIGS_TEMPLATE_PATH / "intermediate-ca.cnf"
+    CONFIG_LEAF_TEMPLATE: Path = CONFIGS_TEMPLATE_PATH / "leaf-certificate.cnf"
+    EXT_SERVER_TEMPLATE: Path = CONFIGS_TEMPLATE_PATH / "server.ext"
+    EXT_CLIENT_TEMPLATE: Path = CONFIGS_TEMPLATE_PATH / "client.ext"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_depth=1, extra="ignore")
 

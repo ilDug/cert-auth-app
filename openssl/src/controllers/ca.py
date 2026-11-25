@@ -57,8 +57,10 @@ class CAController:
         # destination.chmod(0o600)
 
 
+
+
 ####################################################################################
-class RootController(CAController):
+class RootCAController(CAController):
 
     def __init__(self, cnf: Settings, paths: PkiPaths):
         super().__init__(cnf, paths)
@@ -73,9 +75,29 @@ class RootController(CAController):
             bits=4096,
         )
 
+    def generate_certificate(
+        self,
+        configpath: Path,
+        days: int,
+        passphrasepath: Path,
+        cakeypath: Path,
+        cacrtpath: Path,
+    ):
+        cmd = (
+            cmds.ROOT_CRT.replace("<configpath>", str(configpath))
+            .replace("<days>", str(days))
+            .replace("<passphrasepath>", str(passphrasepath))
+            .replace("<cakeypath>", str(cakeypath))
+            .replace("<cacrtpath>", str(cacrtpath))
+            .split(" ")
+        )
+        subprocess.run(
+            cmd,
+            check=True,
+        )
 
 ####################################################################################
-class IntermediateController(CAController):
+class IntermediateCAController(CAController):
 
     def __init__(self, cnf: Settings, paths: PkiPaths):
         super().__init__(cnf, paths)

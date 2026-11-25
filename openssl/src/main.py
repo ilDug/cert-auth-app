@@ -1,7 +1,7 @@
 from core.config import get_settings
 from core.paths import get_settings as get_paths
 from controllers.installer import Installer
-from controllers.root import RootController
+from controllers.ca import RootCAController
 
 def main():
     settings = get_settings()
@@ -12,7 +12,7 @@ def main():
     installer.db_files()
     print("Hello from openssl!")
 
-    root = RootController(settings, paths)
+    root = RootCAController(settings, paths)
     root.create_passphrase()
     root.initialize_private_key()
 
