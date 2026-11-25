@@ -14,10 +14,9 @@ class Settings(BaseSettings):
     ROOT: Path = Path(__file__).resolve().parents[2]
     CONFIG_TEMPLATE_PATH: Path = ROOT / "configs"
     FRONTEND_PATH: Path = ROOT / "browser"
-    PKI: Path | None = None  # in production, set it to '/opt/PKI'
     SECURITY_TOKEN: str | None = None
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_depth=1)
+    model_config = SettingsConfigDict(env_file=".env", env_file_depth=1, extra="ignore")
 
 
 # instance of the settings class to be used throughout the application
