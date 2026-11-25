@@ -57,8 +57,6 @@ class CAController:
         # destination.chmod(0o600)
 
 
-
-
 ####################################################################################
 class RootCAController(CAController):
 
@@ -77,24 +75,26 @@ class RootCAController(CAController):
 
     def generate_certificate(
         self,
-        configpath: Path,
-        days: int,
-        passphrasepath: Path,
-        cakeypath: Path,
-        cacrtpath: Path,
+        passphrasepath: Path | None = None,
+        cakeypath: Path | None = None,
+        cacrtpath: Path | None = None,
     ):
+        if passphrasepath is None:
+            passphrasepath = self.paths.ROOT_PASS
+        if cakeypath is None:
+            cakeypath = self.paths.ROOT_KEY
+        if cacrtpath is None:
+            cacrtpath = self.paths.ROOT_CRT
+
         cmd = (
-            cmds.ROOT_CRT.replace("<configpath>", str(configpath))
-            .replace("<days>", str(days))
+            cmds.ROOT_CRT_GEN.replace("<configpath>", str(self.paths.ROOT_CONF))
             .replace("<passphrasepath>", str(passphrasepath))
             .replace("<cakeypath>", str(cakeypath))
             .replace("<cacrtpath>", str(cacrtpath))
-            .split(" ")
         )
-        subprocess.run(
-            cmd,
-            check=True,
-        )
+
+        subprocess.run(cmd, check=True)
+
 
 ####################################################################################
 class IntermediateCAController(CAController):

@@ -5,12 +5,50 @@ import unittest
 from pathlib import Path
 
 from controllers.cnf import ConfigController
+from controllers.ca import RootCAController
 from core.config import Settings
 from core.paths import PkiPaths
 from models.config_model import RootCertificateConfigModel
 
 
 class RootConfigTests(unittest.TestCase):
+    def test_root_certificate_with_encrypted_key_and_passphrase_file(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "root with spaces"
+            root.mkdir()
+            paths = PkiPaths(
+                MODE="development",
+                ROOT_CA=root,
+                ROOT_CONF=root / "root.cnf",
+                ROOT_KEY=root / "root.key",
+                ROOT_PASS=root / "passphrase",
+                ROOT_CRT=root / "root.crt",
+            )
+            settings = Settings(MODE="development")
+            ConfigController(settings, paths).compile_root_config(
+                RootCertificateConfigModel(
+                    root_ca_dir=str(root),
+                    country="US",
+                    state="Test",
+                    locality="Test",
+                    organization="Example",
+                    organizational_unit="PKI",
+                    common_name="Root",
+                )
+            )
+            paths.ROOT_PASS.write_text("test-only-passphrase", encoding="utf-8")
+            subprocess.run(
+                ["openssl", "genpkey", "-algorithm", "RSA", "-aes-256-cbc",
+                 "-pass", f"file:{paths.ROOT_PASS}", "-pkeyopt",
+                 "rsa_keygen_bits:2048", "-out", str(paths.ROOT_KEY)],
+                check=True, capture_output=True,
+            )
+            RootCAController(settings, paths).generate_certificate()
+            subprocess.run(
+                ["openssl", "verify", "-CAfile", str(paths.ROOT_CRT), str(paths.ROOT_CRT)],
+                check=True, capture_output=True,
+            )
+
     def test_compiled_config_creates_root_with_literal_subject(self):
         template = Path(__file__).resolve().parents[1] / "configs" / "root-ca.cnf"
         original = template.read_text(encoding="utf-8")

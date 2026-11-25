@@ -16,6 +16,8 @@ CA directory. Pass a `RootCertificateConfigModel` containing `root_ca_dir`,
 `country`, `state`, `locality`, `organization`, `organizational_unit`, and
 `common_name`. The certificate configuration models validate and escape these
 values for OpenSSL: they must be non-empty and contain no control characters.
+The templates omit `emailAddress` from the subject rather than setting it to an
+empty value, which OpenSSL rejects.
 The model fields contain the escaped values. The root template uses Python `string.Template`
 placeholders such as `${country}`; `$$dir` becomes OpenSSL's `$dir` in the
 compiled file. The template must be compiled before passing it to OpenSSL.

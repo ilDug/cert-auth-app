@@ -46,7 +46,6 @@ localityName            = "${locality}"
 organizationName        = "${organization}"
 organizationalUnitName  = "${organizational_unit}"
 commonName              = "${common_name}"
-emailAddress            = ""
 
 [ v3_intermediate_req ]
 subjectKeyIdentifier    = hash

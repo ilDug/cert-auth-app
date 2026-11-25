@@ -14,14 +14,14 @@ PRIVATEKEY = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:<passphrase
 # -sha256                         | Usa SHA-256 per la firma.
 # -batch                          | Evita le domande interattive per la richiesta.
 # -extensions v3_root_ca          | Applica le estensioni della sezione v3_root_ca.
-# -passin file:<passphrasepath>   | Legge dal file la passphrase della chiave privata.
+# -passin pass:<passphrase>       | Usa la passphrase fornita per leggere la chiave privata.
 # -key <cakeypath>                | Usa la chiave privata esistente indicata.
 # -out <cacrtpath>                | Scrive il certificato nel file indicato.
-ROOT_CRT_GEN = "openssl req -config <configpath> -new -x509  -days <days> -sha256 -batch -extensions v3_root_ca -passin file:<passphrasepath> -key <cakeypath> -out <cacrtpath>"
+ROOT_CRT_GEN = 'openssl req -config "<configpath>" -new -x509  -sha256 -batch -extensions v3_root_ca -passin file:<passphrasepath> -key "<cakeypath>" -out "<cacrtpath>"'
 
 
-# comando per visualizzare i dettagli del certificato ROOT-CA
-ROOT_CRT_SHOW = "openssl x509 -in <cacrtpath> -noout -text"
+# comando per visualizzare i dettagli del certificato
+CRT_SHOW = 'openssl x509 -in "<cacrtpath>" -noout -text'
 
 
 # INTERMEDIATE_CSR_GEN = "openssl req -config <configpath> -new -sha256 -batch -verbose -extensions v3_intermediate_ca -passin file:<passphrasepath> -key <cakeypath> -out <csrpath>"

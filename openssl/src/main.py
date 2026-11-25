@@ -25,5 +25,10 @@ def main():
         common_name="DagCA",
     ))
 
+    root_ca = RootCAController(settings, paths)
+    root_ca.create_passphrase()
+    root_ca.initialize_private_key()
+    root_ca.generate_certificate()
+
 if __name__ == "__main__":
     main()
