@@ -2,15 +2,15 @@
 default_ca = CA_default
 
 [ CA_default ]
-dir               = ${ENV::ROOT_CA_DIR}
-certs             = $dir/certs
-crl_dir           = $dir/crl
-new_certs_dir     = $dir/newcerts
-database           = $dir/index.txt
-serial             = $dir/serial
-crlnumber          = $dir/crlnumber
-certificate        = $dir/certs/root.crt
-private_key        = $dir/private/root.key
+dir               = "${root_ca_dir}"
+certs             = $$dir/certs
+crl_dir           = $$dir/crl
+new_certs_dir     = $$dir/newcerts
+database           = $$dir/index.txt
+serial             = $$dir/serial
+crlnumber          = $$dir/crlnumber
+certificate        = $$dir/certs/root.crt
+private_key        = $$dir/private/root.key
 default_md         = sha256
 default_days       = 3650
 default_crl_days   = 30
@@ -40,13 +40,13 @@ x509_extensions     = v3_root_ca
 string_mask         = utf8only
 
 [ root_dn ]
-countryName             = ${ENV::ROOT_COUNTRY}
-stateOrProvinceName     = ${ENV::ROOT_STATE}
-localityName            = ${ENV::ROOT_LOCALITY}
-organizationName        = ${ENV::ROOT_ORGANIZATION}
-organizationalUnitName  = ${ENV::ROOT_ORG_UNIT}
-commonName              = ${ENV::ROOT_COMMON_NAME}
-emailAddress            = ${ENV::ROOT_EMAIL}
+countryName             = "${country}"
+stateOrProvinceName     = "${state}"
+localityName            = "${locality}"
+organizationName        = "${organization}"
+organizationalUnitName  = "${organizational_unit}"
+commonName              = "${common_name}"
+emailAddress            = ""
 
 [ v3_root_ca ]
 subjectKeyIdentifier    = hash

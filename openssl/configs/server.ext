@@ -4,4 +4,4 @@ authorityKeyIdentifier  = keyid,issuer
 basicConstraints        = critical,CA:false
 keyUsage                = critical,digitalSignature,keyEncipherment
 extendedKeyUsage        = serverAuth
-subjectAltName          = ${ENV::SERVER_SAN}
+subjectAltName          = "${san}"

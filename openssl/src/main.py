@@ -2,6 +2,7 @@ from core.config import get_settings
 from core.paths import get_settings as get_paths
 from controllers.installer import Installer
 from controllers.ca import RootCAController
+from controllers.configs import ConfigController
 
 def main():
     settings = get_settings()
@@ -12,9 +13,15 @@ def main():
     installer.db_files()
     print("Hello from openssl!")
 
-    root = RootCAController(settings, paths)
-    root.create_passphrase()
-    root.initialize_private_key()
+    config = ConfigController(settings, paths)
+    config.compile_root_config(
+        country="IT",
+        state="Lombardy",
+        locality="Milan",
+        organization="DagTech",
+        organizational_unit="IT",
+        common_name="DagCA",
+    )
 
 if __name__ == "__main__":
     main()

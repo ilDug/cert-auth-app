@@ -7,24 +7,33 @@ extensions:
 - `root-ca.cnf` creates the self-signed root and signs the intermediate CA.
 - `intermediate-ca.cnf` creates the intermediate CA request and issues
   end-entity certificates.
-- `certificate.cnf` creates a request for an end-entity certificate.
+- `leaf-certificate.cnf` creates a request for an end-entity certificate.
 - `server.ext` and `client.ext` give issued certificates their distinct
   `serverAuth` and `clientAuth` roles. They are not CA certificates.
 
-The templates use OpenSSL's `${ENV::NAME}` expansion. Set the required
-environment variables in the process that runs OpenSSL to customize values at
-runtime; the templates themselves do not contain deployment-specific subjects,
-paths, or certificate identities.
+`ConfigController.compile_root_config()` renders `root-ca.cnf` into the root
+CA directory. Pass `country`, `state`, `locality`, `organization`,
+`organizational_unit`, and `common_name` as keyword arguments; the CA
+directory comes from `PkiPaths.ROOT_CA`. All values must be non-empty and
+contain no control characters. The root template uses Python `string.Template`
+placeholders such as `${country}`; `$$dir` becomes OpenSSL's `$dir` in the
+compiled file. The template must be compiled before passing it to OpenSSL.
 
-| Template | Runtime variables |
+All templates use Python `string.Template` placeholders. Render each template
+before passing it to OpenSSL. The other templates require these values:
+
+| Template | Template values |
 | --- | --- |
-| `root-ca.cnf` | `ROOT_CA_DIR`, `ROOT_COUNTRY`, `ROOT_STATE`, `ROOT_LOCALITY`, `ROOT_ORGANIZATION`, `ROOT_ORG_UNIT`, `ROOT_COMMON_NAME`, `ROOT_EMAIL` |
-| `intermediate-ca.cnf` | `INTERMEDIATE_CA_DIR`, `INTERMEDIATE_COUNTRY`, `INTERMEDIATE_STATE`, `INTERMEDIATE_LOCALITY`, `INTERMEDIATE_ORGANIZATION`, `INTERMEDIATE_ORG_UNIT`, `INTERMEDIATE_COMMON_NAME`, `INTERMEDIATE_EMAIL` |
-| `certificate.cnf` | `CERT_COUNTRY`, `CERT_STATE`, `CERT_LOCALITY`, `CERT_ORGANIZATION`, `CERT_ORG_UNIT`, `CERT_COMMON_NAME`, `CERT_EMAIL` |
-| `server.ext` | `SERVER_SAN` (for example, `DNS:api.example.test,IP:192.0.2.10`) |
-| `client.ext` | `CLIENT_SAN` (for example, `URI:spiffe://example.test/workload/client-1`) |
+| `intermediate-ca.cnf` | `intermediate_ca_dir`, `country`, `state`, `locality`, `organization`, `organizational_unit`, `common_name`, `email` |
+| `leaf-certificate.cnf` | `country`, `state`, `locality`, `organization`, `organizational_unit`, `common_name`, `email` |
+| `server.ext` | `san` (for example, `DNS:api.example.test,IP:192.0.2.10`) |
+| `client.ext` | `san` (for example, `URI:spiffe://example.test/workload/client-1`) |
 
-The CA directory variables must point to the matching CA directories, which
+`compile_root_config()` only renders the root template. Callers rendering the
+other templates must validate values and escape OpenSSL configuration special
+characters before substitution, as the root compiler does.
+
+The CA directory paths must point to the matching CA directories, which
 must contain the database, serial-number, and key/certificate paths configured
 in the files. To issue a leaf certificate, pass the matching extension file and
 section to `openssl ca`, for example `-extfile configs/server.ext -extensions

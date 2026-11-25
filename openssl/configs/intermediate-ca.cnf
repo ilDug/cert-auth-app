@@ -2,15 +2,15 @@
 default_ca = CA_default
 
 [ CA_default ]
-dir               = ${ENV::INTERMEDIATE_CA_DIR}
-certs             = $dir/certs
-crl_dir           = $dir/crl
-new_certs_dir     = $dir/newcerts
-database           = $dir/index.txt
-serial             = $dir/serial
-crlnumber          = $dir/crlnumber
-certificate        = $dir/certs/intermediate-ca.crt
-private_key        = $dir/private/intermediate-ca.key
+dir               = "${intermediate_ca_dir}"
+certs             = $$dir/certs
+crl_dir           = $$dir/crl
+new_certs_dir     = $$dir/newcerts
+database           = $$dir/index.txt
+serial             = $$dir/serial
+crlnumber          = $$dir/crlnumber
+certificate        = $$dir/certs/intermediate-ca.crt
+private_key        = $$dir/private/intermediate-ca.key
 default_md         = sha256
 default_days       = 825
 default_crl_days   = 30
@@ -40,13 +40,13 @@ req_extensions      = v3_intermediate_req
 string_mask         = utf8only
 
 [ intermediate_dn ]
-countryName             = ${ENV::INTERMEDIATE_COUNTRY}
-stateOrProvinceName     = ${ENV::INTERMEDIATE_STATE}
-localityName            = ${ENV::INTERMEDIATE_LOCALITY}
-organizationName        = ${ENV::INTERMEDIATE_ORGANIZATION}
-organizationalUnitName  = ${ENV::INTERMEDIATE_ORG_UNIT}
-commonName              = ${ENV::INTERMEDIATE_COMMON_NAME}
-emailAddress            = ${ENV::INTERMEDIATE_EMAIL}
+countryName             = "${country}"
+stateOrProvinceName     = "${state}"
+localityName            = "${locality}"
+organizationName        = "${organization}"
+organizationalUnitName  = "${organizational_unit}"
+commonName              = "${common_name}"
+emailAddress            = ""
 
 [ v3_intermediate_req ]
 subjectKeyIdentifier    = hash
