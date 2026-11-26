@@ -12,7 +12,20 @@ def parse_cmd(cmd: str, values: dict[str, str]) -> list[str]:
 # openssl rand -base64 32 | tr -d '/.+'
 PASSPHRASE = "openssl rand -base64 32"
 
-PRIVATEKEY = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:{passphrase} -pkeyopt rsa_keygen_bits:{bits} -out {output}"
+PRIVATEKEY_GEN = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:{passphrase} -pkeyopt rsa_keygen_bits:{bits} -out {output}"
+
+# mostra i dettagli del della chiave privata
+PRIVATEKEY_SHOW = (
+    "openssl pkey -in {keypath} -noout -text -passin file:{passphrasepath}"
+)
+
+# mostra la chiave pubblica a partire dalla chiave privata
+# PUBLICKEY_FROM_KEY_SHOW = (
+#     "openssl pkey -in {keypath} -pubout -noout -text -passin file:{passphrasepath}"
+# )
+
+# mostra la chiave pubblica in formato PEM a partire dal certificato
+PUBLICKEY_FROM_CRT_SHOW = "openssl x509 -in {crtpath} -pubkey -noout"
 
 # Opzione                         | Significato
 # openssl req                     | Crea una richiesta o un certificato.

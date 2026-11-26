@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 from controllers.cnf import ConfigController
-from controllers.ca import RootCAController
+from controllers.builder import RootCABuilder
 from core.config import Settings
 from core.paths import PkiPaths
 from models.config_model import RootCertificateConfigModel
@@ -43,7 +43,7 @@ class RootConfigTests(unittest.TestCase):
                  "rsa_keygen_bits:2048", "-out", str(paths.ROOT_KEY)],
                 check=True, capture_output=True,
             )
-            RootCAController(settings, paths).generate_certificate()
+            RootCABuilder(settings, paths).issue_selfsigned_root_certificate()
             subprocess.run(
                 ["openssl", "verify", "-CAfile", str(paths.ROOT_CRT), str(paths.ROOT_CRT)],
                 check=True, capture_output=True,
