@@ -19,6 +19,12 @@ PRIVATEKEY_SHOW = (
     "openssl pkey -in {keypath} -passin file:{passphrasepath} -noout -text"
 )
 
+KEY_GEN = "openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:{bits} -out {output}"
+
+CSR_GEN = "openssl req -config {configpath} -new -sha256 -batch -verbose -key {keypath} -out {csrpath}"
+
+CSR_VERIFY = "openssl req -in {csrpath} -noout -verify -text"
+
 # mostra la chiave pubblica a partire dalla chiave privata
 # PUBLICKEY_FROM_KEY_SHOW = (
 #     "openssl pkey -in {keypath} -pubout -noout -text -passin file:{passphrasepath}"

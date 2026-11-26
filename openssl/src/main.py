@@ -13,24 +13,15 @@ def main():
     settings = get_settings()
     paths = get_paths()
 
-    install_pki()
+    install_pki(settings, paths)
+    build_root_ca(settings, paths)
+    build_intermediate_ca(settings, paths)
 
-    config = ConfigController(settings, paths)
-    config.compile_root_config(
-        RootCertificateConfigModel(
-            root_ca_dir=str(paths.ROOT_CA),
-            country="IT",
-            state="Lombardy",
-            locality="Milan",
-            organization="DagTech",
-            organizational_unit="IT",
-            common_name="DagCA",
-        )
-    )
+    
 
-    root_ca = RootCABuilder(settings, paths)
-    root_ca.build()
 
+###############################################################################
+def build_intermediate_ca(settings, paths):
     config = ConfigController(settings, paths)
     config.compile_intermediate_config(
         values=IntermediateCertificateConfigModel(
@@ -47,10 +38,25 @@ def main():
     intermediate_ca.build()
 
 
-def install_pki():
-    settings = get_settings()
-    paths = get_paths()
+def build_root_ca(settings, paths):
+    config = ConfigController(settings, paths)
+    config.compile_root_config(
+        RootCertificateConfigModel(
+            root_ca_dir=str(paths.ROOT_CA),
+            country="IT",
+            state="Lombardy",
+            locality="Milan",
+            organization="DagTech",
+            organizational_unit="IT",
+            common_name="DagCA",
+        )
+    )
 
+    root_ca = RootCABuilder(settings, paths)
+    root_ca.build()
+
+
+def install_pki(settings, paths):
     # Install the PKI infrastructure
     installer = Installer(settings, paths)
     installer.cleanup()
