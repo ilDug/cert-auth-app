@@ -8,6 +8,7 @@ from models.config_model import (
     IntermediateCertificateConfigModel,
 )
 
+
 def main():
     settings = get_settings()
     paths = get_paths()

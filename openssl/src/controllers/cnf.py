@@ -8,6 +8,7 @@ from models.config_model import (
     LeafCertificateConfigModel,
 )
 
+
 class ConfigController:
     def __init__(self, cnf: Settings, paths: PkiPaths):
         self.cnf = cnf

@@ -14,7 +14,6 @@ from models.config_model import (
     RootCertificateConfigModel,
 )
 
-
 SUBJECT = {
     "country": "US",
     "state": "Test",
@@ -35,7 +34,9 @@ class ConfigModelTests(unittest.TestCase):
         for model_type, extra in cases:
             with self.subTest(model=model_type.__name__):
                 model = model_type(**(SUBJECT | extra))
-                self.assertEqual(model.common_name, 'Example \\$name \\"CA\\" \\\\ test')
+                self.assertEqual(
+                    model.common_name, 'Example \\$name \\"CA\\" \\\\ test'
+                )
                 for bad_value in ("", "bad\nvalue", "bad\x7fvalue"):
                     with self.assertRaises(ValidationError):
                         model_type(**(SUBJECT | extra | {"common_name": bad_value}))
@@ -65,7 +66,9 @@ class ConfigModelTests(unittest.TestCase):
                 LEAF_CONF=base / "leaf.cnf",
             )
             controller = ConfigController(Settings(MODE="development"), paths)
-            root_model = RootCertificateConfigModel(**(SUBJECT | {"root_ca_dir": str(root)}))
+            root_model = RootCertificateConfigModel(
+                **(SUBJECT | {"root_ca_dir": str(root)})
+            )
             compiled = (
                 controller.compile_root_config(root_model),
                 controller.compile_intermediate_config(**SUBJECT),
@@ -73,21 +76,48 @@ class ConfigModelTests(unittest.TestCase):
             )
             for path in compiled:
                 text = path.read_text(encoding="utf-8")
-                self.assertIn('commonName              = "Example \\$name \\"CA\\" \\\\ test"', text)
+                self.assertIn(
+                    'commonName              = "Example \\$name \\"CA\\" \\\\ test"',
+                    text,
+                )
             self.assertIn("certs             = $dir/certs", compiled[0].read_text())
             self.assertIn("certs             = $dir/certs", compiled[1].read_text())
 
             key = base / "root.key"
             cert = base / "root.crt"
             subprocess.run(
-                ["openssl", "genpkey", "-algorithm", "RSA", "-pkeyopt",
-                 "rsa_keygen_bits:2048", "-out", str(key)],
-                check=True, capture_output=True,
+                [
+                    "openssl",
+                    "genpkey",
+                    "-algorithm",
+                    "RSA",
+                    "-pkeyopt",
+                    "rsa_keygen_bits:2048",
+                    "-out",
+                    str(key),
+                ],
+                check=True,
+                capture_output=True,
             )
             subprocess.run(
-                ["openssl", "req", "-new", "-x509", "-config", str(compiled[0]),
-                 "-subj", "/CN=Test", "-key", str(key), "-out", str(cert), "-days", "1"],
-                check=True, capture_output=True,
+                [
+                    "openssl",
+                    "req",
+                    "-new",
+                    "-x509",
+                    "-config",
+                    str(compiled[0]),
+                    "-subj",
+                    "/CN=Test",
+                    "-key",
+                    str(key),
+                    "-out",
+                    str(cert),
+                    "-days",
+                    "1",
+                ],
+                check=True,
+                capture_output=True,
             )
 
 
