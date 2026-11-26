@@ -25,6 +25,26 @@ SUBJECT = {
 
 
 class ConfigModelTests(unittest.TestCase):
+    def test_leaf_alt_names_include_common_name(self):
+        model = LeafCertificateConfigModel(**SUBJECT)
+        self.assertEqual(model.alt_names, [model.common_name])
+
+        model = LeafCertificateConfigModel(
+            **(SUBJECT | {"alt_names": ["DNS:example.test", "DNS:www.example.test"]})
+        )
+        self.assertEqual(
+            model.alt_names,
+            ["DNS:example.test", "DNS:www.example.test", model.common_name],
+        )
+
+        model = LeafCertificateConfigModel(
+            **(SUBJECT | {"alt_names": [SUBJECT["common_name"]]})
+        )
+        self.assertEqual(model.alt_names, [model.common_name])
+
+        model.alt_names = ["DNS:new.example.test"]
+        self.assertIn(model.common_name, model.alt_names)
+
     def test_all_models_validate_and_escape_fields(self):
         cases = (
             (RootCertificateConfigModel, {"root_ca_dir": "/tmp/root"}),
