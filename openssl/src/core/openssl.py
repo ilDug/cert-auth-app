@@ -16,8 +16,9 @@ PRIVATEKEY_GEN = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:{passph
 
 # mostra i dettagli del della chiave privata
 PRIVATEKEY_SHOW = (
-    "openssl pkey -in {keypath} -noout -text -passin file:{passphrasepath}"
+    "openssl pkey -in {keypath} -passin file:{passphrasepath} -noout -text"
 )
+
 
 # mostra la chiave pubblica a partire dalla chiave privata
 # PUBLICKEY_FROM_KEY_SHOW = (
@@ -26,6 +27,13 @@ PRIVATEKEY_SHOW = (
 
 # mostra la chiave pubblica in formato PEM a partire dal certificato
 PUBLICKEY_FROM_CRT_SHOW = "openssl x509 -in {crtpath} -pubkey -noout"
+
+# comando per visualizzare i dettagli del certificato
+CRT_SHOW = "openssl x509 -in {crtpath} -noout -text"
+
+# comando per verificare un certificato rispetto a un certificato CA
+CRT_VERIFY = "openssl verify -CAfile {CAcrtpath} {crtpath}"
+
 
 # Opzione                         | Significato
 # openssl req                     | Crea una richiesta o un certificato.
@@ -41,9 +49,8 @@ PUBLICKEY_FROM_CRT_SHOW = "openssl x509 -in {crtpath} -pubkey -noout"
 # -out <cacrtpath>                | Scrive il certificato nel file indicato.
 ROOT_CRT_GEN = "openssl req -config {configpath} -new -x509 -sha256 -batch -extensions v3_root_ca -passin file:{passphrasepath} -key {cakeypath} -out {cacrtpath}"
 
+ROOT_SIGN_INTERMEDIATE_CRT = "openssl ca -config {rootconfigpath} -batch -extensions v3_intermediate_ca -md sha256 -in {csrpath} -out {output} -passin file:{passphrasepath}"
 
-# comando per visualizzare i dettagli del certificato
-CRT_SHOW = "openssl x509 -in {crtpath} -noout -text"
+INTERMEDIATE_CSR_GEN = "openssl req -config {intermediateconfigpath} -new -sha256 -batch -verbose -reqexts v3_intermediate_req -passin file:{passphrasepath} -key {intermediatekeypath} -out {csrpath}"
 
-
-# INTERMEDIATE_CSR_GEN = "openssl req -config {configpath} -new -sha256 -batch -verbose -extensions v3_intermediate_ca -passin file:{passphrasepath} -key {cakeypath} -out {csrpath}"
+INTERMEDIATE_CSR_VERIFY = "openssl req -in {csrpath} -noout -verify -text"

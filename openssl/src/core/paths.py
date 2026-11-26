@@ -29,7 +29,7 @@ class PkiPaths(BaseSettings):
     INTERMEDIATE_PASS: Path = INTERMEDIATE_CA / "private/passphrase"
     INTERMEDIATE_KEY: Path = INTERMEDIATE_CA / "private/intermediate-ca.key"
     INTERMEDIATE_CONF: Path = INTERMEDIATE_CA / "intermediate-ca.cnf"
-    INTERMEDIATE_CSR: Path = INTERMEDIATE_CA / "intermediate-ca.csr"
+    INTERMEDIATE_CSR: Path = INTERMEDIATE_CA / "csr/intermediate-ca.csr"
     INTERMEDIATE_CRT: Path = INTERMEDIATE_CA / "certs/intermediate-ca.crt"
 
     CONFIGS_TEMPLATE_PATH: Path = ROOT / "configs"
