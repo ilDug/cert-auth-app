@@ -19,7 +19,6 @@ PRIVATEKEY_SHOW = (
     "openssl pkey -in {keypath} -passin file:{passphrasepath} -noout -text"
 )
 
-
 # mostra la chiave pubblica a partire dalla chiave privata
 # PUBLICKEY_FROM_KEY_SHOW = (
 #     "openssl pkey -in {keypath} -pubout -noout -text -passin file:{passphrasepath}"
@@ -49,7 +48,7 @@ CRT_VERIFY = "openssl verify -CAfile {CAcrtpath} {crtpath}"
 # -out <cacrtpath>                | Scrive il certificato nel file indicato.
 ROOT_CRT_GEN = "openssl req -config {configpath} -new -x509 -sha256 -batch -extensions v3_root_ca -passin file:{passphrasepath} -key {cakeypath} -out {cacrtpath}"
 
-ROOT_SIGN_INTERMEDIATE_CRT = "openssl ca -config {rootconfigpath} -batch -extensions v3_intermediate_ca -md sha256 -in {csrpath} -out {output} -passin file:{passphrasepath}"
+ROOT_SIGN_INTERMEDIATE_CRT = "openssl ca -config {rootconfigpath} -batch -notext -extensions v3_intermediate_ca -md sha256 -in {csrpath} -out {output} -passin file:{passphrasepath}"
 
 INTERMEDIATE_CSR_GEN = "openssl req -config {intermediateconfigpath} -new -sha256 -batch -verbose -reqexts v3_intermediate_req -passin file:{passphrasepath} -key {intermediatekeypath} -out {csrpath}"
 

@@ -11,11 +11,11 @@ class Installer:
     def scaffolding(self):
         """Create the necessary directory structure for the CA and issued certificates."""
 
-        ca_subdirs = ["certs", "private", "csr", "crl", "newcerts"]
-        # create the necessary subdirectories for the CA structure
-        for dir in [self.paths.ROOT_CA, self.paths.INTERMEDIATE_CA]:
-            for subdir in ca_subdirs:
-                (dir / subdir).mkdir(parents=True, exist_ok=True)
+        for dir in ["certs", "private", "crl", "newcerts", "conf"]:
+            (self.paths.ROOT_CA / dir).mkdir(parents=True, exist_ok=True)
+
+        for dir in ["certs", "private", "csr", "crl", "newcerts", "conf"]:
+            (self.paths.INTERMEDIATE_CA / dir).mkdir(parents=True, exist_ok=True)
 
         # create issued directories for clients and servers
         for dir in [self.paths.CLIENTS, self.paths.SERVERS]:

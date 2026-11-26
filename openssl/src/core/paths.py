@@ -14,7 +14,7 @@ class PkiPaths(BaseSettings):
     ROOT: Path = Path(__file__).resolve().parents[2]
 
     MODE: Literal["development", "production"]
-    PKI: Path = Path(__file__).resolve().parents[2] / "PKI"  #Path("/app/PKI")
+    PKI: Path = Path(__file__).resolve().parents[2] / "PKI"  # Path("/app/PKI")
 
     ROOT_CA: Path = PKI / "ca/root"
     INTERMEDIATE_CA: Path = PKI / "ca/intermediate"
@@ -23,12 +23,12 @@ class PkiPaths(BaseSettings):
 
     ROOT_PASS: Path = ROOT_CA / "private/passphrase"
     ROOT_KEY: Path = ROOT_CA / "private/root.key"
-    ROOT_CONF: Path = ROOT_CA / "root-ca.cnf"
+    ROOT_CONF: Path = ROOT_CA / "conf/root-ca.cnf"
     ROOT_CRT: Path = ROOT_CA / "certs/root.crt"
 
     INTERMEDIATE_PASS: Path = INTERMEDIATE_CA / "private/passphrase"
     INTERMEDIATE_KEY: Path = INTERMEDIATE_CA / "private/intermediate-ca.key"
-    INTERMEDIATE_CONF: Path = INTERMEDIATE_CA / "intermediate-ca.cnf"
+    INTERMEDIATE_CONF: Path = INTERMEDIATE_CA / "conf/intermediate-ca.cnf"
     INTERMEDIATE_CSR: Path = INTERMEDIATE_CA / "csr/intermediate-ca.csr"
     INTERMEDIATE_CRT: Path = INTERMEDIATE_CA / "certs/intermediate-ca.crt"
 
