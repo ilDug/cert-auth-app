@@ -1,9 +1,18 @@
 """OpenSSL command definitions for passphrase generation."""
 
+from icecream import ic
+
+
+# Command parser for OpenSSL commands with placeholders.
+def parse_cmd(cmd: str, values: dict[str, str]) -> list[str]:
+    # ic(cmd.format(**values))
+    return cmd.replace(" ", "÷").format(**values).split("÷")
+
+
 # openssl rand -base64 32 | tr -d '/.+'
 PASSPHRASE = "openssl rand -base64 32"
 
-PRIVATEKEY = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:<passphrase> -pkeyopt rsa_keygen_bits:<bits> -out <output>"
+PRIVATEKEY = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:{passphrase} -pkeyopt rsa_keygen_bits:{bits} -out {output}"
 
 # Opzione                         | Significato
 # openssl req                     | Crea una richiesta o un certificato.
@@ -17,11 +26,11 @@ PRIVATEKEY = "openssl genpkey -algorithm RSA -aes-256-cbc -pass pass:<passphrase
 # -passin pass:<passphrase>       | Usa la passphrase fornita per leggere la chiave privata.
 # -key <cakeypath>                | Usa la chiave privata esistente indicata.
 # -out <cacrtpath>                | Scrive il certificato nel file indicato.
-ROOT_CRT_GEN = 'openssl req -config "<configpath>" -new -x509  -sha256 -batch -extensions v3_root_ca -passin file:<passphrasepath> -key "<cakeypath>" -out "<cacrtpath>"'
+ROOT_CRT_GEN = "openssl req -config {configpath} -new -x509 -sha256 -batch -extensions v3_root_ca -passin file:{passphrasepath} -key {cakeypath} -out {cacrtpath}"
 
 
 # comando per visualizzare i dettagli del certificato
-CRT_SHOW = 'openssl x509 -in "<cacrtpath>" -noout -text'
+CRT_SHOW = "openssl x509 -in {crtpath} -noout -text"
 
 
-# INTERMEDIATE_CSR_GEN = "openssl req -config <configpath> -new -sha256 -batch -verbose -extensions v3_intermediate_ca -passin file:<passphrasepath> -key <cakeypath> -out <csrpath>"
+# INTERMEDIATE_CSR_GEN = "openssl req -config {configpath} -new -sha256 -batch -verbose -extensions v3_intermediate_ca -passin file:{passphrasepath} -key {cakeypath} -out {csrpath}"

@@ -1,3 +1,5 @@
+from icecream import ic
+
 from core.config import Settings
 from core.paths import PkiPaths
 import core.openssl as cmds
@@ -10,22 +12,30 @@ class CAController:
         self.cnf = cnf
         self.paths = paths
 
+    def show_certificate(self, crtpath: Path, pem: bool = False) -> str:
+        if pem:
+            crt = crtpath.read_text()
+            print(crt)
+            return crt
+
+        cmd = cmds.parse_cmd(cmds.CRT_SHOW, {"crtpath": crtpath})
+        crt = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        ic(crt.stdout)
+        return crt.stdout
+
     def generate_private_key(
         self,
         destination: Path,
         passphrase: str,
         bits: int,
     ):
-        cmd = (
-            cmds.PRIVATEKEY.replace("<passphrase>", passphrase)
-            .replace("<bits>", str(bits))
-            .replace("<output>", str(destination))
-            .split(" ")
-        )
-        subprocess.run(
-            cmd,
-            check=True,
-        )
+        values = {
+            "passphrase": passphrase,
+            "bits": str(bits),
+            "output": str(destination),
+        }
+        cmd = cmds.parse_cmd(cmds.PRIVATEKEY, values)
+        subprocess.run(cmd, check=True)
 
     def generate_passphrase(self, destination: Path, passphrase: str = None):
         # se la passprhase è menod di 24 caratteri , raise un errore
@@ -86,14 +96,18 @@ class RootCAController(CAController):
         if cacrtpath is None:
             cacrtpath = self.paths.ROOT_CRT
 
-        cmd = (
-            cmds.ROOT_CRT_GEN.replace("<configpath>", str(self.paths.ROOT_CONF))
-            .replace("<passphrasepath>", str(passphrasepath))
-            .replace("<cakeypath>", str(cakeypath))
-            .replace("<cacrtpath>", str(cacrtpath))
-        )
+        values = {
+            "configpath": self.paths.ROOT_CONF,
+            "passphrasepath": passphrasepath,
+            "cakeypath": cakeypath,
+            "cacrtpath": cacrtpath,
+        }
+        cmd = cmds.parse_cmd(cmds.ROOT_CRT_GEN, values)
 
         subprocess.run(cmd, check=True)
+
+    def show_certificate(self, pem: bool = False):
+        super().show_certificate(self.paths.ROOT_CRT, pem=pem)
 
 
 ####################################################################################
@@ -111,3 +125,6 @@ class IntermediateCAController(CAController):
             passphrase=self.paths.INTERMEDIATE_PASS.read_text(),
             bits=3072,
         )
+
+    def show_certificate(self, pem: bool = False):
+        super().show_certificate(self.paths.INTERMEDIATE_CRT, pem=pem)
