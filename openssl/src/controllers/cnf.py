@@ -3,18 +3,19 @@ from core.config import Settings
 from pathlib import Path
 from string import Template
 from models import (
-    RootCertificateConfigModel,
-    IntermediateCertificateConfigModel,
-    LeafCertificateConfigModel,
+    RootCertificateInputModel,
+    IntermediateCertificateInputModel,
+    LeafCertificateInputModel,
 )
 
-
 class Configurator:
+    """Configurator class for generating OpenSSL configuration files and extensions."""
+
     def __init__(self, cnf: Settings, paths: PkiPaths):
         self.cnf = cnf
         self.paths = paths
 
-    def compile_root_config(self, values: RootCertificateConfigModel) -> Path:
+    def compile_root_config(self, values: RootCertificateInputModel) -> Path:
         template = self.paths.CONFIG_ROOT_TEMPLATE.read_text(encoding="utf-8")
         config = Template(template).substitute(values.model_dump())
         config_path = self.paths.ROOT_CONF
@@ -22,7 +23,7 @@ class Configurator:
         return config_path
 
     def compile_intermediate_config(
-        self, values: IntermediateCertificateConfigModel
+        self, values: IntermediateCertificateInputModel
     ) -> Path:
 
         template = self.paths.CONFIG_INTERMEDIATE_TEMPLATE.read_text(encoding="utf-8")
@@ -32,7 +33,7 @@ class Configurator:
         return config_path
 
     def compile_leaf_config(
-        self, values: LeafCertificateConfigModel, output_dir: Path
+        self, values: LeafCertificateInputModel, output_dir: Path
     ) -> Path:
 
         template = self.paths.CONFIG_LEAF_TEMPLATE.read_text(encoding="utf-8")
@@ -51,7 +52,7 @@ class Configurator:
         return config_path
 
     def compile_server_extensions(
-        self, values: LeafCertificateConfigModel, output_dir: Path
+        self, values: LeafCertificateInputModel, output_dir: Path
     ) -> Path:
         template = self.paths.EXT_SERVER_TEMPLATE.read_text(encoding="utf-8")
         san = ",".join(f"DNS:{name}" for name in values.alt_names)
@@ -61,7 +62,7 @@ class Configurator:
         return ext_path
 
     def compile_client_extensions(
-        self, values: LeafCertificateConfigModel, output_dir: Path
+        self, values: LeafCertificateInputModel, output_dir: Path
     ) -> Path:
         template = self.paths.EXT_CLIENT_TEMPLATE.read_text(encoding="utf-8")
         san = ",".join(f"DNS:{name}" for name in values.alt_names)

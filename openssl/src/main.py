@@ -4,9 +4,9 @@ from controllers.installer import Scaffolder
 from controllers.builder import IntermediateCABuilder, RootCABuilder
 from controllers.cnf import Configurator
 from models import (
-    RootCertificateConfigModel,
-    IntermediateCertificateConfigModel,
-    LeafCertificateConfigModel,
+    RootCertificateInputModel,
+    IntermediateCertificateInputModel,
+    LeafCertificateInputModel,
 )
 from controllers.issuer import CertificateAuthority
 
@@ -14,7 +14,7 @@ def main():
     settings = get_settings()
     paths = get_paths()
 
-    cert_config = LeafCertificateConfigModel(
+    cert_config = LeafCertificateInputModel(
         common_name="dag.com",
         country="IT",
         state="Lombardy",
@@ -37,7 +37,7 @@ def main():
 def build_intermediate_ca(settings, paths):
     config = Configurator(settings, paths)
     config.compile_intermediate_config(
-        values=IntermediateCertificateConfigModel(
+        values=IntermediateCertificateInputModel(
             intermediate_ca_dir=str(paths.INTERMEDIATE_CA),
             country="IT",
             state="Lombardy",
@@ -54,7 +54,7 @@ def build_intermediate_ca(settings, paths):
 def build_root_ca(settings, paths):
     config = Configurator(settings, paths)
     config.compile_root_config(
-        RootCertificateConfigModel(
+        RootCertificateInputModel(
             root_ca_dir=str(paths.ROOT_CA),
             country="IT",
             state="Lombardy",

@@ -1,5 +1,4 @@
 from icecream import ic
-
 from core.config import Settings
 from core.paths import PkiPaths
 import core.openssl as cmds

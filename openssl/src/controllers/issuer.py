@@ -3,7 +3,7 @@ from pathlib import Path
 from controllers import cnf
 from core.config import Settings
 from core.paths import PkiPaths
-from models import LeafCertificateConfigModel
+from models import LeafCertificateInputModel
 from controllers.cnf import Configurator
 import core.openssl as cmds
 import subprocess
@@ -21,23 +21,23 @@ class CertificateAuthority:
         self.type = type
         self.configurator = Configurator(cnf, paths)
 
-    def issue_certificate(self, cnf: LeafCertificateConfigModel):
+    def issue_certificate(self, cnf: LeafCertificateInputModel):
         # 0 - Creazione della working directory per il certificato
-        self.wd = self._mk_working_dir(cnf)
+        wd = self._mk_working_dir(cnf)
         # 1 - generare la configurazione a partire dal template
-        self.cnf_path = self._compile_config(cnf, self.wd)
+        cnf_path = self._compile_config(self.configurator, cnf, wd)
         # 2 - generare extensioni per il certificato (alt_names, ecc.)
-        self.ext_path = self._compile_extensions(cnf, self.wd)
+        ext_path = self._compile_extensions(self.configurator, cnf, wd)
         # 3 - generare la chiave privata per il certificato (senza passphrase)
-        self.key_path = self._generate_private_key(cnf.common_name)
+        key_path = self._generate_private_key(wd, cnf.common_name)
         # 4 - generare la richiesta di firma del certificato (CSR)
-        self.csr_path = self._issue_csr(cnf, self.cnf_path, self.key_path)
+        csr_path = self._issue_csr(wd, cnf.common_name, cnf_path, key_path)
         # 5 - firmare la richiesta con l'autorità di certificazione appropriata ed emettere il certificato
-        self.crt_path = self._sign_certificate(cnf, self.csr_path, self.ext_path)
+        crt_path = self._sign_certificate(wd, cnf.common_name, csr_path, ext_path)
         # 6 - emettere il la chain del certificato assieme ai certificati intermedi
-        self.chain_path = self._chain_certificate(self.crt_path, cnf)
+        chain_path = self._chain_certificate(wd, cnf.common_name, crt_path)
 
-    def _mk_working_dir(self, model: LeafCertificateConfigModel) -> Path:
+    def _mk_working_dir(self, model: LeafCertificateInputModel) -> Path:
         wd = (
             self.paths.SERVERS if self.type == "SERVER" else self.paths.CLIENTS
         ) / model.common_name
@@ -45,26 +45,28 @@ class CertificateAuthority:
         wd.mkdir(parents=True, exist_ok=True)
         return wd
 
-    def _compile_config(self, model: LeafCertificateConfigModel, wd: Path) -> Path:
-        return self.configurator.compile_leaf_config(model, output_dir=wd)
+    def _compile_config(
+        self, compiler: Configurator, model: LeafCertificateInputModel, wd: Path
+    ) -> Path:
+        return compiler.compile_leaf_config(model, output_dir=wd)
 
-    def _compile_extensions(self, model: LeafCertificateConfigModel, wd: Path) -> Path:
+    def _compile_extensions(
+        self, compiler: Configurator, model: LeafCertificateInputModel, wd: Path
+    ) -> Path:
         if self.type == "SERVER":
-            return self.configurator.compile_server_extensions(model, output_dir=wd)
+            return compiler.compile_server_extensions(model, output_dir=wd)
         else:
-            return self.configurator.compile_client_extensions(model, output_dir=wd)
+            return compiler.compile_client_extensions(model, output_dir=wd)
 
-    def _generate_private_key(self, name: str, bits: int = 2048) -> Path:
-        key_path = self.wd / f"{name}.key"
+    def _generate_private_key(self, wd: Path, name: str, bits: int = 2048) -> Path:
+        key_path = wd / f"{name}.key"
         values = {"bits": bits, "output": key_path}
         cmd = cmds.parse_cmd(cmds.KEY_GEN, values)
         subprocess.run(cmd, check=True)
         return key_path
 
-    def _issue_csr(
-        self, cnf: LeafCertificateConfigModel, cnf_path: Path, key_path: Path
-    ) -> Path:
-        csr_path = self.wd / f"{cnf.common_name}.csr"
+    def _issue_csr(self, wd: Path, name: str, cnf_path: Path, key_path: Path) -> Path:
+        csr_path = wd / f"{name}.csr"
         values = {"configpath": cnf_path, "keypath": key_path, "csrpath": csr_path}
 
         cmd = cmds.parse_cmd(cmds.CSR_GEN, values)
@@ -76,30 +78,34 @@ class CertificateAuthority:
 
     def _sign_certificate(
         self,
-        cnf: LeafCertificateConfigModel,
+        wd: Path,
+        name: str,
         csr_path: Path,
         ext_path: Path,
+        days: int | None = None,
     ) -> Path:
-        output_path: Path = self.wd / f"{cnf.common_name}.crt"
+        output_path: Path = wd / f"{name}.crt"
         values = {
             "csrpath": csr_path,
             "extpath": ext_path,
             "output": output_path,
-            "days": cnf.days,
             "intermediateconfigpath": self.paths.INTERMEDIATE_CONF,
             "intermediatepassphrasepath": self.paths.INTERMEDIATE_PASS,
         }
+        if days is not None:
+            values["days"] = days
+
         if self.type == "SERVER":
             cmd = cmds.parse_cmd(cmds.CRT_SIGN_SERVER, values)
         elif self.type == "CLIENT":
             cmd = cmds.parse_cmd(cmds.CRT_SIGN_CLIENT, values)
+        else:
+            raise ValueError(f"Unsupported certificate type: {self.type}")
         subprocess.run(cmd, check=True)
         return output_path
 
-    def _chain_certificate(
-        self, crt_path: Path, cnf: LeafCertificateConfigModel
-    ) -> Path:
-        chain_path = self.wd / f"{cnf.common_name}.fullchain.crt"
+    def _chain_certificate(self, wd: Path, name: str, crt_path: Path) -> Path:
+        chain_path = wd / f"{name}.fullchain.crt"
         with open(chain_path, "wb") as chain_file:
             with open(crt_path, "rb") as crt_file:
                 chain_file.write(crt_file.read())

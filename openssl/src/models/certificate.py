@@ -2,7 +2,8 @@ from typing import Self
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-class CertificateConfigModel(BaseModel):
+
+class CertificateInputModel(BaseModel):
     model_config = ConfigDict(validate_assignment=True)
 
     country: str
@@ -32,7 +33,7 @@ class CertificateConfigModel(BaseModel):
         )
 
 
-class LeafCertificateConfigModel(CertificateConfigModel):
+class LeafCertificateInputModel(CertificateInputModel):
     days: int = 365
     wildcard: bool = False
     alt_names: list[str] = Field(default_factory=list)
@@ -52,9 +53,9 @@ class LeafCertificateConfigModel(CertificateConfigModel):
         return self
 
 
-class IntermediateCertificateConfigModel(CertificateConfigModel):
+class IntermediateCertificateInputModel(CertificateInputModel):
     intermediate_ca_dir: str
 
 
-class RootCertificateConfigModel(CertificateConfigModel):
+class RootCertificateInputModel(CertificateInputModel):
     root_ca_dir: str
