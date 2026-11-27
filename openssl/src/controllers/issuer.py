@@ -32,9 +32,12 @@ class CertificateAuthority:
         self.key_path = self._generate_private_key(cnf.common_name)
         # 4 - generare la richiesta di firma del certificato (CSR)
         self.csr_path = self._issue_csr(cnf, self.cnf_path, self.key_path)
-        # 5 - firmare la richiesta con l'autorità di certificazione appropriata
-        # 6 - emettere il certificato firmato
+        # 5 - firmare la richiesta con l'autorità di certificazione appropriata ed emettere il certificato
+        self.crt_path = self._sign_certificate(cnf, self.csr_path, self.ext_path)
+        # 6 - emettere il la chain del certificato assieme ai certificati intermedi
+        self.chain_path = self._chain_certificate(self.crt_path, cnf)
         # 7 - verificare il certificato emesso
+        return self._verify_certificate()
 
     def _mk_working_dir(self, model: LeafCertificateConfigModel) -> Path:
         wd = (
@@ -72,3 +75,56 @@ class CertificateAuthority:
         cmd = cmds.parse_cmd(cmds.CSR_VERIFY, {"csrpath": csr_path})
         subprocess.run(cmd, check=True)
         return csr_path
+
+    def _sign_certificate(
+        self,
+        cnf: LeafCertificateConfigModel,
+        csr_path: Path,
+        ext_path: Path,
+    ) -> Path:
+        output_path: Path = self.wd / f"{cnf.common_name}.crt"
+        values = {
+            "csrpath": csr_path,
+            "extpath": ext_path,
+            "output": output_path,
+            "days": cnf.days,
+            "intermediateconfigpath": self.paths.INTERMEDIATE_CONF,
+            "intermediatepassphrasepath": self.paths.INTERMEDIATE_PASS,
+        }
+        if self.type == "SERVER":
+            cmd = cmds.parse_cmd(cmds.CRT_SIGN_SERVER, values)
+        elif self.type == "CLIENT":
+            cmd = cmds.parse_cmd(cmds.CRT_SIGN_CLIENT, values)
+        subprocess.run(cmd, check=True)
+        return output_path
+
+    def _chain_certificate(
+        self, crt_path: Path, cnf: LeafCertificateConfigModel
+    ) -> Path:
+        chain_path = self.wd / f"{cnf.common_name}.fullchain.pem"
+        with open(chain_path, "wb") as chain_file:
+            with open(crt_path, "rb") as crt_file:
+                chain_file.write(crt_file.read())
+            with open(self.paths.INTERMEDIATE_CRT, "rb") as inter_file:
+                chain_file.write(inter_file.read())
+        return chain_path
+
+    def _verify_certificate(self) -> bool:
+        try:
+            # verifica il singolo certificato
+            cmd = cmds.parse_cmd(
+                cmds.CRT_VERIFY,
+                {"CAcrtpath": self.paths.INTERMEDIATE_CRT, "crtpath": self.crt_path},
+            )
+            subprocess.run(cmd, check=True)
+
+            # verifica la catena completa
+            cmd = cmds.parse_cmd(
+                cmds.CRT_VERIFY,
+                {"CAcrtpath": self.paths.ROOT_CRT, "crtpath": self.chain_path},
+            )
+            subprocess.run(cmd, check=True)
+
+            return True
+        except subprocess.CalledProcessError:
+            return False

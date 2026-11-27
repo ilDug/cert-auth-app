@@ -54,7 +54,8 @@ class ConfigController:
         self, values: LeafCertificateConfigModel, output_dir: Path
     ) -> Path:
         template = self.paths.EXT_SERVER_TEMPLATE.read_text(encoding="utf-8")
-        ext = Template(template).substitute({"san": values.alt_names})
+        san = ",".join(f"DNS:{name}" for name in values.alt_names)
+        ext = Template(template).substitute({"san": san})
         ext_path = output_dir / f"{values.common_name}.ext"
         ext_path.write_text(ext, encoding="utf-8")
         return ext_path
@@ -63,7 +64,8 @@ class ConfigController:
         self, values: LeafCertificateConfigModel, output_dir: Path
     ) -> Path:
         template = self.paths.EXT_CLIENT_TEMPLATE.read_text(encoding="utf-8")
-        ext = Template(template).substitute({"san": values.alt_names})
+        san = ",".join(f"DNS:{name}" for name in values.alt_names)
+        ext = Template(template).substitute({"san": san})
         ext_path = output_dir / f"{values.common_name}.ext"
         ext_path.write_text(ext, encoding="utf-8")
         return ext_path

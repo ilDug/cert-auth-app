@@ -4,6 +4,8 @@ import unittest
 from pathlib import Path
 from string import Template
 
+from core.openssl import CRT_SIGN, parse_cmd
+
 
 class TemplateTests(unittest.TestCase):
     def test_intermediate_and_leaf_templates_with_openssl(self):
@@ -39,14 +41,20 @@ class TemplateTests(unittest.TestCase):
                 )
 
             intermediate = render(
-                "intermediate-ca.cnf", subject | {"intermediate_ca_dir": str(ca)}
+                "intermediate-ca.cnf",
+                subject | {"intermediate_ca_dir": str(ca).replace("\\", "\\\\")},
             )
             key = ca / "private" / "intermediate-ca.key"
             certificate = ca / "certs" / "intermediate-ca.crt"
+            passphrase = ca / "private" / "passphrase"
+            passphrase.write_text("test-only-passphrase\n", encoding="ascii")
             openssl(
                 "genpkey",
                 "-algorithm",
                 "RSA",
+                "-aes-256-cbc",
+                "-pass",
+                f"file:{passphrase}",
                 "-pkeyopt",
                 "rsa_keygen_bits:2048",
                 "-out",
@@ -62,6 +70,8 @@ class TemplateTests(unittest.TestCase):
                 "v3_intermediate_req",
                 "-key",
                 key,
+                "-passin",
+                f"file:{passphrase}",
                 "-out",
                 certificate,
                 "-days",
@@ -97,26 +107,51 @@ class TemplateTests(unittest.TestCase):
                 with self.subTest(role=role):
                     extensions = render(f"{role}.ext", {"san": san})
                     issued = Path(temporary) / f"{role}.crt"
-                    openssl(
-                        "ca",
-                        "-batch",
-                        "-config",
-                        intermediate,
-                        "-extfile",
-                        extensions,
-                        "-extensions",
-                        f"{role}_cert",
-                        "-in",
-                        csr,
-                        "-out",
-                        issued,
-                        "-days",
-                        "1",
-                        "-notext",
-                    )
+                    if role == "server":
+                        command = parse_cmd(
+                            CRT_SIGN,
+                            {
+                                "intermediateconfigpath": str(intermediate),
+                                "extpath": str(extensions),
+                                "csrpath": str(csr),
+                                "output": str(issued),
+                                "passphrasepath": str(passphrase),
+                            },
+                        )
+                        subprocess.run(command, check=True, capture_output=True)
+                        self.assertTrue(
+                            issued.read_text().startswith("-----BEGIN CERTIFICATE-----")
+                        )
+                        self.assertEqual(
+                            openssl("req", "-in", csr, "-noout", "-pubkey").stdout,
+                            openssl("x509", "-in", issued, "-noout", "-pubkey").stdout,
+                        )
+                    else:
+                        openssl(
+                            "ca",
+                            "-batch",
+                            "-config",
+                            intermediate,
+                            "-extfile",
+                            extensions,
+                            "-extensions",
+                            f"{role}_cert",
+                            "-in",
+                            csr,
+                            "-out",
+                            issued,
+                            "-days",
+                            "1",
+                            "-notext",
+                            "-passin",
+                            f"file:{passphrase}",
+                        )
                     text = openssl("x509", "-in", issued, "-noout", "-text").stdout
                     self.assertIn(expected, text)
                     self.assertIn(san.split(",", 1)[0], text)
+                    if role == "server":
+                        self.assertIn("IP Address:192.0.2.10", text)
+                        self.assertIn("CA:FALSE", text)
                     openssl(
                         "verify",
                         "-CAfile",

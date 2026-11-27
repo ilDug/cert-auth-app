@@ -6,18 +6,31 @@ from controllers.cnf import ConfigController
 from models.config_model import (
     RootCertificateConfigModel,
     IntermediateCertificateConfigModel,
+    LeafCertificateConfigModel,
 )
-
+from controllers.issuer import CertificateAuthority
 
 def main():
     settings = get_settings()
     paths = get_paths()
 
-    install_pki(settings, paths)
-    build_root_ca(settings, paths)
-    build_intermediate_ca(settings, paths)
+    cert_config = LeafCertificateConfigModel(
+        common_name="dag.com",
+        country="IT",
+        state="Lombardy",
+        locality="Milan",
+        organization="DagTech",
+        organizational_unit="IT",
+        days=20,
+        wildcard=True,
+        alt_names=["dag.com", "www.dag.com"],
+    )
+    ca = CertificateAuthority(settings, paths)
+    ca.issue_certificate(cert_config)
 
-    
+    # install_pki(settings, paths)
+    # build_root_ca(settings, paths)
+    # build_intermediate_ca(settings, paths)
 
 
 ###############################################################################

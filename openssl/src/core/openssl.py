@@ -30,14 +30,18 @@ CSR_VERIFY = "openssl req -in {csrpath} -noout -verify -text"
 #     "openssl pkey -in {keypath} -pubout -noout -text -passin file:{passphrasepath}"
 # )
 
-# mostra la chiave pubblica in formato PEM a partire dal certificato
-PUBLICKEY_FROM_CRT_SHOW = "openssl x509 -in {crtpath} -pubkey -noout"
+CRT_SIGN_SERVER = "openssl ca -config {intermediateconfigpath} -batch -notext -verbose -extfile {extpath} -extensions server_cert -days {days} -md sha256 -in {csrpath} -out {output} -passin file:{intermediatepassphrasepath}"
+
+CRT_SIGN_CLIENT = "openssl ca -config {intermediateconfigpath} -batch -notext -verbose -extfile {extpath} -extensions client_cert -days {days} -md sha256 -in {csrpath} -out {output} -passin file:{intermediatepassphrasepath}"
 
 # comando per visualizzare i dettagli del certificato
 CRT_SHOW = "openssl x509 -in {crtpath} -noout -text"
 
 # comando per verificare un certificato rispetto a un certificato CA
 CRT_VERIFY = "openssl verify -CAfile {CAcrtpath} {crtpath}"
+
+# mostra la chiave pubblica in formato PEM a partire dal certificato
+PUBLICKEY_FROM_CRT_SHOW = "openssl x509 -in {crtpath} -pubkey -noout"
 
 
 # Opzione                         | Significato
