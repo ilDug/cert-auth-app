@@ -1,9 +1,9 @@
 from core.config import get_settings
 from core.paths import get_settings as get_paths
-from controllers.installer import Installer
+from controllers.installer import Scaffolder
 from controllers.builder import IntermediateCABuilder, RootCABuilder
-from controllers.cnf import ConfigController
-from models.config_model import (
+from controllers.cnf import Configurator
+from models import (
     RootCertificateConfigModel,
     IntermediateCertificateConfigModel,
     LeafCertificateConfigModel,
@@ -35,7 +35,7 @@ def main():
 
 ###############################################################################
 def build_intermediate_ca(settings, paths):
-    config = ConfigController(settings, paths)
+    config = Configurator(settings, paths)
     config.compile_intermediate_config(
         values=IntermediateCertificateConfigModel(
             intermediate_ca_dir=str(paths.INTERMEDIATE_CA),
@@ -52,7 +52,7 @@ def build_intermediate_ca(settings, paths):
 
 
 def build_root_ca(settings, paths):
-    config = ConfigController(settings, paths)
+    config = Configurator(settings, paths)
     config.compile_root_config(
         RootCertificateConfigModel(
             root_ca_dir=str(paths.ROOT_CA),
@@ -71,9 +71,9 @@ def build_root_ca(settings, paths):
 
 def install_pki(settings, paths):
     # Install the PKI infrastructure
-    installer = Installer(settings, paths)
+    installer = Scaffolder(settings, paths)
     installer.cleanup()
-    installer.scaffolding()
+    installer.setup()
     installer.db_files()
 
 

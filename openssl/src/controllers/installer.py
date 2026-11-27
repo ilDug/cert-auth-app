@@ -3,12 +3,14 @@ from core.paths import PkiPaths
 import shutil
 
 
-class Installer:
+class Scaffolder:
+    """Class responsible for setting up and managing the PKI directory structure."""
+
     def __init__(self, cnf: Settings, paths: PkiPaths):
         self.cnf = cnf
         self.paths = paths
 
-    def scaffolding(self):
+    def setup(self):
         """Create the necessary directory structure for the CA and issued certificates."""
 
         for dir in ["certs", "private", "crl", "newcerts", "conf"]:

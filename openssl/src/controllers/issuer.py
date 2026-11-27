@@ -3,8 +3,8 @@ from pathlib import Path
 from controllers import cnf
 from core.config import Settings
 from core.paths import PkiPaths
-from models.config_model import LeafCertificateConfigModel
-from controllers.cnf import ConfigController
+from models import LeafCertificateConfigModel
+from controllers.cnf import Configurator
 import core.openssl as cmds
 import subprocess
 
@@ -19,7 +19,7 @@ class CertificateAuthority:
         self.settings = cnf
         self.paths = paths
         self.type = type
-        self.config_ctrl = ConfigController(cnf, paths)
+        self.configurator = Configurator(cnf, paths)
 
     def issue_certificate(self, cnf: LeafCertificateConfigModel):
         # 0 - Creazione della working directory per il certificato
@@ -46,13 +46,13 @@ class CertificateAuthority:
         return wd
 
     def _compile_config(self, model: LeafCertificateConfigModel, wd: Path) -> Path:
-        return self.config_ctrl.compile_leaf_config(model, output_dir=wd)
+        return self.configurator.compile_leaf_config(model, output_dir=wd)
 
     def _compile_extensions(self, model: LeafCertificateConfigModel, wd: Path) -> Path:
         if self.type == "SERVER":
-            return self.config_ctrl.compile_server_extensions(model, output_dir=wd)
+            return self.configurator.compile_server_extensions(model, output_dir=wd)
         else:
-            return self.config_ctrl.compile_client_extensions(model, output_dir=wd)
+            return self.configurator.compile_client_extensions(model, output_dir=wd)
 
     def _generate_private_key(self, name: str, bits: int = 2048) -> Path:
         key_path = self.wd / f"{name}.key"

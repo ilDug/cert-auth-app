@@ -2,14 +2,14 @@ from core.paths import PkiPaths
 from core.config import Settings
 from pathlib import Path
 from string import Template
-from models.config_model import (
+from models import (
     RootCertificateConfigModel,
     IntermediateCertificateConfigModel,
     LeafCertificateConfigModel,
 )
 
 
-class ConfigController:
+class Configurator:
     def __init__(self, cnf: Settings, paths: PkiPaths):
         self.cnf = cnf
         self.paths = paths
