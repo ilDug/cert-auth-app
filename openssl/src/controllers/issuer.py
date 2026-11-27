@@ -1,10 +1,10 @@
 from typing import Literal
 from pathlib import Path
-from controllers import cnf
+from controllers import configurator
 from core.config import Settings
 from core.paths import PkiPaths
 from models import LeafCertificateInputModel
-from controllers.cnf import Configurator
+from controllers.configurator import Configurator
 import core.openssl as cmds
 import subprocess
 

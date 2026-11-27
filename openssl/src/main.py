@@ -1,8 +1,8 @@
 from core.config import get_settings
 from core.paths import get_settings as get_paths
-from controllers.installer import Scaffolder
+from controllers.scaffolder import Scaffolder
 from controllers.builder import IntermediateCABuilder, RootCABuilder
-from controllers.cnf import Configurator
+from controllers.configurator import Configurator
 from models import (
     RootCertificateInputModel,
     IntermediateCertificateInputModel,
