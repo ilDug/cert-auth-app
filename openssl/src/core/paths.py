@@ -50,5 +50,5 @@ paths = PkiPaths()
 @lru_cache
 def get_settings() -> PkiPaths:
     """Get the cached paths instance."""
-    ic("Getting cached settings instance", paths)
+    # ic("Getting cached settings instance", paths)
     return paths

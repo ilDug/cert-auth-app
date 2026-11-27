@@ -5,7 +5,7 @@ from icecream import ic
 
 # Command parser for OpenSSL commands with placeholders.
 def parse_cmd(cmd: str, values: dict[str, str]) -> list[str]:
-    # ic(cmd.format(**values))
+    ic(cmd.format(**values))
     return cmd.replace(" ", "÷").format(**values).split("÷")
 
 

@@ -27,7 +27,7 @@ settings = Settings()
 @lru_cache
 def get_settings() -> Settings:
     """Get the cached settings instance."""
-    ic("Getting cached settings instance", settings)
+    # ic("Getting cached settings instance", settings)
     return settings
 
 

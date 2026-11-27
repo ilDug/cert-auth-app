@@ -36,8 +36,6 @@ class CertificateAuthority:
         self.crt_path = self._sign_certificate(cnf, self.csr_path, self.ext_path)
         # 6 - emettere il la chain del certificato assieme ai certificati intermedi
         self.chain_path = self._chain_certificate(self.crt_path, cnf)
-        # 7 - verificare il certificato emesso
-        return self._verify_certificate()
 
     def _mk_working_dir(self, model: LeafCertificateConfigModel) -> Path:
         wd = (
@@ -101,30 +99,10 @@ class CertificateAuthority:
     def _chain_certificate(
         self, crt_path: Path, cnf: LeafCertificateConfigModel
     ) -> Path:
-        chain_path = self.wd / f"{cnf.common_name}.fullchain.pem"
+        chain_path = self.wd / f"{cnf.common_name}.fullchain.crt"
         with open(chain_path, "wb") as chain_file:
             with open(crt_path, "rb") as crt_file:
                 chain_file.write(crt_file.read())
             with open(self.paths.INTERMEDIATE_CRT, "rb") as inter_file:
                 chain_file.write(inter_file.read())
         return chain_path
-
-    def _verify_certificate(self) -> bool:
-        try:
-            # verifica il singolo certificato
-            cmd = cmds.parse_cmd(
-                cmds.CRT_VERIFY,
-                {"CAcrtpath": self.paths.INTERMEDIATE_CRT, "crtpath": self.crt_path},
-            )
-            subprocess.run(cmd, check=True)
-
-            # verifica la catena completa
-            cmd = cmds.parse_cmd(
-                cmds.CRT_VERIFY,
-                {"CAcrtpath": self.paths.ROOT_CRT, "crtpath": self.chain_path},
-            )
-            subprocess.run(cmd, check=True)
-
-            return True
-        except subprocess.CalledProcessError:
-            return False
